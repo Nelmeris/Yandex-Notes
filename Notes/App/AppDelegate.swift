@@ -41,6 +41,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("\n")
         print(Note.parse(json: json)!)
         
+        FileNotebook.removeFile()
+        let notebook = FileNotebook()
+        notebook.add(note)
+        notebook.add(newNote)
+        notebook.add(note)
+        notebook.saveToFile()
+        notebook.remove(with: newNote.uid)
         return true
     }
 

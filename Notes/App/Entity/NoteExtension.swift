@@ -25,6 +25,7 @@ extension Note {
     
     static func parse(json: [String: Any]) -> Note? {
         
+        guard let uid = json["uid"] as? String else { return nil }
         guard let title = json["title"] as? String else { return nil }
         guard let content = json["content"] as? String else { return nil }
         
@@ -49,11 +50,7 @@ extension Note {
             destructionDate = nil
         }
         
-        if let uid = json["uid"] as? String {
-            return Note(uid: uid, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate)
-        } else {
-            return Note(title: title, content: content, color: color, importance: importance, destructionDate: destructionDate)
-        }
+        return Note(uid: uid, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate)
         
     }
     

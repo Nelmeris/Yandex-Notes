@@ -10,9 +10,12 @@
 		57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0B622CB63C80044DDDC /* AppDelegate.swift */; };
 		57FAB0BE22CB63CA0044DDDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FAB0BD22CB63CA0044DDDC /* Assets.xcassets */; };
 		57FAB0C122CB63CA0044DDDC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57FAB0BF22CB63CA0044DDDC /* LaunchScreen.storyboard */; };
-		57FAB0CC22CB63CA0044DDDC /* NotesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0CB22CB63CA0044DDDC /* NotesTests.swift */; };
 		57FAB0D722CB643C0044DDDC /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0D622CB643C0044DDDC /* Note.swift */; };
 		57FAB0DE22CB66160044DDDC /* NoteExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0DD22CB66160044DDDC /* NoteExtension.swift */; };
+		57FAB0E022CB972D0044DDDC /* FileNotebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0DF22CB972D0044DDDC /* FileNotebook.swift */; };
+		57FAB0E222CB9DD90044DDDC /* FileNotebookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0E122CB9DD90044DDDC /* FileNotebookTests.swift */; };
+		57FAB0E422CBB2DB0044DDDC /* NoteExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0E322CBB2DB0044DDDC /* NoteExtensionsTests.swift */; };
+		57FAB0E622CBB5810044DDDC /* NoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0E522CBB5810044DDDC /* NoteTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,10 +35,13 @@
 		57FAB0C022CB63CA0044DDDC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		57FAB0C222CB63CA0044DDDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57FAB0C722CB63CA0044DDDC /* NotesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		57FAB0CB22CB63CA0044DDDC /* NotesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTests.swift; sourceTree = "<group>"; };
 		57FAB0CD22CB63CA0044DDDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57FAB0D622CB643C0044DDDC /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		57FAB0DD22CB66160044DDDC /* NoteExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteExtension.swift; sourceTree = "<group>"; };
+		57FAB0DF22CB972D0044DDDC /* FileNotebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNotebook.swift; sourceTree = "<group>"; };
+		57FAB0E122CB9DD90044DDDC /* FileNotebookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNotebookTests.swift; sourceTree = "<group>"; };
+		57FAB0E322CBB2DB0044DDDC /* NoteExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteExtensionsTests.swift; sourceTree = "<group>"; };
+		57FAB0E522CBB5810044DDDC /* NoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,8 +93,10 @@
 		57FAB0CA22CB63CA0044DDDC /* NotesTests */ = {
 			isa = PBXGroup;
 			children = (
-				57FAB0CB22CB63CA0044DDDC /* NotesTests.swift */,
 				57FAB0CD22CB63CA0044DDDC /* Info.plist */,
+				57FAB0E122CB9DD90044DDDC /* FileNotebookTests.swift */,
+				57FAB0E322CBB2DB0044DDDC /* NoteExtensionsTests.swift */,
+				57FAB0E522CBB5810044DDDC /* NoteTests.swift */,
 			);
 			path = NotesTests;
 			sourceTree = "<group>";
@@ -124,6 +132,7 @@
 			children = (
 				57FAB0D622CB643C0044DDDC /* Note.swift */,
 				57FAB0DD22CB66160044DDDC /* NoteExtension.swift */,
+				57FAB0DF22CB972D0044DDDC /* FileNotebook.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -181,6 +190,7 @@
 					};
 					57FAB0C622CB63CA0044DDDC = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 						TestTargetID = 57FAB0B222CB63C80044DDDC;
 					};
 				};
@@ -230,6 +240,7 @@
 			files = (
 				57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */,
 				57FAB0DE22CB66160044DDDC /* NoteExtension.swift in Sources */,
+				57FAB0E022CB972D0044DDDC /* FileNotebook.swift in Sources */,
 				57FAB0D722CB643C0044DDDC /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -238,7 +249,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57FAB0CC22CB63CA0044DDDC /* NotesTests.swift in Sources */,
+				57FAB0E622CBB5810044DDDC /* NoteTests.swift in Sources */,
+				57FAB0E222CB9DD90044DDDC /* FileNotebookTests.swift in Sources */,
+				57FAB0E422CBB2DB0044DDDC /* NoteExtensionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +434,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
 				INFOPLIST_FILE = NotesTests/Info.plist;
@@ -431,6 +445,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = artemkufaev.NotesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Notes.app/Notes";
@@ -442,6 +457,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
 				INFOPLIST_FILE = NotesTests/Info.plist;
