@@ -13,6 +13,7 @@
 		57FAB0BE22CB63CA0044DDDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FAB0BD22CB63CA0044DDDC /* Assets.xcassets */; };
 		57FAB0C122CB63CA0044DDDC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57FAB0BF22CB63CA0044DDDC /* LaunchScreen.storyboard */; };
 		57FAB0CC22CB63CA0044DDDC /* NotesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0CB22CB63CA0044DDDC /* NotesTests.swift */; };
+		57FAB0D722CB643C0044DDDC /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0D622CB643C0044DDDC /* Note.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		57FAB0C722CB63CA0044DDDC /* NotesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FAB0CB22CB63CA0044DDDC /* NotesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTests.swift; sourceTree = "<group>"; };
 		57FAB0CD22CB63CA0044DDDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57FAB0D622CB643C0044DDDC /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		57FAB0B522CB63C80044DDDC /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				57FAB0D622CB643C0044DDDC /* Note.swift */,
 				57FAB0B622CB63C80044DDDC /* AppDelegate.swift */,
 				57FAB0B822CB63C80044DDDC /* ViewController.swift */,
 				57FAB0BA22CB63C80044DDDC /* Main.storyboard */,
@@ -199,6 +202,7 @@
 			files = (
 				57FAB0B922CB63C80044DDDC /* ViewController.swift in Sources */,
 				57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */,
+				57FAB0D722CB643C0044DDDC /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
