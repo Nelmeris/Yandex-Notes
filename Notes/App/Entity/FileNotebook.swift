@@ -10,32 +10,23 @@ import Foundation
 
 class FileNotebook {
     
-    private(set) var notes: [Note] = []
+    private(set) var notes: [String: Note] = [:]
     
     public func contain(with uid: String) -> Bool {
-        for note in notes {
-            if note.uid == uid {
-                return true
-            }
-        }
-        return false
+        return notes.contains { $0.key == uid }
     }
     
     public func add(_ note: Note) {
         guard !contain(with: note.uid) else { return }
-        notes.append(note)
+        notes[note.uid] = note
     }
     
     public func remove(with uid: String) {
-        notes.removeAll { note -> Bool in
-            note.uid == uid
-        }
+        notes.removeValue(forKey: uid)
     }
     
     public func get(with uid: String) -> Note? {
-        return notes.drop { note -> Bool in
-            return note.uid == uid
-        }.first
+        return notes[uid]
     }
     
     public func update(_ note: Note) {
@@ -45,10 +36,7 @@ class FileNotebook {
     }
     
     public func saveToFile() {
-        var json: [[String: Any]] = []
-        for note in notes {
-            json.append(note.json)
-        }
+        let json = notes.map { $0.value.json }
         let data = try! JSONSerialization.data(withJSONObject: json, options: [])
         guard let fileURL = FileNotebook.getFilePath() else { return }
         do {
@@ -61,15 +49,14 @@ class FileNotebook {
     public func loadFromFile() {
         guard let fileURL = FileNotebook.getFilePath() else { return }
         do {
-            var notes = [Note]()
             let data = try Data(contentsOf: fileURL)
             let jsonArray = try! JSONSerialization.jsonObject(with: data, options: []) as! [[String: Any]]
-            for jsonObject in jsonArray {
-                if let note = Note.parse(json: jsonObject) {
-                    notes.append(note)
-                }
+            let notesArray = jsonArray.compactMap { Note.parse(json: $0) }
+            self.notes = notesArray.reduce([String: Note]()) { dict, note in
+                var dict = dict
+                dict[note.uid] = note
+                return dict
             }
-            self.notes = notes
         } catch let error {
             print(error)
         }
