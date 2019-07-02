@@ -10,8 +10,8 @@ import UIKit
 
 struct Note {
     
-    enum ImportanceLevels {
-        case unimportant, ordinary, important
+    enum ImportanceLevels: Int {
+        case insignificant, usual, critical
     }
     
     let uid: String

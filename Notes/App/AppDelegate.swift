@@ -13,9 +13,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    func printJSON(json: [String: Any]) {
+        for (key, value) in json {
+            if let newJson = value as? [String: Any] {
+                print("'\(key)' [")
+                printJSON(json: newJson)
+                print("]")
+            } else {
+                print("'\(key)': \(value)")
+            }
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let note = Note(title: "Title", content: "Content", color: .blue, importance: .usual, destructionDate: Date())
+        var json = note.json
+        printJSON(json: json)
+        print("\n")
+        print(Note.parse(json: json)!)
+        print("\n")
+        
+        let newNote = Note(title: "New note", content: "Note content", importance: .critical, destructionDate: nil)
+        json = newNote.json
+        printJSON(json: json)
+        print("\n")
+        print(Note.parse(json: json)!)
+        
         return true
     }
 
