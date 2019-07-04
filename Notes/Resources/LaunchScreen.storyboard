@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="ipad9_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="msj-lR-Tlz">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <color key="backgroundColor" name="MainColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uR3-VX-MQO">
+                                <rect key="frame" x="10" y="348.5" width="748" height="327"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="752" text="Notes" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="vcH-SK-Rjf">
+                                        <rect key="frame" x="0.0" y="10" width="748" height="57"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="47"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="248" verticalCompressionResistancePriority="748" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="Q7J-mS-b0Q">
+                                        <rect key="frame" x="249" y="67" width="250" height="250"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="250" id="11m-EF-Gbb"/>
+                                            <constraint firstAttribute="width" secondItem="Q7J-mS-b0Q" secondAttribute="height" multiplier="1:1" id="eGC-wl-bDG"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" name="MainColor"/>
+                                <constraints>
+                                    <constraint firstItem="vcH-SK-Rjf" firstAttribute="leading" secondItem="uR3-VX-MQO" secondAttribute="leading" id="J66-pc-UIc"/>
+                                    <constraint firstItem="vcH-SK-Rjf" firstAttribute="top" secondItem="uR3-VX-MQO" secondAttribute="top" constant="10" id="Ng5-rK-L76"/>
+                                    <constraint firstItem="Q7J-mS-b0Q" firstAttribute="centerX" secondItem="uR3-VX-MQO" secondAttribute="centerX" id="QRp-zl-0uc"/>
+                                    <constraint firstItem="Q7J-mS-b0Q" firstAttribute="top" secondItem="vcH-SK-Rjf" secondAttribute="bottom" id="f0M-sh-mO6"/>
+                                    <constraint firstAttribute="trailing" secondItem="vcH-SK-Rjf" secondAttribute="trailing" id="fTE-dD-vNS"/>
+                                    <constraint firstAttribute="bottom" secondItem="Q7J-mS-b0Q" secondAttribute="bottom" constant="10" id="rzz-ah-xKY"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright © 2019 Артем Куфаев. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="obG-Y5-kRd">
+                                <rect key="frame" x="20" y="993.5" width="728" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="obG-Y5-kRd" secondAttribute="trailing" constant="20" id="15w-v6-B1r"/>
+                            <constraint firstItem="msj-lR-Tlz" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="42c-As-DOa"/>
+                            <constraint firstItem="uR3-VX-MQO" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="EUw-Yr-dks"/>
+                            <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="20" id="Fse-UP-CmA"/>
+                            <constraint firstAttribute="bottom" secondItem="msj-lR-Tlz" secondAttribute="bottom" id="JGT-0q-No2"/>
+                            <constraint firstItem="msj-lR-Tlz" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="KrC-LW-1r5"/>
+                            <constraint firstItem="uR3-VX-MQO" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Mkc-As-IFT"/>
+                            <constraint firstItem="obG-Y5-kRd" firstAttribute="top" relation="greaterThanOrEqual" secondItem="uR3-VX-MQO" secondAttribute="bottom" id="a2v-HW-jbp"/>
+                            <constraint firstItem="msj-lR-Tlz" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="hYo-hA-2zg"/>
+                            <constraint firstItem="uR3-VX-MQO" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" priority="900" constant="10" id="oxY-H9-JNs"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="uR3-VX-MQO" secondAttribute="trailing" priority="900" constant="10" id="tjP-cY-H2a"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="10" id="uB2-xV-Erg"/>
+                            <constraint firstItem="uR3-VX-MQO" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="20" id="yoT-1G-roi"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="51.25" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Icon" width="299.66665649414062" height="299.66665649414062"/>
+        <namedColor name="MainColor">
+            <color red="0.94300001859664917" green="0.35400000214576721" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

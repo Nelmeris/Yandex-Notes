@@ -50,9 +50,13 @@ class FileNotebook {
         guard let fileURL = FileNotebook.getFilePath() else { return }
         do {
             let data = try Data(contentsOf: fileURL)
-            let jsonArray = try! JSONSerialization.jsonObject(with: data, options: []) as! [[String: Any]]
+            let jsonArray = try!
+                JSONSerialization.jsonObject(with: data, options: [])
+                as! [[String: Any]]
             let notesArray = jsonArray.compactMap { Note.parse(json: $0) }
-            self.notes = notesArray.reduce([String: Note]()) { dict, note in
+            self.notes = notesArray.reduce(
+                [String: Note]()
+            ) { dict, note in
                 var dict = dict
                 dict[note.uid] = note
                 return dict
@@ -72,21 +76,23 @@ class FileNotebook {
     }
     
     static func getFilePath() -> URL? {
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+        if let dir = FileManager.default.urls(for: .documentDirectory,
+                                              in: .userDomainMask).first {
             let file = "notebook.json"
             let fileURL = dir.appendingPathComponent(file)
             return fileURL
         } else { return nil }
     }
     
-    init() {
-        guard let pathComponent = FileNotebook.getFilePath() else { return }
+    static func isFileCreated() -> Bool {
+        guard let pathComponent = FileNotebook.getFilePath() else { return false }
         let filePath = pathComponent.path
         let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: filePath) {
-            loadFromFile()
-            print("Notebook was loaded")
-        } else {
+        return fileManager.fileExists(atPath: filePath)
+    }
+    
+    init() {
+        if !FileNotebook.isFileCreated() {
             saveToFile()
             print("Notebook was created")
         }

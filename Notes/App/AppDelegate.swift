@@ -28,6 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        #if DEBUG
+        
         let note = Note(title: "Title", content: "Content", color: .blue, importance: .usual, destructionDate: Date())
         var json = note.json
         printJSON(json: json)
@@ -41,13 +43,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("\n")
         print(Note.parse(json: json)!)
         
-        FileNotebook.removeFile()
         let notebook = FileNotebook()
         notebook.add(note)
         notebook.add(newNote)
         notebook.add(note)
         notebook.saveToFile()
         notebook.remove(with: newNote.uid)
+        notebook.loadFromFile()
+        
+        #elseif DEMO
+        
+        let note = Note(title: "Заметка для демо 1", content: "Какой-то контент", color: .black, importance: .critical, destructionDate: Date())
+        let notebook = FileNotebook()
+        notebook.add(note)
+        
+        note = Note(title: "Заметка для демо 2", content: "Какой-то контент 2", color: .yellow, importance: .usual, destructionDate: Date())
+        notebook.add(note)
+        
+        #endif
+        
         return true
     }
 
