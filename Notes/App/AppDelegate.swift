@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import 
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,40 +25,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    class Node {
+        var node: Node?
+        
+        convenience init(node: Node) {
+            self.init()
+            self.node = node
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         #if DEBUG
         
-        let note = Note(title: "Title", content: "Content", color: .blue, importance: .usual, destructionDate: Date())
-        var json = note.json
-        printJSON(json: json)
-        print("\n")
-        print(Note.parse(json: json)!)
-        print("\n")
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = UIViewController()
+        window?.makeKeyAndVisible()
         
-        let newNote = Note(title: "New note", content: "Note content", importance: .critical, destructionDate: nil)
-        json = newNote.json
-        printJSON(json: json)
-        print("\n")
-        print(Note.parse(json: json)!)
+//        DispatchQueue.global().async {
+//            self.window?.rootViewController?.view.backgroundColor = .blue
+//        }
         
-        let notebook = FileNotebook()
-        notebook.add(note)
-        notebook.add(newNote)
-        notebook.add(note)
-        notebook.saveToFile()
-        notebook.remove(with: newNote.uid)
-        notebook.loadFromFile()
+        var node = Node()
+        for _ in 0...10000000 {
+            let newNode = Node()
+            node.node = newNode
+            node = newNode
+        }
         
         #elseif DEMO
         
-        let note = Note(title: "Заметка для демо 1", content: "Какой-то контент", color: .black, importance: .critical, destructionDate: Date())
+        let note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
+                        color: .black, importance: .critical, destructionDate: Date())
         let notebook = FileNotebook()
         notebook.add(note)
         
-        note = Note(title: "Заметка для демо 2", content: "Какой-то контент 2", color: .yellow, importance: .usual, destructionDate: Date())
+        note = Note(title: "Заметка для демо 2", content: "Какой-то контент 2",
+                    color: .yellow, importance: .usual, destructionDate: Date())
         notebook.add(note)
         
         #endif

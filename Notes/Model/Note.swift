@@ -29,7 +29,6 @@ struct Note {
         importance: ImportanceLevels,
         destructionDate selfDestructionDate: Date? = nil
         ) {
-        let test = ""
         self.uid = uid
         self.title = title
         self.content = content
