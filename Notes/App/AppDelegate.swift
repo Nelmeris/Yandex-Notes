@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import 
+import CocoaLumberjack
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,15 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
-    class Node {
-        var node: Node?
-        
-        convenience init(node: Node) {
-            self.init()
-            self.node = node
-        }
-    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -44,20 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = UIViewController()
         window?.makeKeyAndVisible()
         
-//        DispatchQueue.global().async {
-//            self.window?.rootViewController?.view.backgroundColor = .blue
-//        }
-        
-        var node = Node()
-        for _ in 0...10000000 {
-            let newNode = Node()
-            node.node = newNode
-            node = newNode
-        }
-        
         #elseif DEMO
         
-        let note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
+        var note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
                         color: .black, importance: .critical, destructionDate: Date())
         let notebook = FileNotebook()
         notebook.add(note)
@@ -65,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         note = Note(title: "Заметка для демо 2", content: "Какой-то контент 2",
                     color: .yellow, importance: .usual, destructionDate: Date())
         notebook.add(note)
+        DDLogDebug("Созданы демонстрационные заметки")
         
         #endif
         
