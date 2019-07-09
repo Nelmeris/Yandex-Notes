@@ -3,11 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		55AEF8BF8731C9DF131D3220 /* libPods-Notes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A3A0CBF0846AF82DA15BE0 /* libPods-Notes.a */; };
+		579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */; };
+		579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */; };
+		579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */; };
+		579AAC5622D53B7000B3DD09 /* UIColorHEXValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */; };
+		579AAC5B22D53DDC00B3DD09 /* UIColorBrightness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */; };
+		57D01C5822D50C5F00412438 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57D01C5722D50C5F00412438 /* Main.storyboard */; };
+		57D01C5B22D516B700412438 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D01C5A22D516B700412438 /* UIViewExtension.swift */; };
+		57D01C5D22D5180300412438 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D01C5C22D5180300412438 /* EditNoteViewController.swift */; };
 		57E5962022CCFAD400D73B45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57E5961F22CCFAD400D73B45 /* LaunchScreen.storyboard */; };
 		57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0B622CB63C80044DDDC /* AppDelegate.swift */; };
 		57FAB0BE22CB63CA0044DDDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FAB0BD22CB63CA0044DDDC /* Assets.xcassets */; };
@@ -35,6 +43,14 @@
 		0AC5D6A210B2F2F9C698D1CB /* Pods-NotesTests.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotesTests.demo.xcconfig"; path = "Target Support Files/Pods-NotesTests/Pods-NotesTests.demo.xcconfig"; sourceTree = "<group>"; };
 		263DB9C6613F9C22A215C05A /* Pods-Notes.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notes.demo.xcconfig"; path = "Target Support Files/Pods-Notes/Pods-Notes.demo.xcconfig"; sourceTree = "<group>"; };
 		2ED5DFE0481618F037CD9B88 /* libPods-NotesTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotesTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickButton.swift; sourceTree = "<group>"; };
+		579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
+		579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
+		579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorHEXValues.swift; sourceTree = "<group>"; };
+		579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorBrightness.swift; sourceTree = "<group>"; };
+		57D01C5722D50C5F00412438 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		57D01C5A22D516B700412438 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		57D01C5C22D5180300412438 /* EditNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		57E5961F22CCFAD400D73B45 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		57FAB0B322CB63C80044DDDC /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FAB0B622CB63C80044DDDC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +100,52 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		579AAC5722D53BAE00B3DD09 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				57D01C5722D50C5F00412438 /* Main.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		579AAC5822D53BB500B3DD09 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				57D01C5C22D5180300412438 /* EditNoteViewController.swift */,
+				579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		579AAC5922D53BBB00B3DD09 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */,
+				579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		57D01C5622D50B8000412438 /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				579AAC5722D53BAE00B3DD09 /* Storyboards */,
+				579AAC5822D53BB500B3DD09 /* ViewControllers */,
+				579AAC5922D53BBB00B3DD09 /* Views */,
+			);
+			path = Flows;
+			sourceTree = "<group>";
+		};
+		57D01C5922D516A000412438 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				57D01C5A22D516B700412438 /* UIViewExtension.swift */,
+				579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */,
+				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		57FAB0AA22CB63C80044DDDC = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				57FAB0DA22CB65870044DDDC /* App */,
+				57D01C5922D516A000412438 /* Core */,
 				57FAB0D822CB65490044DDDC /* Resources */,
 				57FAB0D922CB65660044DDDC /* Enviroments */,
 			);
@@ -147,6 +210,7 @@
 			children = (
 				57FAB0B622CB63C80044DDDC /* AppDelegate.swift */,
 				575D1CBA22CFC6BB00D40EB7 /* Entity */,
+				57D01C5622D50B8000412438 /* Flows */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -257,6 +321,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57D01C5822D50C5F00412438 /* Main.storyboard in Resources */,
 				57FAB0BE22CB63CA0044DDDC /* Assets.xcassets in Resources */,
 				57E5962022CCFAD400D73B45 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -323,10 +388,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
+				57D01C5B22D516B700412438 /* UIViewExtension.swift in Sources */,
+				579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */,
 				57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */,
 				57FAB0DE22CB66160044DDDC /* NoteExtension.swift in Sources */,
+				579AAC5B22D53DDC00B3DD09 /* UIColorBrightness.swift in Sources */,
 				57FAB0E022CB972D0044DDDC /* FileNotebook.swift in Sources */,
+				57D01C5D22D5180300412438 /* EditNoteViewController.swift in Sources */,
 				57FAB0D722CB643C0044DDDC /* Note.swift in Sources */,
+				579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */,
+				579AAC5622D53B7000B3DD09 /* UIColorHEXValues.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -32,8 +32,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if DEBUG
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = UIViewController()
-        window?.makeKeyAndVisible()
+        if let window = window {
+            let note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
+                            color: .black, importance: .critical, destructionDate: Date())
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let rootVC = storyboard.instantiateViewController(withIdentifier: "EditNote") as! EditNoteViewController
+            rootVC.note = note
+            window.rootViewController = rootVC
+            window.makeKeyAndVisible()
+        }
         
         #elseif DEMO
         
