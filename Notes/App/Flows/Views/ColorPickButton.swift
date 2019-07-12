@@ -14,7 +14,7 @@ class ColorPickButton: UIButton {
     @IBInspectable var checkmarkerColor: UIColor = .black
     @IBInspectable var checkmarkerThickness: CGFloat = 1.0
     @IBInspectable var isChecked: Bool = false {
-        didSet {
+        willSet {
             setNeedsDisplay()
         }
     }

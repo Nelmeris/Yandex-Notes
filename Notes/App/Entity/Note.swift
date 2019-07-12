@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Note {
+struct Note: Equatable {
     
     enum ImportanceLevels: Int {
         case insignificant, usual, critical
@@ -21,7 +21,8 @@ struct Note {
     let color: UIColor
     let importance: ImportanceLevels
     
-    let selfDestructionDate: Date?
+    let destructionDate: Date?
+    let createDate: Date
     
     init(
         uid: String = UUID().uuidString,
@@ -34,7 +35,17 @@ struct Note {
         self.content = content
         self.color = color
         self.importance = importance
-        self.selfDestructionDate = selfDestructionDate
+        self.destructionDate = selfDestructionDate
+        self.createDate = Date()
+    }
+    
+    static func ==(lhs: Note, rhs: Note) -> Bool {
+        return lhs.uid == rhs.uid &&
+            lhs.title == rhs.title &&
+            lhs.content == rhs.content &&
+            lhs.color == rhs.color &&
+            lhs.importance == rhs.importance &&
+            lhs.destructionDate == rhs.destructionDate
     }
     
 }

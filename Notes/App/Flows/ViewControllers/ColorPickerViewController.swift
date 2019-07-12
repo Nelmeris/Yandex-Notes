@@ -23,6 +23,14 @@ class ColorPickerViewController: UIViewController, HSBColorPickerDelegate {
         updatePreview()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard let navigControl = navigationController else { return }
+        guard let editNoteVC = navigControl.viewControllers.last as? EditNoteViewController else { return }
+        editNoteVC.colorPickerButton.backgroundColor = color
+        editNoteVC.checkedColorButton = editNoteVC.colorPickerButton
+    }
+    
     func HSBColorColorPickerTouched(sender: HSBColorPicker, color: UIColor, point: CGPoint, state: UIGestureRecognizer.State) {
         self.color = color
         updatePreview()
@@ -41,6 +49,10 @@ class ColorPickerViewController: UIViewController, HSBColorPickerDelegate {
         let color = getBrightnessColor()
         colorPreview.backgroundColor = color
         colorHEXField.text = color.toHexString()
+    }
+    
+    @IBAction func done(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
     }
     
 }

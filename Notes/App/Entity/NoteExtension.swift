@@ -80,7 +80,7 @@ extension Note {
         if (self.importance != .usual) {
             json["importance"] = self.importance.rawValue
         }
-        json["destruction_date"] = self.selfDestructionDate?.timeIntervalSince1970
+        json["destruction_date"] = self.destructionDate?.timeIntervalSince1970
         
         return json
     }

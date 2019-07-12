@@ -31,15 +31,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         #if DEBUG
         
-        window = UIWindow(frame: UIScreen.main.bounds)
-        if let window = window {
-            let note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
+        let notebook = FileNotebook()
+        notebook.loadFromFile()
+        
+        if notebook.notes.count == 0 {
+            
+            var note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
                             color: .black, importance: .critical, destructionDate: Date())
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let rootVC = storyboard.instantiateViewController(withIdentifier: "EditNote") as! EditNoteViewController
-            rootVC.note = note
-            window.rootViewController = rootVC
-            window.makeKeyAndVisible()
+            notebook.add(note)
+            
+            note = Note(title: "Заметка для демо 2", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make",
+                        color: .yellow, importance: .usual, destructionDate: Date())
+            notebook.add(note)
+            
+            note = Note(title: "Заметка для демо 3", content: "Lorem Ipsum is simply dummy text of the printing and typesetting",
+                        color: .white, importance: .usual)
+            notebook.add(note)
+            
+            note = Note(title: "Заметка для демо 4", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lore",
+                        color: .red, importance: .usual)
+            notebook.add(note)
+            
+            notebook.saveToFile()
         }
         
         #elseif DEMO

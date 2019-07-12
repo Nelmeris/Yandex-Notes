@@ -93,4 +93,5 @@ class HSBColorPicker : DesignableView {
         let color = getColorAtPoint(point: point)
         self.delegate?.HSBColorColorPickerTouched(sender: self, color: color, point: point, state:gestureRecognizer.state)
     }
+    
 }

@@ -10,23 +10,34 @@ import Foundation
 
 class FileNotebook {
     
-    private(set) var notes: [String: Note] = [:]
+    private(set) var notes: [Note] = []
+    private(set) var isAutosave: Bool = false
+    
+    public func setAutosave(_ value: Bool) {
+        isAutosave = value
+    }
     
     public func contain(with uid: String) -> Bool {
-        return notes.contains { $0.key == uid }
+        return notes.contains { $0.uid == uid }
     }
     
     public func add(_ note: Note) {
         guard !contain(with: note.uid) else { return }
-        notes[note.uid] = note
+        notes.append(note)
+        if isAutosave {
+            saveToFile()
+        }
     }
     
     public func remove(with uid: String) {
-        notes.removeValue(forKey: uid)
+        notes.removeAll { $0.uid == uid }
+        if isAutosave {
+            saveToFile()
+        }
     }
     
     public func get(with uid: String) -> Note? {
-        return notes[uid]
+        return notes.first { $0.uid == uid }
     }
     
     public func update(_ note: Note) {
@@ -36,7 +47,7 @@ class FileNotebook {
     }
     
     public func saveToFile() {
-        let json = notes.map { $0.value.json }
+        let json = notes.map { $0.json }
         let data = try! JSONSerialization.data(withJSONObject: json, options: [])
         guard let fileURL = FileNotebook.getFilePath() else { return }
         do {
@@ -53,14 +64,7 @@ class FileNotebook {
             let jsonArray = try!
                 JSONSerialization.jsonObject(with: data, options: [])
                 as! [[String: Any]]
-            let notesArray = jsonArray.compactMap { Note.parse(json: $0) }
-            self.notes = notesArray.reduce(
-                [String: Note]()
-            ) { dict, note in
-                var dict = dict
-                dict[note.uid] = note
-                return dict
-            }
+            self.notes = jsonArray.compactMap { Note.parse(json: $0) }
         } catch let error {
             print(error)
         }
