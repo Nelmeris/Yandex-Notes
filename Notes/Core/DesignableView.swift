@@ -33,6 +33,20 @@ extension UIView {
     }
     
     @IBInspectable
+    var isCircle: Bool {
+        get {
+            return cornerRadius == frame.height / 2
+        }
+        set {
+            if newValue {
+                cornerRadius = frame.height / 2
+            } else {
+                cornerRadius = 0
+            }
+        }
+    }
+    
+    @IBInspectable
     var borderWidth: CGFloat {
         get {
             return layer.borderWidth
