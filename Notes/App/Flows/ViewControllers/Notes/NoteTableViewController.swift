@@ -2,8 +2,8 @@
 //  NoteTableViewController.swift
 //  Notes
 //
-//  Created by Артем Куфаев on 10/07/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 10/07/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
@@ -11,8 +11,10 @@ import UIKit
 class NoteTableViewController: UITableViewController {
     
     var notebook: FileNotebook!
-    let cellReuseIdentifier = "NoteCell"
-    let segueToEditNoteIdentifier = "NoteTableToEditNote"
+    private let cellReuseIdentifier = "NoteCell"
+    private let segueToEditNoteIdentifier = "NoteTableToEditNote"
+    
+    var selectedNote: Note?
     
     var notes: [Note] {
         let notes = self.notebook.notes.sorted { $0.createDate > $1.createDate }
@@ -48,7 +50,10 @@ class NoteTableViewController: UITableViewController {
         performSegue(withIdentifier: segueToEditNoteIdentifier, sender: self)
     }
     
-    var selectedNote: Note?
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destVC = segue.destination as? EditNoteViewController else { return }
+        destVC.note = selectedNote
+    }
 
 }
 
@@ -57,12 +62,6 @@ extension NoteTableViewController {
     
     override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         selectedNote = notes[indexPath.row]
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destVC = segue.destination as? EditNoteViewController else { return }
-        destVC.note = selectedNote
-        destVC.parentVC = self
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -103,11 +102,10 @@ extension NoteTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let note = notes[indexPath.row]
-            notebook.remove(with: note.uid)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
+        guard editingStyle == .delete else { return }
+        let note = notes[indexPath.row]
+        notebook.remove(with: note.uid)
+        tableView.deleteRows(at: [indexPath], with: .fade)
     }
     
 }

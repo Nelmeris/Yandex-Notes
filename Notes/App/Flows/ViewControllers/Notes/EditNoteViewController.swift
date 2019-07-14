@@ -2,8 +2,8 @@
 //  EditNoteViewController.swift
 //  Notes
 //
-//  Created by Артем Куфаев on 09/07/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 09/07/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
@@ -13,7 +13,6 @@ class EditNoteViewController: UIViewController {
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var contentView: UITextView!
     @IBOutlet weak var dateField: UITextField!
-    var staticDateFieldHeight: CGFloat!
     @IBOutlet weak var dateFieldHeight: NSLayoutConstraint!
     @IBOutlet weak var checkedColorButton: ColorPickButton! {
         didSet {
@@ -32,8 +31,10 @@ class EditNoteViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var dateSwitch: UISwitch!
     
-    let storyboardId = "Main"
-    let colorPickerId = "ColorPicker"
+    private let storyboardId = "Main"
+    private let colorPickerId = "ColorPicker"
+    
+    var staticDateFieldHeight: CGFloat!
     
     var selectedColor: UIColor {
         return checkedColorButton.backgroundColor!
@@ -53,7 +54,34 @@ class EditNoteViewController: UIViewController {
     
     let datePicker = UIDatePicker()
     var note: Note!
-    weak var parentVC: UIViewController!
+    
+    override func viewDidLoad() {
+        configureViews()
+        showDatePicker()
+        donedatePicker()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        guard isMovingFromParent else { return }
+        guard let navigControl = navigationController else { return }
+        guard let noteTableVC = navigControl.viewControllers.last as? NoteTableViewController else { return }
+        
+        guard let title = titleField.text, title != "" else { return }
+        guard let content = contentView.text, content != "" else { return }
+        let color = selectedColor
+        let date = dateSwitch.isOn ? datePicker.date : nil
+        
+        if note == nil {
+            createNote(destination: noteTableVC, title: title, content: content, color: color, date: date)
+        } else {
+            editNote(destination: noteTableVC, title: title, content: content, color: color, date: date)
+        }
+    }
     
     func configureViews() {
         staticDateFieldHeight = dateFieldHeight.constant
@@ -86,55 +114,6 @@ class EditNoteViewController: UIViewController {
         }
     }
     
-    override func viewDidLoad() {
-        configureViews()
-        showDatePicker()
-        donedatePicker()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        guard isMovingFromParent else { return }
-        
-        guard let noteTableVC = parentVC as? NoteTableViewController else { return }
-        
-        guard let title = titleField.text, title != "" else { return }
-        guard let content = contentView.text, content != "" else { return }
-        let color = selectedColor
-        let date = dateSwitch.isOn ? datePicker.date : nil
-        
-        if note == nil {
-            let newNote = Note(title: title, content: content, color: color, importance: .usual, destructionDate: date)
-            
-            noteTableVC.tableView.beginUpdates()
-            noteTableVC.notebook.add(newNote)
-            let newIndex = noteTableVC.notes.firstIndex { $0.uid == newNote.uid }!
-            noteTableVC.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
-            noteTableVC.tableView.endUpdates()
-        } else {
-            let newNote = Note(uid: note.uid, title: title, content: content, color: color, importance: note?.importance ?? .usual, destructionDate: date)
-            
-            guard !(note == newNote) else { return }
-            
-            let index = noteTableVC.notes.firstIndex { $0.uid == note.uid }!
-            
-            noteTableVC.tableView.beginUpdates()
-            noteTableVC.notebook.update(newNote)
-            let newIndex = noteTableVC.notes.firstIndex { $0.uid == newNote.uid }!
-            if index == newIndex {
-                noteTableVC.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            } else {
-                noteTableVC.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                noteTableVC.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
-            }
-            noteTableVC.tableView.endUpdates()
-        }
-    }
-    
     @IBAction func dateSwitchChanged(_ sender: UISwitch) {
         if sender.isOn {
             dateField.isHidden = false
@@ -143,6 +122,61 @@ class EditNoteViewController: UIViewController {
             dateField.isHidden = true
             dateFieldHeight.constant = 0
         }
+    }
+    
+}
+
+// MARK: - Note maker
+extension EditNoteViewController {
+    
+    func createNote(destination dest: NoteTableViewController,
+                    title: String,
+                    content: String,
+                    color: UIColor,
+                    date: Date?) {
+        let newNote = Note(
+            title: title,
+            content: content,
+            color: color,
+            importance: .usual,
+            destructionDate: date
+        )
+        
+        dest.tableView.beginUpdates()
+        dest.notebook.add(newNote)
+        let newIndex = dest.notes.firstIndex { $0.uid == newNote.uid }!
+        dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+        dest.tableView.endUpdates()
+    }
+    
+    func editNote(destination dest: NoteTableViewController,
+                  title: String,
+                  content: String,
+                  color: UIColor,
+                  date: Date?) {
+        let newNote = Note(
+            uid: note.uid,
+            title: title,
+            content: content,
+            color: color,
+            importance: note.importance,
+            destructionDate: date
+        )
+        
+        guard !(note == newNote) else { return }
+        
+        let index = dest.notes.firstIndex { $0.uid == note.uid }!
+        
+        dest.tableView.beginUpdates()
+        dest.notebook.update(newNote)
+        let newIndex = dest.notes.firstIndex { $0.uid == newNote.uid }!
+        if index == newIndex {
+            dest.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        } else {
+            dest.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+        }
+        dest.tableView.endUpdates()
     }
     
 }
@@ -199,18 +233,15 @@ extension EditNoteViewController {
 extension EditNoteViewController {
     
     func showDatePicker() {
-        //Formate Date
         datePicker.datePickerMode = .dateAndTime
-        let now = Date()
-        datePicker.minimumDate = now
+        datePicker.minimumDate = Date()
         
-        //ToolBar
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(donedatePicker))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelDatePicker))
-        toolbar.setItems([doneButton,spaceButton,cancelButton], animated: false)
+        toolbar.setItems([cancelButton, spaceButton, doneButton], animated: false)
         dateField.inputAccessoryView = toolbar
         dateField.inputView = datePicker
     }

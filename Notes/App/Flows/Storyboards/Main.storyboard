@@ -333,6 +333,12 @@
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                         <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="elementSize">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="selectedColor">
+                                        <color key="value" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xey-Oa-vRV">
@@ -349,7 +355,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Ncu-QR-MVp">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Ncu-QR-MVp">
                                 <rect key="frame" x="192" y="158" width="204" height="31"/>
                                 <connections>
                                     <action selector="brightnessChange:" destination="pYA-Nd-ajV" eventType="valueChanged" id="MQk-5t-Rfu"/>
@@ -565,7 +571,7 @@
         <!--Галерея-->
         <scene sceneID="XVF-bW-NVG">
             <objects>
-                <viewController storyboardIdentifier="GalleryViewer" id="kCP-xf-Zfi" customClass="GalleryViewerViewController" customModule="Greeting" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GalleryViewer" id="kCP-xf-Zfi" customClass="GalleryViewerViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="km0-6W-Ijg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -594,7 +600,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ColorPicker" width="256" height="256"/>
+        <image name="ColorPicker" width="990" height="994"/>
         <image name="GalleryIcon" width="25" height="25"/>
         <image name="NotebookIcon" width="25" height="25"/>
     </resources>

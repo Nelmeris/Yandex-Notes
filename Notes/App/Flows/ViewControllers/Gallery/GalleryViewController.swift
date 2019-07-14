@@ -2,15 +2,15 @@
 //  GalleryViewController.swift
 //  Notes
 //
-//  Created by Артем Куфаев on 12/07/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 12/07/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
 
 private let reuseIdentifier = "PhotoCell"
 
-class GalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class GalleryViewController: UICollectionViewController {
     
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     var images = [UIImage]()
@@ -38,6 +38,20 @@ class GalleryViewController: UICollectionViewController, UICollectionViewDelegat
     @objc func addNewPhoto() {
         self.present(imagePicker, animated: true, completion: nil)
     }
+
+}
+
+// MARK: - UICollectionViewDelegate
+extension GalleryViewController {
+    
+    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+}
+
+// MARK: - UIImagePickerControllerDelegate
+extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
@@ -46,38 +60,35 @@ class GalleryViewController: UICollectionViewController, UICollectionViewDelegat
         self.dismiss(animated: true, completion: nil)
     }
     
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension GalleryViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = collectionView.bounds.size
         let currentSize = size.width > size.height ? size.height : size.width
         return CGSize(width: currentSize / 3.2, height: currentSize / 3.2)
     }
+    
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
+extension GalleryViewController {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
         return images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? GalleryPhotoViewCell
-        ?? GalleryPhotoViewCell()
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: reuseIdentifier,
+            for: indexPath) as? GalleryPhotoViewCell
+            ?? GalleryPhotoViewCell()
         
         cell.photoView.image = images[indexPath.row]
     
@@ -91,33 +102,5 @@ class GalleryViewController: UICollectionViewController, UICollectionViewDelegat
         vc.selectImageId = indexPath.row
         self.navigationController?.pushViewController(vc, animated: true)
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
-    }
-    */
-
 }

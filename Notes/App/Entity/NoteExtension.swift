@@ -2,12 +2,13 @@
 //  NoteExtension.swift
 //  Notes
 //
-//  Created by Артем Куфаев on 02/07/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 02/07/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
 
+// MARK: - Parse from JSON
 extension Note {
     
     static private func parseColor(json: [String: Double]) -> UIColor? {
@@ -53,6 +54,11 @@ extension Note {
         return Note(uid: uid, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate)
         
     }
+    
+}
+
+// MARK: - Parse to JSON
+extension Note {
     
     private func parseColor(_ color: UIColor) -> [String: Double] {
         var nColor: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)

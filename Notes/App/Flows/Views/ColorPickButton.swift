@@ -2,14 +2,14 @@
 //  ColorPickButton
 //  Notes
 //
-//  Created by Артем Куфаев on 09/07/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 09/07/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
 
 @IBDesignable
-class ColorPickButton: UIButton {
+class ColorPickButton: DesignableButton {
     
     @IBInspectable var checkmarkerColor: UIColor = .black
     @IBInspectable var checkmarkerThickness: CGFloat = 1.0
@@ -21,29 +21,22 @@ class ColorPickButton: UIButton {
 
     override func draw(_ rect: CGRect) {
         guard isChecked else { return }
-        let frame = getCheckmarkerFrame(rect: rect)
         let path = UIBezierPath()
         path.move(to: CGPoint(
-            x: frame.origin.x,
-            y: frame.origin.y + frame.size.height * 2 / 3
-        ))
+            x: bounds.maxX / 4.0,
+            y: bounds.midY)
+        )
         path.addLine(to: CGPoint(
-            x: frame.origin.x + frame.size.width / 3,
-            y: frame.origin.y + frame.size.height
-        ))
+            x: bounds.midX,
+            y: bounds.maxY / 4.0 * 3.0)
+        )
         path.addLine(to: CGPoint(
-            x: frame.origin.x + frame.size.width,
-            y: frame.origin.y
-        ))
+            x: bounds.maxX / 4.0 * 3.0,
+            y: bounds.maxY / 4.0)
+        )
         path.lineWidth = checkmarkerThickness
         checkmarkerColor.setStroke()
         path.stroke()
-    }
-    
-    func getCheckmarkerFrame(rect: CGRect) -> CGRect {
-        let origin = CGPoint(x: rect.size.width * 2 / 3 - 5, y: 5)
-        let size = CGSize(width: rect.size.width / 3, height: rect.size.height / 3)
-        return CGRect(origin: origin, size: size)
     }
 
 }

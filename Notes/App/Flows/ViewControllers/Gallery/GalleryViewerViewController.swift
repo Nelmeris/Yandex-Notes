@@ -2,13 +2,13 @@
 //  GalleryViewController.swift
 //  Notes
 //
-//  Created by Артем Куфаев on 09/07/2019.
+//  Created by Artem Kufaev on 09/07/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
 
-class GalleryViewerViewController: UIViewController, UIScrollViewDelegate {
+class GalleryViewerViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -18,7 +18,6 @@ class GalleryViewerViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.delegate = self
         
         for image in images {
             let imageView = UIImageView(image: image)

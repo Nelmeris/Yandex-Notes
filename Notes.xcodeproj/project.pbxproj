@@ -19,7 +19,7 @@
 		57C4D2CF22D8CB3200E7F86E /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C4D2CE22D8CB3200E7F86E /* GalleryViewController.swift */; };
 		57C4D2D122D8CC6900E7F86E /* GalleryPhotoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C4D2D022D8CC6900E7F86E /* GalleryPhotoViewCell.swift */; };
 		57D01C5822D50C5F00412438 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57D01C5722D50C5F00412438 /* Main.storyboard */; };
-		57D01C5B22D516B700412438 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D01C5A22D516B700412438 /* UIViewExtension.swift */; };
+		57D01C5B22D516B700412438 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D01C5A22D516B700412438 /* DesignableView.swift */; };
 		57D01C5D22D5180300412438 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D01C5C22D5180300412438 /* EditNoteViewController.swift */; };
 		57E5962022CCFAD400D73B45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57E5961F22CCFAD400D73B45 /* LaunchScreen.storyboard */; };
 		57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0B622CB63C80044DDDC /* AppDelegate.swift */; };
@@ -59,7 +59,7 @@
 		57C4D2CE22D8CB3200E7F86E /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		57C4D2D022D8CC6900E7F86E /* GalleryPhotoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryPhotoViewCell.swift; sourceTree = "<group>"; };
 		57D01C5722D50C5F00412438 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		57D01C5A22D516B700412438 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		57D01C5A22D516B700412438 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		57D01C5C22D5180300412438 /* EditNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		57E5961F22CCFAD400D73B45 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		57FAB0B322CB63C80044DDDC /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +100,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5724F67922DB372E002360EE /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				579AAC6122D5CFDC00B3DD09 /* NoteTableViewController.swift */,
+				57D01C5C22D5180300412438 /* EditNoteViewController.swift */,
+				579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */,
+			);
+			path = Notes;
+			sourceTree = "<group>";
+		};
 		575D1CBA22CFC6BB00D40EB7 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +118,15 @@
 				57FAB0DF22CB972D0044DDDC /* FileNotebook.swift */,
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		576F037522DB35D9004015F9 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				57C4D2CE22D8CB3200E7F86E /* GalleryViewController.swift */,
+				57C4D2CC22D8B7BB00E7F86E /* GalleryViewerViewController.swift */,
+			);
+			path = Gallery;
 			sourceTree = "<group>";
 		};
 		579AAC5722D53BAE00B3DD09 /* Storyboards */ = {
@@ -121,11 +140,8 @@
 		579AAC5822D53BB500B3DD09 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				57C4D2CE22D8CB3200E7F86E /* GalleryViewController.swift */,
-				57C4D2CC22D8B7BB00E7F86E /* GalleryViewerViewController.swift */,
-				579AAC6122D5CFDC00B3DD09 /* NoteTableViewController.swift */,
-				57D01C5C22D5180300412438 /* EditNoteViewController.swift */,
-				579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */,
+				5724F67922DB372E002360EE /* Notes */,
+				576F037522DB35D9004015F9 /* Gallery */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -162,7 +178,7 @@
 		57D01C5922D516A000412438 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				57D01C5A22D516B700412438 /* UIViewExtension.swift */,
+				57D01C5A22D516B700412438 /* DesignableView.swift */,
 				579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */,
 				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
 			);
@@ -413,7 +429,7 @@
 			files = (
 				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
 				57C4D2CD22D8B7BB00E7F86E /* GalleryViewerViewController.swift in Sources */,
-				57D01C5B22D516B700412438 /* UIViewExtension.swift in Sources */,
+				57D01C5B22D516B700412438 /* DesignableView.swift in Sources */,
 				579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */,
 				57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */,
 				57FAB0DE22CB66160044DDDC /* NoteExtension.swift in Sources */,
@@ -515,6 +531,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
 				INFOPLIST_FILE = Notes/Enviroments/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -674,6 +691,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
 				INFOPLIST_FILE = Notes/Enviroments/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -694,6 +712,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
 				INFOPLIST_FILE = Notes/Enviroments/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

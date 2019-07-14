@@ -2,8 +2,8 @@
 //  ColorPickerViewController.swift
 //  Notes
 //
-//  Created by Артем Куфаев on 10/07/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 10/07/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
@@ -15,11 +15,16 @@ class ColorPickerViewController: UIViewController, HSBColorPickerDelegate {
     @IBOutlet weak var brightnessSlider: UISlider!
     @IBOutlet weak var colorPicker: HSBColorPicker!
     
-    var color: UIColor!
+    var color: UIColor? = nil {
+        didSet {
+            updatePreview()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         colorPicker.delegate = self
+        colorPicker.selectColor(color ?? .white)
         updatePreview()
     }
     
@@ -31,24 +36,18 @@ class ColorPickerViewController: UIViewController, HSBColorPickerDelegate {
         editNoteVC.checkedColorButton = editNoteVC.colorPickerButton
     }
     
-    func HSBColorColorPickerTouched(sender: HSBColorPicker, color: UIColor, point: CGPoint, state: UIGestureRecognizer.State) {
+    func HSBColorColorPickerTouched(sender: HSBColorPicker, color: UIColor, point: CGPoint, state: UIGestureRecognizer.State?) {
         self.color = color
-        updatePreview()
-    }
-    
-    func getBrightnessColor() -> UIColor {
-        let brightness = brightnessSlider.value * 100 - 50
-        return self.color.adjust(by: CGFloat(brightness))!
     }
 
     @IBAction func brightnessChange(_ sender: Any) {
-        updatePreview()
+        colorPicker.brightnessFactor = CGFloat(brightnessSlider.value)
     }
     
     func updatePreview() {
-        let color = getBrightnessColor()
-        colorPreview.backgroundColor = color
-        colorHEXField.text = color.toHexString()
+        guard let color = color else { return }
+        colorPreview?.backgroundColor = color
+        colorHEXField?.text = color.toHexString()
     }
     
     @IBAction func done(_ sender: Any) {

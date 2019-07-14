@@ -1,9 +1,9 @@
 //
-//  UIViewExtension.swift
+//  DesignableView
 //  Notes
 //
-//  Created by Артем Куфаев on 09/07/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 09/07/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
