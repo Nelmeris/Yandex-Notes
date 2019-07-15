@@ -1,5 +1,5 @@
 //
-//  GalleryViewController.swift
+//  GalleryViewerViewController.swift
 //  Notes
 //
 //  Created by Artem Kufaev on 09/07/2019.

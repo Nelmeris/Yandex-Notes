@@ -58,7 +58,7 @@ class EditNoteViewController: UIViewController {
     override func viewDidLoad() {
         configureViews()
         showDatePicker()
-        donedatePicker()
+        doneDatePicker()
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -238,7 +238,7 @@ extension EditNoteViewController {
         
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
-        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(donedatePicker))
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneDatePicker))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelDatePicker))
         toolbar.setItems([cancelButton, spaceButton, doneButton], animated: false)
@@ -246,7 +246,7 @@ extension EditNoteViewController {
         dateField.inputView = datePicker
     }
     
-    @objc func donedatePicker() {
+    @objc func doneDatePicker() {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM d, h:mm a"
         dateField.text = formatter.string(from: datePicker.date)
