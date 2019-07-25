@@ -15,7 +15,9 @@ class FileNotebook {
     
     static private let fileName = "notebook.json"
     
-    init() {
+    static public let shared = FileNotebook()
+    
+    private init() {
         guard FileNotebook.isFileCreated() else {
             saveToFile()
             print("Notebook was created")

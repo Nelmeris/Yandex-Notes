@@ -10,20 +10,17 @@ import UIKit
 
 class NoteTableViewController: UITableViewController {
     
-    var notebook: FileNotebook!
     private let cellReuseIdentifier = "NoteCell"
     private let segueToEditNoteIdentifier = "NoteTableToEditNote"
     
     var selectedNote: Note?
     
     var sortedNotes: [Note] {
-        return notebook.notes.sorted { $0.createDate > $1.createDate }
+        return FileNotebook.shared.notes.sorted { $0.createDate > $1.createDate }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        notebook = FileNotebook()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
@@ -34,7 +31,7 @@ class NoteTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let loadNotesOperation = LoadNotesOperation(notebook: notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        let loadNotesOperation = LoadNotesOperation(notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         loadNotesOperation.completionBlock = {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -114,7 +111,7 @@ extension NoteTableViewController {
         guard editingStyle == .delete else { return }
         let note = sortedNotes[indexPath.row]
         tableView.beginUpdates()
-        let removeNoteOperation = RemoveNoteOperation(note: note, notebook: notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        let removeNoteOperation = RemoveNoteOperation(note: note, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         removeNoteOperation.completionBlock = {
             DispatchQueue.main.async {
                 tableView.deleteRows(at: [indexPath], with: .fade)

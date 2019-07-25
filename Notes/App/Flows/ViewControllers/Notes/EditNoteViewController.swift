@@ -143,7 +143,7 @@ extension EditNoteViewController {
         )
         
         dest.tableView.beginUpdates()
-        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: dest.notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.completionBlock = {
             DispatchQueue.main.async {
                 let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid }!
@@ -173,8 +173,8 @@ extension EditNoteViewController {
         let index = dest.sortedNotes.firstIndex { $0.uid == note.uid }!
         
         dest.tableView.beginUpdates()
-        let removeNoteOperation = RemoveNoteOperation(note: note, notebook: dest.notebook, backendQueue: backendQueue, dbQueue: dbQueue)
-        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: dest.notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        let removeNoteOperation = RemoveNoteOperation(note: note, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
+        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.addDependency(removeNoteOperation)
         saveNoteOperation.completionBlock = {
             DispatchQueue.main.async {

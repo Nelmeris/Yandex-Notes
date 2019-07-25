@@ -16,27 +16,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func printJSON(json: [String: Any]) {
-        for (key, value) in json {
-            if let newJson = value as? [String: Any] {
-                print("'\(key)' [")
-                printJSON(json: newJson)
-                print("]")
-            } else {
-                print("'\(key)': \(value)")
-            }
-        }
-    }
+//    func printJSON(json: [String: Any]) {
+//        for (key, value) in json {
+//            if let newJson = value as? [String: Any] {
+//                print("'\(key)' [")
+//                printJSON(json: newJson)
+//                print("]")
+//            } else {
+//                print("'\(key)': \(value)")
+//            }
+//        }
+//    }
     
     private func initNotebook() {
-        let notebook = FileNotebook()
-        
         var note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
                         color: .black, importance: .critical, destructionDate: Date())
         
         var saveNoteOperation = SaveNoteOperation(
             note: note,
-            notebook: notebook,
+            notebook: FileNotebook.shared,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )
@@ -46,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     color: .yellow, importance: .usual, destructionDate: Date())
         saveNoteOperation = SaveNoteOperation(
             note: note,
-            notebook: notebook,
+            notebook: FileNotebook.shared,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )
@@ -56,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     color: .white, importance: .usual)
         saveNoteOperation = SaveNoteOperation(
             note: note,
-            notebook: notebook,
+            notebook: FileNotebook.shared,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )
@@ -66,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     color: .red, importance: .usual)
         saveNoteOperation = SaveNoteOperation(
             note: note,
-            notebook: notebook,
+            notebook: FileNotebook.shared,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )
