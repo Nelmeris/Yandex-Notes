@@ -9,6 +9,8 @@
 import UIKit
 import CocoaLumberjack
 
+let commonQueue = OperationQueue.main
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -25,33 +27,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    private func initNotebook() {
+        let notebook = FileNotebook()
+        
+        var note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
+                        color: .black, importance: .critical, destructionDate: Date())
+        
+        var saveNoteOperation = SaveNoteOperation(
+            note: note,
+            notebook: notebook,
+            backendQueue: backendQueue,
+            dbQueue: dbQueue
+        )
+        commonQueue.addOperation(saveNoteOperation)
+        
+        note = Note(title: "Заметка для демо 2", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make",
+                    color: .yellow, importance: .usual, destructionDate: Date())
+        saveNoteOperation = SaveNoteOperation(
+            note: note,
+            notebook: notebook,
+            backendQueue: backendQueue,
+            dbQueue: dbQueue
+        )
+        commonQueue.addOperation(saveNoteOperation)
+        
+        note = Note(title: "Заметка для демо 3", content: "Lorem Ipsum is simply dummy text of the printing and typesetting",
+                    color: .white, importance: .usual)
+        saveNoteOperation = SaveNoteOperation(
+            note: note,
+            notebook: notebook,
+            backendQueue: backendQueue,
+            dbQueue: dbQueue
+        )
+        commonQueue.addOperation(saveNoteOperation)
+        
+        note = Note(title: "Заметка для демо 4", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lore",
+                    color: .red, importance: .usual)
+        saveNoteOperation = SaveNoteOperation(
+            note: note,
+            notebook: notebook,
+            backendQueue: backendQueue,
+            dbQueue: dbQueue
+        )
+        commonQueue.addOperation(saveNoteOperation)
+        
+        saveNoteOperation.completionBlock = {
+            UserDefaults.standard.set(true, forKey: "INITED")
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         #if DEBUG
         
-        let notebook = FileNotebook()
-        notebook.loadFromFile()
+        dbQueue.maxConcurrentOperationCount = 1
+        commonQueue.maxConcurrentOperationCount = 1
         
-        if notebook.notes.count == 0 {
-            
-            var note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
-                            color: .black, importance: .critical, destructionDate: Date())
-            notebook.add(note)
-            
-            note = Note(title: "Заметка для демо 2", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make",
-                        color: .yellow, importance: .usual, destructionDate: Date())
-            notebook.add(note)
-            
-            note = Note(title: "Заметка для демо 3", content: "Lorem Ipsum is simply dummy text of the printing and typesetting",
-                        color: .white, importance: .usual)
-            notebook.add(note)
-            
-            note = Note(title: "Заметка для демо 4", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lore",
-                        color: .red, importance: .usual)
-            notebook.add(note)
-            
-            notebook.saveToFile()
+        if !UserDefaults.standard.bool(forKey: "INITED") {
+            initNotebook()
         }
         
         #elseif DEMO

@@ -143,10 +143,15 @@ extension EditNoteViewController {
         )
         
         dest.tableView.beginUpdates()
-        dest.notebook.add(newNote)
-        let newIndex = dest.notes.firstIndex { $0.uid == newNote.uid }!
-        dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
-        dest.tableView.endUpdates()
+        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: dest.notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        saveNoteOperation.completionBlock = {
+            DispatchQueue.main.async {
+                let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid }!
+                dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+                dest.tableView.endUpdates()
+            }
+        }
+        commonQueue.addOperation(saveNoteOperation)
     }
     
     func editNote(destination dest: NoteTableViewController,
@@ -165,18 +170,27 @@ extension EditNoteViewController {
         
         guard !(note == newNote) else { return }
         
-        let index = dest.notes.firstIndex { $0.uid == note.uid }!
+        let index = dest.sortedNotes.firstIndex { $0.uid == note.uid }!
         
         dest.tableView.beginUpdates()
-        dest.notebook.update(newNote)
-        let newIndex = dest.notes.firstIndex { $0.uid == newNote.uid }!
-        if index == newIndex {
-            dest.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        } else {
-            dest.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+        let removeNoteOperation = RemoveNoteOperation(note: note, notebook: dest.notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: dest.notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        saveNoteOperation.addDependency(removeNoteOperation)
+        saveNoteOperation.completionBlock = {
+            DispatchQueue.main.async {
+                let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid }!
+                if index == newIndex {
+                    dest.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                } else {
+                    dest.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                    dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+                }
+                dest.tableView.endUpdates()
+            }
         }
-        dest.tableView.endUpdates()
+        
+        commonQueue.addOperation(removeNoteOperation)
+        commonQueue.addOperation(saveNoteOperation)
     }
     
 }

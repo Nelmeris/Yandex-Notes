@@ -16,22 +16,31 @@ class NoteTableViewController: UITableViewController {
     
     var selectedNote: Note?
     
-    var notes: [Note] {
-        let notes = self.notebook.notes.sorted { $0.createDate > $1.createDate }
-        return notes
+    var sortedNotes: [Note] {
+        return notebook.notes.sorted { $0.createDate > $1.createDate }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         notebook = FileNotebook()
-        notebook.loadFromFile()
-        notebook.setAutosave(true)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         
         title = "Заметки"
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let loadNotesOperation = LoadNotesOperation(notebook: notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        loadNotesOperation.completionBlock = {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        commonQueue.addOperation(loadNotesOperation)
     }
     
     @objc func startEditing(sender: UIBarButtonItem) {
@@ -61,7 +70,7 @@ class NoteTableViewController: UITableViewController {
 extension NoteTableViewController {
     
     override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        selectedNote = notes[indexPath.row]
+        selectedNote = sortedNotes[indexPath.row]
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -78,7 +87,7 @@ extension NoteTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes.count
+        return sortedNotes.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -88,7 +97,7 @@ extension NoteTableViewController {
             ) as? NoteTableViewCell ??
             NoteTableViewCell(style: .default, reuseIdentifier: cellReuseIdentifier)
         
-        let note = notes[indexPath.row]
+        let note = sortedNotes[indexPath.row]
         
         cell.titleLabel.text = note.title
         cell.contentLabel.text = note.content
@@ -103,9 +112,16 @@ extension NoteTableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
-        let note = notes[indexPath.row]
-        notebook.remove(with: note.uid)
-        tableView.deleteRows(at: [indexPath], with: .fade)
+        let note = sortedNotes[indexPath.row]
+        tableView.beginUpdates()
+        let removeNoteOperation = RemoveNoteOperation(note: note, notebook: notebook, backendQueue: backendQueue, dbQueue: dbQueue)
+        removeNoteOperation.completionBlock = {
+            DispatchQueue.main.async {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.endUpdates()
+            }
+        }
+        commonQueue.addOperation(removeNoteOperation)
     }
     
 }

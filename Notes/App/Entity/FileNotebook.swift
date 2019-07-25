@@ -11,15 +11,17 @@ import Foundation
 class FileNotebook {
     
     private(set) var notes: [Note] = []
-    private(set) var isAutosave: Bool = false
+    private(set) var isAutosave: Bool = true
     
     static private let fileName = "notebook.json"
     
     init() {
-        if !FileNotebook.isFileCreated() {
+        guard FileNotebook.isFileCreated() else {
             saveToFile()
             print("Notebook was created")
+            return
         }
+        loadFromFile()
     }
     
     public func setAutosave(_ value: Bool) {
@@ -38,8 +40,21 @@ class FileNotebook {
         }
     }
     
+    public func add(_ notes: [Note]) {
+        for note in notes {
+            add(note)
+        }
+    }
+    
     public func remove(with uid: String) {
         notes.removeAll { $0.uid == uid }
+        if isAutosave {
+            saveToFile()
+        }
+    }
+    
+    public func removeAll() {
+        notes.removeAll()
         if isAutosave {
             saveToFile()
         }
@@ -76,10 +91,11 @@ extension FileNotebook {
     }
     
     public func saveToFile() {
+        let notes = self.notes
         let json = notes.map { $0.json }
-        let data = try! JSONSerialization.data(withJSONObject: json, options: [])
-        guard let fileURL = FileNotebook.getFilePath() else { return }
         do {
+            let data = try JSONSerialization.data(withJSONObject: json, options: [])
+            guard let fileURL = FileNotebook.getFilePath() else { return }
             try data.write(to: fileURL)
         } catch let error {
             print(error)
@@ -90,7 +106,7 @@ extension FileNotebook {
         guard let fileURL = FileNotebook.getFilePath() else { return }
         do {
             let data = try Data(contentsOf: fileURL)
-            let jsonArray = try!
+            let jsonArray = try
                 JSONSerialization.jsonObject(with: data, options: [])
                 as! [[String: Any]]
             self.notes = jsonArray.compactMap { Note.parse(json: $0) }
