@@ -12,7 +12,7 @@ class LoadNotesDBOperation: BaseDBOperation {
     private(set) var result: [Note]?
     
     override func main() {
-        result = notebook.notes
-        finish()
+        self.result = self.notebook.notes
+        self.finish()
     }
 }

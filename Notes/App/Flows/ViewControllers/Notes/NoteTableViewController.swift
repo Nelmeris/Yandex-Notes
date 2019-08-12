@@ -22,15 +22,18 @@ class NoteTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        GistService.shared.dispatchGroup.enter()
+//        let authVC = AuthViewController()
+//        authVC.delegate = self
+//        present(authVC, animated: true, completion: nil)
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         
         title = "Заметки"
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
+    func loadNotes() {
         let loadNotesOperation = LoadNotesOperation(notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         loadNotesOperation.completionBlock = {
             DispatchQueue.main.async {
@@ -38,6 +41,11 @@ class NoteTableViewController: UITableViewController {
             }
         }
         commonQueue.addOperation(loadNotesOperation)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadNotes()
     }
     
     @objc func startEditing(sender: UIBarButtonItem) {
@@ -61,6 +69,15 @@ class NoteTableViewController: UITableViewController {
         destVC.note = selectedNote
     }
 
+}
+
+extension NoteTableViewController: AuthViewControllerDelegate {
+    
+    func handleTokenChanged(token: String) {
+        UserDefaults.standard.set(token, forKey: "access_token")
+        loadNotes()
+    }
+    
 }
 
 // MARK: - UITableViewDelegate

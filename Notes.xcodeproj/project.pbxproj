@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		55AEF8BF8731C9DF131D3220 /* libPods-Notes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A3A0CBF0846AF82DA15BE0 /* libPods-Notes.a */; };
+		5739C7D023012D640025294E /* GistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5739C7CF23012D640025294E /* GistService.swift */; };
+		574071B7230170580091E4D2 /* URLSessionDataTaskUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574071B6230170580091E4D2 /* URLSessionDataTaskUpdate.swift */; };
 		577AA4FB22E90A5000FA4E52 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577AA4FA22E90A5000FA4E52 /* NetworkError.swift */; };
 		579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */; };
 		579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */; };
@@ -37,7 +39,6 @@
 		57F518C12300F6CD000E91C4 /* GistFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518BE2300F6CD000E91C4 /* GistFile.swift */; };
 		57F518C22300F6CD000E91C4 /* Gist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518BF2300F6CD000E91C4 /* Gist.swift */; };
 		57F518CB2300F7A5000E91C4 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518CA2300F7A4000E91C4 /* AuthViewController.swift */; };
-		57F518CD2300F7C5000E91C4 /* GistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518CC2300F7C5000E91C4 /* GistService.swift */; };
 		57F518D123010583000E91C4 /* NoteCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518D023010583000E91C4 /* NoteCodable.swift */; };
 		57F518D323010BF0000E91C4 /* GistOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518D223010BF0000E91C4 /* GistOwner.swift */; };
 		57F518D523010C49000E91C4 /* GistFileCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518D423010C49000E91C4 /* GistFileCreator.swift */; };
@@ -68,6 +69,8 @@
 		0AC5D6A210B2F2F9C698D1CB /* Pods-NotesTests.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotesTests.demo.xcconfig"; path = "Target Support Files/Pods-NotesTests/Pods-NotesTests.demo.xcconfig"; sourceTree = "<group>"; };
 		263DB9C6613F9C22A215C05A /* Pods-Notes.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notes.demo.xcconfig"; path = "Target Support Files/Pods-Notes/Pods-Notes.demo.xcconfig"; sourceTree = "<group>"; };
 		2ED5DFE0481618F037CD9B88 /* libPods-NotesTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotesTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5739C7CF23012D640025294E /* GistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GistService.swift; path = ../../../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/App/BusinessLogic/Network/GistService.swift; sourceTree = "<group>"; };
+		574071B6230170580091E4D2 /* URLSessionDataTaskUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = URLSessionDataTaskUpdate.swift; path = ../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/Core/URLSessionDataTaskUpdate.swift; sourceTree = "<group>"; };
 		577AA4FA22E90A5000FA4E52 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickButton.swift; sourceTree = "<group>"; };
 		579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
@@ -97,7 +100,6 @@
 		57F518BE2300F6CD000E91C4 /* GistFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistFile.swift; sourceTree = "<group>"; };
 		57F518BF2300F6CD000E91C4 /* Gist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gist.swift; sourceTree = "<group>"; };
 		57F518CA2300F7A4000E91C4 /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
-		57F518CC2300F7C5000E91C4 /* GistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GistService.swift; path = ../../../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/App/BusinessLogic/Network/GistService.swift; sourceTree = "<group>"; };
 		57F518D023010583000E91C4 /* NoteCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCodable.swift; sourceTree = "<group>"; };
 		57F518D223010BF0000E91C4 /* GistOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistOwner.swift; sourceTree = "<group>"; };
 		57F518D423010C49000E91C4 /* GistFileCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GistFileCreator.swift; path = ../../../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/App/Entity/Gists/GistFileCreator.swift; sourceTree = "<group>"; };
@@ -150,6 +152,14 @@
 			path = Notes;
 			sourceTree = "<group>";
 		};
+		5739C7CE23012D4D0025294E /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				5739C7CF23012D640025294E /* GistService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		575D1CBA22CFC6BB00D40EB7 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,7 +182,7 @@
 		577AA4E122E908AD00FA4E52 /* BusinessLogic */ = {
 			isa = PBXGroup;
 			children = (
-				57F518BB2300F681000E91C4 /* Network */,
+				5739C7CE23012D4D0025294E /* Network */,
 				577AA4E222E908C300FA4E52 /* Operations */,
 			);
 			path = BusinessLogic;
@@ -273,16 +283,9 @@
 				57D01C5A22D516B700412438 /* DesignableView.swift */,
 				579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */,
 				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
+				574071B6230170580091E4D2 /* URLSessionDataTaskUpdate.swift */,
 			);
 			path = Core;
-			sourceTree = "<group>";
-		};
-		57F518BB2300F681000E91C4 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				57F518CC2300F7C5000E91C4 /* GistService.swift */,
-			);
-			path = Network;
 			sourceTree = "<group>";
 		};
 		57F518BC2300F6A2000E91C4 /* Notes */ = {
@@ -557,8 +560,10 @@
 				57F518C12300F6CD000E91C4 /* GistFile.swift in Sources */,
 				57E56C5522EA2CBD0006087C /* BaseBackendOperation.swift in Sources */,
 				57F518D123010583000E91C4 /* NoteCodable.swift in Sources */,
+				574071B7230170580091E4D2 /* URLSessionDataTaskUpdate.swift in Sources */,
 				57F518CB2300F7A5000E91C4 /* AuthViewController.swift in Sources */,
 				57F518D323010BF0000E91C4 /* GistOwner.swift in Sources */,
+				5739C7D023012D640025294E /* GistService.swift in Sources */,
 				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
 				57C4D2CD22D8B7BB00E7F86E /* GalleryViewerViewController.swift in Sources */,
 				57D01C5B22D516B700412438 /* DesignableView.swift in Sources */,
@@ -572,7 +577,6 @@
 				579AAC6222D5CFDC00B3DD09 /* NoteTableViewController.swift in Sources */,
 				579AAC5B22D53DDC00B3DD09 /* UIColorBrightness.swift in Sources */,
 				57E56C5C22EA2CCB0006087C /* BaseDBOperation.swift in Sources */,
-				57F518CD2300F7C5000E91C4 /* GistService.swift in Sources */,
 				57FAB0E022CB972D0044DDDC /* FileNotebook.swift in Sources */,
 				57D01C5D22D5180300412438 /* EditNoteViewController.swift in Sources */,
 				57E56C6422EA2CD30006087C /* LoadNotesOperation.swift in Sources */,

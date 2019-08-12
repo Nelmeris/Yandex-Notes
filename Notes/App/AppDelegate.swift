@@ -79,9 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         #if DEBUG
         
-        dbQueue.maxConcurrentOperationCount = 1
-        commonQueue.maxConcurrentOperationCount = 1
-        
         if !UserDefaults.standard.bool(forKey: "INITED") {
             initNotebook()
         }

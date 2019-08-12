@@ -85,9 +85,11 @@ extension AuthViewController {
             
             if let token = components.queryItems?.first(where: { $0.name == "access_token" })?.value {
                 strongSelf.delegate?.handleTokenChanged(token: token)
-                strongSelf.dismiss(animated: true, completion: nil)
+                strongSelf.dismiss(animated: true) {
+                    GistService.shared.dispatchGroup.leave()
+                }
             }
-            }.resume()
+        }.resume()
     }
     
 }

@@ -25,17 +25,18 @@ class LoadNotesOperation: AsyncOperation {
         
         super.init()
         
-        addDependency(loadFromDb)
         addDependency(loadFromBackend)
+        addDependency(loadFromDb)
         
-        dbQueue.addOperation(loadFromDb)
         backendQueue.addOperation(loadFromBackend)
+        dbQueue.addOperation(loadFromDb)
     }
     
     private func updateLocalData(with notes: [Note]) {
         let dbNotes = loadFromDb.result!
         var flag = false
-        for index in 0..<dbNotes.count {
+        let maxIndex = dbNotes.count > notes.count ? notes.count : dbNotes.count
+        for index in 0..<maxIndex {
             if notes[index] != dbNotes[index] {
                 flag = true
                 break

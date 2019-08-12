@@ -10,5 +10,4 @@ import Foundation
 
 struct GistFileCreator: Codable {
     let content: String
-    let filename: String?
 }

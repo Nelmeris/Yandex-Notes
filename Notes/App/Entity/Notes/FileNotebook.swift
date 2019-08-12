@@ -112,7 +112,7 @@ extension FileNotebook {
                 JSONSerialization.jsonObject(with: data, options: [])
                 as! [[String: Any]]
             self.notes = jsonArray.compactMap { Note.parse(json: $0) }
-        } catch let error {
+        } catch {
             print(error)
         }
     }

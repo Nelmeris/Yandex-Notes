@@ -30,8 +30,8 @@ class AsyncOperation: Operation {
         }
         willChangeValue(forKey: "isExecuting")
         _executing = true
-        main()
         didChangeValue(forKey: "isExecuting")
+        main()
     }
     
     override func main() {
