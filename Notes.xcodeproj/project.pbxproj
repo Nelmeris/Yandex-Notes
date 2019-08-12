@@ -34,6 +34,9 @@
 		57E56C6322EA2CD30006087C /* RemoveNoteOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E56C6022EA2CD30006087C /* RemoveNoteOperation.swift */; };
 		57E56C6422EA2CD30006087C /* LoadNotesOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E56C6122EA2CD30006087C /* LoadNotesOperation.swift */; };
 		57E5962022CCFAD400D73B45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57E5961F22CCFAD400D73B45 /* LaunchScreen.storyboard */; };
+		57F518C12300F6CD000E91C4 /* GistFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518BE2300F6CD000E91C4 /* GistFile.swift */; };
+		57F518C22300F6CD000E91C4 /* Gist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518BF2300F6CD000E91C4 /* Gist.swift */; };
+		57F518C32300F6CD000E91C4 /* GistOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518C02300F6CD000E91C4 /* GistOwner.swift */; };
 		57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0B622CB63C80044DDDC /* AppDelegate.swift */; };
 		57FAB0BE22CB63CA0044DDDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FAB0BD22CB63CA0044DDDC /* Assets.xcassets */; };
 		57FAB0D722CB643C0044DDDC /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0D622CB643C0044DDDC /* Note.swift */; };
@@ -86,6 +89,9 @@
 		57E56C6022EA2CD30006087C /* RemoveNoteOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveNoteOperation.swift; sourceTree = "<group>"; };
 		57E56C6122EA2CD30006087C /* LoadNotesOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadNotesOperation.swift; sourceTree = "<group>"; };
 		57E5961F22CCFAD400D73B45 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		57F518BE2300F6CD000E91C4 /* GistFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistFile.swift; sourceTree = "<group>"; };
+		57F518BF2300F6CD000E91C4 /* Gist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gist.swift; sourceTree = "<group>"; };
+		57F518C02300F6CD000E91C4 /* GistOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistOwner.swift; sourceTree = "<group>"; };
 		57FAB0B322CB63C80044DDDC /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FAB0B622CB63C80044DDDC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57FAB0BD22CB63CA0044DDDC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -137,9 +143,8 @@
 		575D1CBA22CFC6BB00D40EB7 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				57FAB0D622CB643C0044DDDC /* Note.swift */,
-				57FAB0DD22CB66160044DDDC /* NoteExtension.swift */,
-				57FAB0DF22CB972D0044DDDC /* FileNotebook.swift */,
+				57F518BD2300F6AB000E91C4 /* Gists */,
+				57F518BC2300F6A2000E91C4 /* Notes */,
 				577AA4FA22E90A5000FA4E52 /* NetworkError.swift */,
 			);
 			path = Entity;
@@ -157,6 +162,7 @@
 		577AA4E122E908AD00FA4E52 /* BusinessLogic */ = {
 			isa = PBXGroup;
 			children = (
+				57F518BB2300F681000E91C4 /* Network */,
 				577AA4E222E908C300FA4E52 /* Operations */,
 			);
 			path = BusinessLogic;
@@ -258,6 +264,33 @@
 				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		57F518BB2300F681000E91C4 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		57F518BC2300F6A2000E91C4 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				57FAB0D622CB643C0044DDDC /* Note.swift */,
+				57FAB0DD22CB66160044DDDC /* NoteExtension.swift */,
+				57FAB0DF22CB972D0044DDDC /* FileNotebook.swift */,
+			);
+			path = Notes;
+			sourceTree = "<group>";
+		};
+		57F518BD2300F6AB000E91C4 /* Gists */ = {
+			isa = PBXGroup;
+			children = (
+				57F518C02300F6CD000E91C4 /* GistOwner.swift */,
+				57F518BF2300F6CD000E91C4 /* Gist.swift */,
+				57F518BE2300F6CD000E91C4 /* GistFile.swift */,
+			);
+			path = Gists;
 			sourceTree = "<group>";
 		};
 		57FAB0AA22CB63C80044DDDC = {
@@ -505,6 +538,7 @@
 			files = (
 				57E56C5B22EA2CCB0006087C /* SaveNoteDBOperation.swift in Sources */,
 				57E56C5422EA2CBD0006087C /* SaveNotesBackendOperation.swift in Sources */,
+				57F518C12300F6CD000E91C4 /* GistFile.swift in Sources */,
 				57E56C5522EA2CBD0006087C /* BaseBackendOperation.swift in Sources */,
 				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
 				57C4D2CD22D8B7BB00E7F86E /* GalleryViewerViewController.swift in Sources */,
@@ -524,11 +558,13 @@
 				57C4D2D122D8CC6900E7F86E /* GalleryPhotoViewCell.swift in Sources */,
 				57FAB0D722CB643C0044DDDC /* Note.swift in Sources */,
 				579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */,
+				57F518C22300F6CD000E91C4 /* Gist.swift in Sources */,
 				57C4D2CF22D8CB3200E7F86E /* GalleryViewController.swift in Sources */,
 				57E56C6322EA2CD30006087C /* RemoveNoteOperation.swift in Sources */,
 				579AAC5622D53B7000B3DD09 /* UIColorHEXValues.swift in Sources */,
 				57E56C5622EA2CBD0006087C /* LoadNotesBackendOperation.swift in Sources */,
 				57E56C5022EA2CB10006087C /* AsyncOperation.swift in Sources */,
+				57F518C32300F6CD000E91C4 /* GistOwner.swift in Sources */,
 				57E56C6222EA2CD30006087C /* SaveNoteOperation.swift in Sources */,
 				579AAC6022D5CFC300B3DD09 /* NoteTableViewCell.swift in Sources */,
 			);
