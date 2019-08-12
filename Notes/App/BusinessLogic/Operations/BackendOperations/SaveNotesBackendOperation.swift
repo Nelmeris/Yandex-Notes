@@ -22,8 +22,45 @@ class SaveNotesBackendOperation: BaseBackendOperation {
         super.init()
     }
     
+    private func failture() {
+        self.result = .failure(.unreachable)
+        self.finish()
+    }
+    
     override func main() {
-        result = .failure(.unreachable)
-        finish()
+        guard
+            let url = URL(string: gitHubAPIURL + "gists/\(gistId)"),
+            let gistContent = try? JSONEncoder().encode(notes),
+            let gistContentString = String(data: gistContent, encoding: .utf8) else {
+                failture()
+                return
+        }
+        let gistFile = GistFileCreator(content: gistContentString, filename: jsonGistFileName)
+        let gist = GistCreator(public: false, description: "Yandex.Notes for Stepic", files: [jsonGistFileName: gistFile])
+        
+        guard let gistJson = try? JSONEncoder().encode(gist) else {
+            failture()
+            return
+        }
+        
+        var gistRequest = URLRequest(url: url)
+        gistRequest.httpMethod = "PATCH"
+        gistRequest.httpBody = gistJson
+        gistRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: gistRequest) {
+            [weak self] (data, response, error) in
+            guard let strongSelf = self else { return }
+            if let response = response as? HTTPURLResponse {
+                switch response.statusCode {
+                case 200..<300:
+                    strongSelf.result = .success
+                default:
+                    strongSelf.result = .failure(.unreachable)
+                }
+            }
+            strongSelf.finish()
+        }
+        task.resume()
     }
 }

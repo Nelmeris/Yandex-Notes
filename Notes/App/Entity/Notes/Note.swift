@@ -10,7 +10,7 @@ import UIKit
 
 struct Note: Equatable {
     
-    enum ImportanceLevels: Int {
+    enum ImportanceLevels: Int, Codable {
         case insignificant, usual, critical
     }
     
