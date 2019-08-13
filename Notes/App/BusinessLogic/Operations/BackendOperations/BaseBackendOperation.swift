@@ -13,6 +13,4 @@ var gistId: String? = nil
 
 class BaseBackendOperation: AsyncOperation {
     
-    let jsonGistFileName = "ios-course-notes-db"
-    
 }

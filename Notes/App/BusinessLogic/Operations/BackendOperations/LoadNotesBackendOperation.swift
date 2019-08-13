@@ -10,7 +10,7 @@ import Foundation
 
 enum LoadNotesBackendResult {
     case success([Note])
-    case failure(NetworkError)
+    case failure(GistServiceErrors)
 }
 
 class LoadNotesBackendOperation: BaseBackendOperation {
@@ -20,62 +20,14 @@ class LoadNotesBackendOperation: BaseBackendOperation {
         }
     }
     
-    private func createNewGist() {
-        let gistFileCreator = GistFileCreator(content: "[]")
-        let gistCreator = GistCreator(public: false, description: self.jsonGistFileName, files: [self.jsonGistFileName: gistFileCreator])
-        
-        GistService.shared.create(with: gistCreator) { result in // Создать его
-            if let gist = result { // Если успешно
-                gistId = gist.id // Сохранить ID
-                self.result = .success([]) // Сбросить заметки
-            } else {
-                self.result = .failure(.unreachable)
-            }
-        }
-    }
-    
-    private func pullNotes(from gist: Gist) {
-        guard let gistFile = gist.files[self.jsonGistFileName],
-            let gistFileContent = gistFile.content else { return }
-        do {
-            let data = gistFileContent.data(using: .utf8)
-            let notes = try JSONDecoder().decode([Note].self, from: data!)
-            self.result = .success(notes)
-        } catch {
-            print(error.localizedDescription)
-            self.result = .failure(.unreachable)
-        }
-    }
-    
-    private func search(for q: String) {
-        GistService.shared.search(for: jsonGistFileName) { result in
-            // Если не найден
-            guard let gist = result else {
-                self.createNewGist()
+    override func main() {
+        print("Start load from Backend operation")
+        GistForNotesService.shared.pullNotes { result, error in
+            guard let notes = result else {
+                self.result = .failure(error!)
                 return
             }
-            // Если найден
-            gistId = gist.id
-            GistService.shared.get(with: gist.id) { gist in
-                self.pullNotes(from: gist!)
-            }
-        }
-    }
-    
-    override func main() {
-        // Если gist id известен
-        if let gistId = gistId {
-            // Получить его данные
-            GistService.shared.get(with: gistId) { gist in
-                guard let gist = gist else { // Если gist id ошибочен
-                    self.search(for: self.jsonGistFileName)
-                    return
-                }
-                self.pullNotes(from: gist)
-            }
-        } else { // Если неизвестен Gist
-            // Найти его
-            search(for: jsonGistFileName)
+            self.result = .success(notes)
         }
     }
 }

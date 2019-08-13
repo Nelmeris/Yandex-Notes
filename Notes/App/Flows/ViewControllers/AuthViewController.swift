@@ -84,10 +84,10 @@ extension AuthViewController {
             guard let components = URLComponents(string: "\(strongSelf.gitHubDomain)?\(responseString)") else { return }
             
             if let token = components.queryItems?.first(where: { $0.name == "access_token" })?.value {
+                UserDefaults.standard.set(token, forKey: GistService.shared.accessTokenKey)
+                strongSelf.dismiss(animated: true)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: GistService.shared.notificationKey), object: token)
                 strongSelf.delegate?.handleTokenChanged(token: token)
-                strongSelf.dismiss(animated: true) {
-                    GistService.shared.dispatchGroup.leave()
-                }
             }
         }.resume()
     }

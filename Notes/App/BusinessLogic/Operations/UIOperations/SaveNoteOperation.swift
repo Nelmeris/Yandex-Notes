@@ -34,7 +34,11 @@ class SaveNoteOperation: AsyncOperation {
         addDependency(fakeOp)
         
         saveToDb.completionBlock = {
+            print("Save to DataBase operation completed")
             let saveToBackend = SaveNotesBackendOperation(notes: notebook.notes)
+            saveToBackend.completionBlock = {
+                print("Save to Backend operation completed")
+            }
             self.saveToBackend = saveToBackend
             self.addDependency(saveToBackend)
             self.removeDependency(fakeOp)
@@ -45,11 +49,13 @@ class SaveNoteOperation: AsyncOperation {
     }
     
     override func main() {
+        print("Start save operation")
         switch saveToBackend!.result! {
         case .success:
             self.result = true
-        case .failure:
+        case .failure(let error):
             self.result = false
+            print(error.localizedDescription)
         }
         self.finish()
     }

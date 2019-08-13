@@ -8,9 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		55AEF8BF8731C9DF131D3220 /* libPods-Notes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A3A0CBF0846AF82DA15BE0 /* libPods-Notes.a */; };
-		5739C7D023012D640025294E /* GistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5739C7CF23012D640025294E /* GistService.swift */; };
-		574071B7230170580091E4D2 /* URLSessionDataTaskUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574071B6230170580091E4D2 /* URLSessionDataTaskUpdate.swift */; };
-		577AA4FB22E90A5000FA4E52 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577AA4FA22E90A5000FA4E52 /* NetworkError.swift */; };
+		5769C2252302B77300530294 /* URLSessionDataTaskUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */; };
+		5769C2272302B78000530294 /* GistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2262302B78000530294 /* GistService.swift */; };
+		5769C22A2302B79900530294 /* GistFileCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2282302B79800530294 /* GistFileCreator.swift */; };
+		5769C22B2302B79900530294 /* GistCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2292302B79900530294 /* GistCreator.swift */; };
+		5769C22D2302B8C500530294 /* GistForNotesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C22C2302B8C500530294 /* GistForNotesService.swift */; };
+		5769C22F2302C0B200530294 /* GistServiceErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C22E2302C0B200530294 /* GistServiceErrors.swift */; };
+		5769C2312302C6DB00530294 /* ExecuteGistRequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2302302C6DB00530294 /* ExecuteGistRequestOperation.swift */; };
+		5769C2362302D23B00530294 /* URLResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2352302D23B00530294 /* URLResponseError.swift */; };
+		5769C2382302D36C00530294 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2372302D36C00530294 /* NetworkError.swift */; };
+		5769C23A2302D48100530294 /* URLRequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2392302D48100530294 /* URLRequestError.swift */; };
+		5769C23C2302DB7100530294 /* GlobalMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C23B2302DB7100530294 /* GlobalMethods.swift */; };
 		579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */; };
 		579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */; };
 		579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */; };
@@ -41,8 +49,6 @@
 		57F518CB2300F7A5000E91C4 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518CA2300F7A4000E91C4 /* AuthViewController.swift */; };
 		57F518D123010583000E91C4 /* NoteCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518D023010583000E91C4 /* NoteCodable.swift */; };
 		57F518D323010BF0000E91C4 /* GistOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518D223010BF0000E91C4 /* GistOwner.swift */; };
-		57F518D523010C49000E91C4 /* GistFileCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518D423010C49000E91C4 /* GistFileCreator.swift */; };
-		57F518D723010C5E000E91C4 /* GistCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F518D623010C5E000E91C4 /* GistCreator.swift */; };
 		57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0B622CB63C80044DDDC /* AppDelegate.swift */; };
 		57FAB0BE22CB63CA0044DDDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FAB0BD22CB63CA0044DDDC /* Assets.xcassets */; };
 		57FAB0D722CB643C0044DDDC /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FAB0D622CB643C0044DDDC /* Note.swift */; };
@@ -69,9 +75,17 @@
 		0AC5D6A210B2F2F9C698D1CB /* Pods-NotesTests.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotesTests.demo.xcconfig"; path = "Target Support Files/Pods-NotesTests/Pods-NotesTests.demo.xcconfig"; sourceTree = "<group>"; };
 		263DB9C6613F9C22A215C05A /* Pods-Notes.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notes.demo.xcconfig"; path = "Target Support Files/Pods-Notes/Pods-Notes.demo.xcconfig"; sourceTree = "<group>"; };
 		2ED5DFE0481618F037CD9B88 /* libPods-NotesTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotesTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5739C7CF23012D640025294E /* GistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GistService.swift; path = ../../../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/App/BusinessLogic/Network/GistService.swift; sourceTree = "<group>"; };
-		574071B6230170580091E4D2 /* URLSessionDataTaskUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = URLSessionDataTaskUpdate.swift; path = ../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/Core/URLSessionDataTaskUpdate.swift; sourceTree = "<group>"; };
-		577AA4FA22E90A5000FA4E52 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskUpdate.swift; sourceTree = "<group>"; };
+		5769C2262302B78000530294 /* GistService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistService.swift; sourceTree = "<group>"; };
+		5769C2282302B79800530294 /* GistFileCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistFileCreator.swift; sourceTree = "<group>"; };
+		5769C2292302B79900530294 /* GistCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistCreator.swift; sourceTree = "<group>"; };
+		5769C22C2302B8C500530294 /* GistForNotesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistForNotesService.swift; sourceTree = "<group>"; };
+		5769C22E2302C0B200530294 /* GistServiceErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistServiceErrors.swift; sourceTree = "<group>"; };
+		5769C2302302C6DB00530294 /* ExecuteGistRequestOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecuteGistRequestOperation.swift; sourceTree = "<group>"; };
+		5769C2352302D23B00530294 /* URLResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResponseError.swift; sourceTree = "<group>"; };
+		5769C2372302D36C00530294 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		5769C2392302D48100530294 /* URLRequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestError.swift; sourceTree = "<group>"; };
+		5769C23B2302DB7100530294 /* GlobalMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalMethods.swift; sourceTree = "<group>"; };
 		579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickButton.swift; sourceTree = "<group>"; };
 		579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 		579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
@@ -102,8 +116,6 @@
 		57F518CA2300F7A4000E91C4 /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		57F518D023010583000E91C4 /* NoteCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCodable.swift; sourceTree = "<group>"; };
 		57F518D223010BF0000E91C4 /* GistOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistOwner.swift; sourceTree = "<group>"; };
-		57F518D423010C49000E91C4 /* GistFileCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GistFileCreator.swift; path = ../../../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/App/Entity/Gists/GistFileCreator.swift; sourceTree = "<group>"; };
-		57F518D623010C5E000E91C4 /* GistCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GistCreator.swift; path = ../../../../../../../../System/Volumes/Data/Users/nelmeris/Projects/Notes/Notes/App/Entity/Gists/GistCreator.swift; sourceTree = "<group>"; };
 		57FAB0B322CB63C80044DDDC /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FAB0B622CB63C80044DDDC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57FAB0BD22CB63CA0044DDDC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -155,7 +167,8 @@
 		5739C7CE23012D4D0025294E /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				5739C7CF23012D640025294E /* GistService.swift */,
+				5769C2262302B78000530294 /* GistService.swift */,
+				5769C22C2302B8C500530294 /* GistForNotesService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -163,11 +176,38 @@
 		575D1CBA22CFC6BB00D40EB7 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				5769C2332302D1E100530294 /* Enums */,
 				57F518BD2300F6AB000E91C4 /* Gists */,
 				57F518BC2300F6A2000E91C4 /* Notes */,
-				577AA4FA22E90A5000FA4E52 /* NetworkError.swift */,
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		5769C2322302D1D900530294 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				5769C22E2302C0B200530294 /* GistServiceErrors.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		5769C2332302D1E100530294 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				5769C2322302D1D900530294 /* Errors */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		5769C2342302D22900530294 /* URLSession */ = {
+			isa = PBXGroup;
+			children = (
+				5769C2372302D36C00530294 /* NetworkError.swift */,
+				5769C2392302D48100530294 /* URLRequestError.swift */,
+				5769C2352302D23B00530294 /* URLResponseError.swift */,
+				5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */,
+			);
+			path = URLSession;
 			sourceTree = "<group>";
 		};
 		576F037522DB35D9004015F9 /* Gallery */ = {
@@ -195,6 +235,7 @@
 				577AA4E422E908DE00FA4E52 /* BackendOperations */,
 				577AA4E522E908E900FA4E52 /* DBOperations */,
 				57E56C4F22EA2CB10006087C /* AsyncOperation.swift */,
+				5769C2302302C6DB00530294 /* ExecuteGistRequestOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -280,10 +321,11 @@
 		57D01C5922D516A000412438 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				5769C2342302D22900530294 /* URLSession */,
 				57D01C5A22D516B700412438 /* DesignableView.swift */,
 				579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */,
 				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
-				574071B6230170580091E4D2 /* URLSessionDataTaskUpdate.swift */,
+				5769C23B2302DB7100530294 /* GlobalMethods.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -305,8 +347,8 @@
 				57F518BF2300F6CD000E91C4 /* Gist.swift */,
 				57F518D223010BF0000E91C4 /* GistOwner.swift */,
 				57F518BE2300F6CD000E91C4 /* GistFile.swift */,
-				57F518D423010C49000E91C4 /* GistFileCreator.swift */,
-				57F518D623010C5E000E91C4 /* GistCreator.swift */,
+				5769C2292302B79900530294 /* GistCreator.swift */,
+				5769C2282302B79800530294 /* GistFileCreator.swift */,
 			);
 			path = Gists;
 			sourceTree = "<group>";
@@ -554,26 +596,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5769C2312302C6DB00530294 /* ExecuteGistRequestOperation.swift in Sources */,
 				57E56C5B22EA2CCB0006087C /* SaveNoteDBOperation.swift in Sources */,
-				57F518D523010C49000E91C4 /* GistFileCreator.swift in Sources */,
 				57E56C5422EA2CBD0006087C /* SaveNotesBackendOperation.swift in Sources */,
 				57F518C12300F6CD000E91C4 /* GistFile.swift in Sources */,
+				5769C22A2302B79900530294 /* GistFileCreator.swift in Sources */,
+				5769C22F2302C0B200530294 /* GistServiceErrors.swift in Sources */,
+				5769C22D2302B8C500530294 /* GistForNotesService.swift in Sources */,
 				57E56C5522EA2CBD0006087C /* BaseBackendOperation.swift in Sources */,
 				57F518D123010583000E91C4 /* NoteCodable.swift in Sources */,
-				574071B7230170580091E4D2 /* URLSessionDataTaskUpdate.swift in Sources */,
 				57F518CB2300F7A5000E91C4 /* AuthViewController.swift in Sources */,
+				5769C22B2302B79900530294 /* GistCreator.swift in Sources */,
 				57F518D323010BF0000E91C4 /* GistOwner.swift in Sources */,
-				5739C7D023012D640025294E /* GistService.swift in Sources */,
 				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
+				5769C2272302B78000530294 /* GistService.swift in Sources */,
 				57C4D2CD22D8B7BB00E7F86E /* GalleryViewerViewController.swift in Sources */,
 				57D01C5B22D516B700412438 /* DesignableView.swift in Sources */,
 				579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */,
+				5769C2382302D36C00530294 /* NetworkError.swift in Sources */,
 				57E56C5E22EA2CCB0006087C /* LoadNotesDBOperation.swift in Sources */,
-				577AA4FB22E90A5000FA4E52 /* NetworkError.swift in Sources */,
 				57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */,
-				57F518D723010C5E000E91C4 /* GistCreator.swift in Sources */,
 				57E56C5D22EA2CCB0006087C /* RemoveNoteDBOperation.swift in Sources */,
 				57FAB0DE22CB66160044DDDC /* NoteExtension.swift in Sources */,
+				5769C2252302B77300530294 /* URLSessionDataTaskUpdate.swift in Sources */,
 				579AAC6222D5CFDC00B3DD09 /* NoteTableViewController.swift in Sources */,
 				579AAC5B22D53DDC00B3DD09 /* UIColorBrightness.swift in Sources */,
 				57E56C5C22EA2CCB0006087C /* BaseDBOperation.swift in Sources */,
@@ -583,11 +628,14 @@
 				57C4D2D122D8CC6900E7F86E /* GalleryPhotoViewCell.swift in Sources */,
 				57FAB0D722CB643C0044DDDC /* Note.swift in Sources */,
 				579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */,
+				5769C23C2302DB7100530294 /* GlobalMethods.swift in Sources */,
 				57F518C22300F6CD000E91C4 /* Gist.swift in Sources */,
 				57C4D2CF22D8CB3200E7F86E /* GalleryViewController.swift in Sources */,
 				57E56C6322EA2CD30006087C /* RemoveNoteOperation.swift in Sources */,
 				579AAC5622D53B7000B3DD09 /* UIColorHEXValues.swift in Sources */,
 				57E56C5622EA2CBD0006087C /* LoadNotesBackendOperation.swift in Sources */,
+				5769C2362302D23B00530294 /* URLResponseError.swift in Sources */,
+				5769C23A2302D48100530294 /* URLRequestError.swift in Sources */,
 				57E56C5022EA2CB10006087C /* AsyncOperation.swift in Sources */,
 				57E56C6222EA2CD30006087C /* SaveNoteOperation.swift in Sources */,
 				579AAC6022D5CFC300B3DD09 /* NoteTableViewCell.swift in Sources */,

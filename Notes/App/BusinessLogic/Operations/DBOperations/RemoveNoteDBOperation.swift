@@ -18,6 +18,7 @@ class RemoveNoteDBOperation: BaseDBOperation {
     }
     
     override func main() {
+        print("Start remove from DataBase operation")
         notebook.remove(with: note.uid)
         finish()
     }

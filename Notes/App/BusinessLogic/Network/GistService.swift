@@ -10,12 +10,15 @@ import Foundation
 
 class GistService {
     
-    private init() {}
+    private init() {
+        executeQueue.maxConcurrentOperationCount = 1
+    }
     static let shared = GistService()
     
     let gitHubAPIURL = "https://api.github.com"
+    let notificationKey = "token_was_received"
     
-    private let accessTokenKey = "access_token"
+    let accessTokenKey = "access_token"
     
     var accessToken: String? {
         get {
@@ -30,170 +33,117 @@ class GistService {
         }
     }
     
-    enum RequestErrors: Error, LocalizedError {
-        case invalidUrlPath
-        
-        var localizedDescription: String {
-            switch self {
-            case .invalidUrlPath:
-                return "Invalid path to API method"
+    private let executeQueue = OperationQueue()
+    
+    private func executeRequest(with method: RequestMethods, path: String, data: Data? = nil, completion: @escaping (Data?) -> Void) {
+        let operation = ExecuteGistRequestOperation(method: method, path: path, data: data)
+        operation.completionBlock = {
+            guard let result = operation.result else { fatalError() }
+            switch result {
+            case .success(let data, statusCode: let code):
+                print("Network request success. Status code: \(code)")
+                completion(data)
+            case .failture(let error):
+                switch error {
+                case .failedRequest(let error):
+                    print("Network request error. \(error)")
+                case .failedResponse(let error):
+                    print("Network response error. \(error.localizedDescription)")
+                }
+                completion(nil)
             }
         }
-    }
-    
-    enum RequestMethods: String {
-        case get = "GET"
-        case post = "POST"
-        case patch = "PATCH"
-    }
-    
-    private func createRequest(with method: RequestMethods, path: String, httpBody: Data? = nil) throws -> URLRequest {
-        guard let token = accessToken,
-            let url = URL(string: "\(gitHubAPIURL)/\(path)") else { throw RequestErrors.invalidUrlPath }
-        var request = URLRequest(url: url)
-        request.setValue("token \(token)", forHTTPHeaderField: "Authorization")
-        request.httpMethod = method.rawValue
-        request.httpBody = httpBody
-        return request
-    }
-    
-    let dispatchGroup = DispatchGroup()
-    
-    private func executeRequest(with method: RequestMethods, path: String, data: Data? = nil, completion: @escaping (Data?) -> Void) throws {
-        let request = try createRequest(with: method, path: path, httpBody: data)
-        dispatchGroup.wait()
-        dispatchGroup.enter()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
-        print("\(dateFormatter.string(from: Date())): Request \(method.rawValue)/\(request.url!.absoluteString)")
-        URLSession.shared.dataTask(with: request) { result in
-            self.dispatchGroup.leave()
-            switch result {
-            case .success(let result):
-                print("\(dateFormatter.string(from: Date())): Network. Success request. Status code: \(result.statusCode)")
-                completion(result.data)
-            case .redirection(let result):
-                print("\(dateFormatter.string(from: Date())): Network. Redirection error. Status code: \(result.statusCode). Description: \(result.error.localizedDescription)")
-                completion(nil)
-            case .clientError(let result):
-                print("\(dateFormatter.string(from: Date())): Network. Client error. Status code: \(result.statusCode). Description: \(result.error.localizedDescription)")
-                completion(nil)
-            case .serverError(let result):
-                print("\(dateFormatter.string(from: Date())): Network. Server error. Status code: \(result.statusCode). Description: \(result.error.localizedDescription)")
-                completion(nil)
-            case .unknownError(let error):
-                print("\(dateFormatter.string(from: Date())): Network. Unknown error. Description: \(error.localizedDescription)")
-                completion(nil)
-            case .unexpectedError(_):
-                print("\(dateFormatter.string(from: Date())): Network. Unexpected error")
-                completion(nil)
-            }
-        }.resume()
+        executeQueue.addOperation(operation)
     }
     
     // Создать новый Gist
-    func create(with gist: GistCreator, completion: @escaping (Gist?) -> Void) {
+    func create(with gist: GistCreator, completion: @escaping (_ data: Gist?, _ error: GistServiceErrors?) -> Void) {
         do {
             let data = try JSONEncoder().encode(gist)
-            try executeRequest(with: .post, path: "gists", data: data) { data in
+            executeRequest(with: .post, path: "gists", data: data) { data in
                 guard let data = data else {
-                    completion(nil)
+                    completion(nil, .failedCreation)
                     return
                 }
                 do {
                     let newGist = try JSONDecoder().decode(Gist.self, from: data)
-                    completion(newGist)
+                    completion(newGist, nil)
                 } catch {
-                    print(error.localizedDescription)
-                    completion(nil)
+                    completion(nil, .failedDecodeData(error))
                 }
             }
         } catch {
-            print("Network. Request error. Description: \(error.localizedDescription)")
-            completion(nil)
+            completion(nil, .failedEncodeData(error))
         }
     }
     
     // Обновить Gist по ID
-    func patch(with gistId: String, gist: GistCreator, completion: @escaping (Bool) -> Void) {
+    func patch(with gistId: String, gist: GistCreator, completion: @escaping (_ error: GistServiceErrors?) -> Void) {
         do {
             let data = try JSONEncoder().encode(gist)
-            try executeRequest(with: .patch, path: "gists/\(gistId)", data: data) { data in
+            executeRequest(with: .patch, path: "gists/\(gistId)", data: data) { data in
                 guard data != nil else {
-                    completion(false)
+                    completion(.failedPatch)
                     return
                 }
+                completion(nil)
             }
-            completion(true)
         } catch {
-            print("Network. Request error. Description: \(error.localizedDescription)")
-            completion(false)
+            completion(.failedEncodeData(error))
         }
     }
     
     // Загрузить все Gist's пользователя
-    func load(completion: @escaping ([Gist]?) -> Void) {
-        do {
-            try executeRequest(with: .get, path: "gists") { data in
-                guard let data = data else {
-                    completion(nil)
-                    return
-                }
-                do {
-                    let gists = try JSONDecoder().decode([Gist].self, from: data)
-                    completion(gists)
-                } catch {
-                    print(error.localizedDescription)
-                    completion(nil)
-                }
+    func load(completion: @escaping (_ data: [Gist]?, _ error: GistServiceErrors?) -> Void) {
+        executeRequest(with: .get, path: "gists") { data in
+            guard let data = data else {
+                completion(nil, .failedLoad)
+                return
             }
-        } catch {
-            print("Network. Request error. Description: \(error.localizedDescription)")
-            completion(nil)
+            do {
+                let gists = try JSONDecoder().decode([Gist].self, from: data)
+                completion(gists, nil)
+            } catch {
+                completion(nil, .failedDecodeData(error))
+            }
         }
     }
     
     // Получить определенный Gist по ID
-    func get(with gistId: String, completion: @escaping (Gist?) -> Void) {
-        do {
-            try executeRequest(with: .get, path: "gists/\(gistId)") { data in
-                guard let data = data else {
-                    completion(nil)
-                    return
-                }
-                do {
-                    let gist = try JSONDecoder().decode(Gist.self, from: data)
-                    completion(gist)
-                } catch {
-                    print(error.localizedDescription)
-                    completion(nil)
-                }
+    func get(with gistId: String, completion: @escaping (_ data: Gist?, _ error: GistServiceErrors?) -> Void) {
+        executeRequest(with: .get, path: "gists/\(gistId)") { data in
+            guard let data = data else {
+                completion(nil, .failedGet)
+                return
             }
-        } catch {
-            print("Network. Request error. Description: \(error.localizedDescription)")
-            completion(nil)
+            do {
+                let gist = try JSONDecoder().decode(Gist.self, from: data)
+                completion(gist, nil)
+            } catch let error {
+                completion(nil, .failedDecodeData(error))
+            }
         }
     }
     
-    func search(for q: String, completion: @escaping (_ gist: Gist?) -> Void) {
-        load { gists in
+    func search(for q: String, completion: @escaping (_ data: Gist?, _ error: GistServiceErrors?) -> Void) {
+        load { gists, error  in
             guard let gists = gists else {
-                completion(nil)
+                completion(nil, error)
                 return
             }
             for gist in gists {
                 for (filename, _) in gist.files {
                     if filename == q {
-                        completion(gist)
+                        completion(gist, nil)
                         return
                     }
                 }
                 if gist.description == q {
-                    completion(gist)
+                    completion(gist, nil)
                     return
                 }
             }
-            completion(nil)
+            completion(nil, .failedSearch)
         }
     }
     

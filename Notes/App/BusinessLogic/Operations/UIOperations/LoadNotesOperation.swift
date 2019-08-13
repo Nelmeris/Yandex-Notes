@@ -21,7 +21,13 @@ class LoadNotesOperation: AsyncOperation {
         self.notebook = notebook
         
         loadFromBackend = LoadNotesBackendOperation()
+        loadFromBackend.completionBlock = {
+            print("Load from Backend operation completed")
+        }
         loadFromDb = LoadNotesDBOperation(notebook: notebook)
+        loadFromDb.completionBlock = {
+            print("Load from DataBase operation completed")
+        }
         
         super.init()
         
@@ -49,12 +55,14 @@ class LoadNotesOperation: AsyncOperation {
     }
     
     override func main() {
+        print("Start load operation")
         switch loadFromBackend.result! {
         case .success(let notes):
             updateLocalData(with: notes)
             result = notes
-        case .failure:
+        case .failure(let error):
             result = loadFromDb.result!
+            print(error.localizedDescription)
         }
         finish()
     }

@@ -12,6 +12,7 @@ class LoadNotesDBOperation: BaseDBOperation {
     private(set) var result: [Note]?
     
     override func main() {
+        print("Start load from DataBase operation")
         self.result = self.notebook.notes
         self.finish()
     }

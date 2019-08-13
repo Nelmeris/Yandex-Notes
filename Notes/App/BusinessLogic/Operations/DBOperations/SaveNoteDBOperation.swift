@@ -18,6 +18,7 @@ class SaveNoteDBOperation: BaseDBOperation {
     }
     
     override func main() {
+        print("Start save to DataBase operation")
         notebook.add(note)
         finish()
     }

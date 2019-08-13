@@ -174,6 +174,7 @@ extension EditNoteViewController {
         
         dest.tableView.beginUpdates()
         let removeNoteOperation = RemoveNoteOperation(note: note, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
+        commonQueue.addOperation(removeNoteOperation)
         let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.addDependency(removeNoteOperation)
         saveNoteOperation.completionBlock = {
@@ -189,7 +190,6 @@ extension EditNoteViewController {
             }
         }
         
-        commonQueue.addOperation(removeNoteOperation)
         commonQueue.addOperation(saveNoteOperation)
     }
     

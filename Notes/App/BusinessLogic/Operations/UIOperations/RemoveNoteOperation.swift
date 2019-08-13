@@ -30,6 +30,7 @@ class RemoveNoteOperation: AsyncOperation {
         addDependency(fakeOp)
         
         removeFromDB.completionBlock = {
+            print("Remove from DataBase operation completed")
             let saveToBackend = SaveNotesBackendOperation(notes: notebook.notes)
             self.saveToBackend = saveToBackend
             self.addDependency(saveToBackend)
@@ -42,11 +43,13 @@ class RemoveNoteOperation: AsyncOperation {
     }
     
     override func main() {
+        print("Start remove operation")
         switch saveToBackend!.result! {
         case .success:
             result = true
-        case .failure:
+        case .failure(let error):
             result = false
+            print(error.localizedDescription)
         }
         
         finish()

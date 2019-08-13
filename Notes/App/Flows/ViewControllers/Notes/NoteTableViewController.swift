@@ -22,11 +22,6 @@ class NoteTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        GistService.shared.dispatchGroup.enter()
-//        let authVC = AuthViewController()
-//        authVC.delegate = self
-//        present(authVC, animated: true, completion: nil)
-        
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         
@@ -36,6 +31,7 @@ class NoteTableViewController: UITableViewController {
     func loadNotes() {
         let loadNotesOperation = LoadNotesOperation(notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         loadNotesOperation.completionBlock = {
+            print("Main load operation completed")
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
