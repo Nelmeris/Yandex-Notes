@@ -129,7 +129,42 @@ class EditNoteViewController: UIViewController {
 // MARK: - Note maker
 extension EditNoteViewController {
     
-    func createNote(destination dest: NoteTableViewController,
+    private func updateTable(_ dest: NoteTableViewController,
+                             _ note: Note,
+                             oldNote: Note? = nil,
+                             oldIndex: Int? = nil) {
+        DispatchQueue.main.async {
+            dest.tableView.beginUpdates()
+            if let oldNote = oldNote,
+                let oldIndex = oldIndex {
+                self.updateTableAfterEditNote(dest, note, oldNote: oldNote, oldIndex: oldIndex)
+            } else {
+                self.updateTableAfterCreateNote(dest, note)
+            }
+            dest.tableView.endUpdates()
+        }
+    }
+    
+    private func updateTableAfterCreateNote(_ dest: NoteTableViewController,
+                                            _ newNote: Note) {
+        let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid } ?? 0
+        dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+    }
+    
+    private func updateTableAfterEditNote(_ dest: NoteTableViewController,
+                                          _ newNote: Note,
+                                          oldNote: Note,
+                                          oldIndex: Int) {
+        let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid } ?? 0
+        if oldIndex == newIndex {
+            dest.tableView.reloadRows(at: [IndexPath(row: oldIndex, section: 0)], with: .automatic)
+        } else {
+            dest.tableView.deleteRows(at: [IndexPath(row: oldIndex, section: 0)], with: .automatic)
+            dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+        }
+    }
+    
+    private func createNote(destination dest: NoteTableViewController,
                     title: String,
                     content: String,
                     color: UIColor,
@@ -142,19 +177,14 @@ extension EditNoteViewController {
             destructionDate: date
         )
         
-        dest.tableView.beginUpdates()
         let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.saveToDb.completionBlock = {
-            DispatchQueue.main.async {
-                let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid } ?? 0
-                dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
-                dest.tableView.endUpdates()
-            }
+            self.updateTable(dest, newNote)
         }
         commonQueue.addOperation(saveNoteOperation)
     }
     
-    func editNote(destination dest: NoteTableViewController,
+    private func editNote(destination dest: NoteTableViewController,
                   title: String,
                   content: String,
                   color: UIColor,
@@ -170,26 +200,17 @@ extension EditNoteViewController {
         
         guard !(note == newNote) else { return }
         
-        let index = dest.sortedNotes.firstIndex { $0.uid == note.uid }!
-        
-        dest.tableView.beginUpdates()
         let removeNoteOperation = RemoveNoteOperation(note: note, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
-        commonQueue.addOperation(removeNoteOperation)
+        
         let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.addDependency(removeNoteOperation)
+        
+        let index = dest.sortedNotes.firstIndex { $0.uid == note.uid }!
         saveNoteOperation.saveToDb.completionBlock = {
-            DispatchQueue.main.async {
-                let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid }!
-                if index == newIndex {
-                    dest.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                } else {
-                    dest.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                    dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
-                }
-                dest.tableView.endUpdates()
-            }
+            self.updateTable(dest, newNote, oldNote: self.note, oldIndex: index)
         }
         
+        commonQueue.addOperation(removeNoteOperation)
         commonQueue.addOperation(saveNoteOperation)
     }
     
