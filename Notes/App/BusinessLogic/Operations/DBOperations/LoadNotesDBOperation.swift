@@ -9,11 +9,19 @@
 import Foundation
 
 class LoadNotesDBOperation: BaseDBOperation {
-    private(set) var result: [Note]?
+    
+    private(set) var result: [Note]? {
+        didSet {
+            finish()
+        }
+    }
+    
+    init(notebook: FileNotebook) {
+        super.init(title: "Load notes from DataBase", notebook: notebook)
+    }
     
     override func main() {
-        print("Start load from DataBase operation")
         self.result = self.notebook.notes
-        self.finish()
     }
+    
 }

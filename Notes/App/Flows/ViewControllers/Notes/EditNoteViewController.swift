@@ -144,7 +144,7 @@ extension EditNoteViewController {
         
         dest.tableView.beginUpdates()
         let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
-        saveNoteOperation.completionBlock = {
+        saveNoteOperation.saveToDb.completionBlock = {
             DispatchQueue.main.async {
                 let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid } ?? 0
                 dest.tableView.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
@@ -177,7 +177,7 @@ extension EditNoteViewController {
         commonQueue.addOperation(removeNoteOperation)
         let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.addDependency(removeNoteOperation)
-        saveNoteOperation.completionBlock = {
+        saveNoteOperation.saveToDb.completionBlock = {
             DispatchQueue.main.async {
                 let newIndex = dest.sortedNotes.firstIndex { $0.uid == newNote.uid }!
                 if index == newIndex {

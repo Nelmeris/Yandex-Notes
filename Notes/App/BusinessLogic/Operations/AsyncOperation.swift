@@ -9,8 +9,15 @@
 import Foundation
 
 class AsyncOperation: Operation {
+    
     private var _executing = false 
     private var _finished = false
+    private let title: String
+    
+    init(title: String) {
+        self.title = title
+        super.init()
+    }
     
     override var isAsynchronous: Bool {
         return true
@@ -29,6 +36,7 @@ class AsyncOperation: Operation {
             return
         }
         willChangeValue(forKey: "isExecuting")
+        print("\(title) operation started")
         _executing = true
         didChangeValue(forKey: "isExecuting")
         main()
@@ -40,7 +48,9 @@ class AsyncOperation: Operation {
     
     func finish() {
         willChangeValue(forKey: "isFinished")
+        print("\(title) operation finished")
         _finished = true
         didChangeValue(forKey: "isFinished")
     }
+    
 }

@@ -9,17 +9,18 @@
 import Foundation
 
 class SaveNoteDBOperation: BaseDBOperation {
+    
     private let note: Note
     
     init(note: Note,
          notebook: FileNotebook) {
         self.note = note
-        super.init(notebook: notebook)
+        super.init(title: "Save note to DataBase", notebook: notebook)
     }
     
     override func main() {
-        print("Start save to DataBase operation")
         notebook.add(note)
         finish()
     }
+    
 }

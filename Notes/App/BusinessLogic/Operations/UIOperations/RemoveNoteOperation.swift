@@ -9,11 +9,16 @@
 import Foundation
 
 class RemoveNoteOperation: AsyncOperation {
-    private let notebook: FileNotebook
-    private let removeFromDB: RemoveNoteDBOperation
-    private var saveToBackend: SaveNotesBackendOperation?
     
-    private(set) var result: Bool?
+    private let notebook: FileNotebook
+    private(set) var removeFromDB: RemoveNoteDBOperation
+    private(set) var saveToBackend: SaveNotesBackendOperation?
+    
+    private(set) var result: Bool? {
+        didSet {
+            finish()
+        }
+    }
     
     init(note: Note,
          notebook: FileNotebook,
@@ -23,27 +28,24 @@ class RemoveNoteOperation: AsyncOperation {
         
         removeFromDB = RemoveNoteDBOperation(note: note, notebook: notebook)
         
-        super.init()
+        super.init(title: "Main remove note")
         
-        // Дополнительная зависимость, чтобы успеть добавить зависимость saveToBackend
-        let fakeOp = Operation()
-        addDependency(fakeOp)
-        
-        removeFromDB.completionBlock = {
-            print("Remove from DataBase operation completed")
+        let fakeOp = BlockOperation {
             let saveToBackend = SaveNotesBackendOperation(notes: notebook.notes)
             self.saveToBackend = saveToBackend
             self.addDependency(saveToBackend)
-            self.removeDependency(fakeOp)
             backendQueue.addOperation(saveToBackend)
         }
         
         addDependency(removeFromDB)
+        addDependency(fakeOp)
+        fakeOp.addDependency(removeFromDB)
+        
         dbQueue.addOperation(removeFromDB)
+        dbQueue.addOperation(fakeOp)
     }
     
     override func main() {
-        print("Start remove operation")
         switch saveToBackend!.result! {
         case .success:
             result = true
@@ -51,7 +53,6 @@ class RemoveNoteOperation: AsyncOperation {
             result = false
             print(error.localizedDescription)
         }
-        
-        finish()
     }
+    
 }

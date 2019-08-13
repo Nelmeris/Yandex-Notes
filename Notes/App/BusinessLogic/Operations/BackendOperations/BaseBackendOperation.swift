@@ -9,8 +9,5 @@
 import Foundation
 
 let backendQueue = OperationQueue()
-var gistId: String? = nil
 
-class BaseBackendOperation: AsyncOperation {
-    
-}
+class BaseBackendOperation: AsyncOperation { }

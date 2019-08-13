@@ -37,6 +37,7 @@ class ExecuteGistRequestOperation: AsyncOperation {
         self.method = method
         self.path = path
         self.data = data
+        super.init(title: "Execute Gist request")
     }
     
     private func createRequest(completion: @escaping (URLRequest) -> Void) throws {

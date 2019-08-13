@@ -9,11 +9,16 @@
 import Foundation
 
 class LoadNotesOperation: AsyncOperation {
-    private let notebook: FileNotebook
-    private let loadFromDb: LoadNotesDBOperation
-    private let loadFromBackend: LoadNotesBackendOperation
     
-    private(set) var result: [Note]? = nil
+    private let notebook: FileNotebook
+    private(set) var loadFromDb: LoadNotesDBOperation
+    private(set) var loadFromBackend: LoadNotesBackendOperation
+    
+    private(set) var result: [Note]? {
+        didSet {
+            finish()
+        }
+    }
     
     init(notebook: FileNotebook,
          backendQueue: OperationQueue,
@@ -21,15 +26,9 @@ class LoadNotesOperation: AsyncOperation {
         self.notebook = notebook
         
         loadFromBackend = LoadNotesBackendOperation()
-        loadFromBackend.completionBlock = {
-            print("Load from Backend operation completed")
-        }
         loadFromDb = LoadNotesDBOperation(notebook: notebook)
-        loadFromDb.completionBlock = {
-            print("Load from DataBase operation completed")
-        }
         
-        super.init()
+        super.init(title: "Main load notes")
         
         addDependency(loadFromBackend)
         addDependency(loadFromDb)
@@ -55,7 +54,6 @@ class LoadNotesOperation: AsyncOperation {
     }
     
     override func main() {
-        print("Start load operation")
         switch loadFromBackend.result! {
         case .success(let notes):
             updateLocalData(with: notes)
@@ -64,6 +62,6 @@ class LoadNotesOperation: AsyncOperation {
             result = loadFromDb.result!
             print(error.localizedDescription)
         }
-        finish()
     }
+    
 }

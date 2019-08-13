@@ -9,12 +9,18 @@
 import Foundation
 
 class SaveNoteOperation: AsyncOperation {
+    
     private let note: Note
     private let notebook: FileNotebook
-    private let saveToDb: SaveNoteDBOperation
-    private var saveToBackend: SaveNotesBackendOperation?
     
-    private(set) var result: Bool? = false
+    private(set) var saveToDb: SaveNoteDBOperation
+    private(set) var saveToBackend: SaveNotesBackendOperation?
+    
+    private(set) var result: Bool? = false {
+        didSet {
+            finish()
+        }
+    }
     
     init(note: Note,
          notebook: FileNotebook,
@@ -25,31 +31,25 @@ class SaveNoteOperation: AsyncOperation {
         
         saveToDb = SaveNoteDBOperation(note: note, notebook: notebook)
         
-        super.init()
-        
-        addDependency(saveToDb)
+        super.init(title: "Main save note")
         
         // Дополнительная зависимость, чтобы успеть добавить зависимость saveToBackend
-        let fakeOp = Operation()
-        addDependency(fakeOp)
-        
-        saveToDb.completionBlock = {
-            print("Save to DataBase operation completed")
+        let fakeOp = BlockOperation {
             let saveToBackend = SaveNotesBackendOperation(notes: notebook.notes)
-            saveToBackend.completionBlock = {
-                print("Save to Backend operation completed")
-            }
             self.saveToBackend = saveToBackend
             self.addDependency(saveToBackend)
-            self.removeDependency(fakeOp)
             backendQueue.addOperation(saveToBackend)
         }
         
+        addDependency(saveToDb)
+        addDependency(fakeOp)
+        fakeOp.addDependency(saveToDb)
+        
         dbQueue.addOperation(saveToDb)
+        dbQueue.addOperation(fakeOp)
     }
     
     override func main() {
-        print("Start save operation")
         switch saveToBackend!.result! {
         case .success:
             self.result = true
@@ -57,6 +57,6 @@ class SaveNoteOperation: AsyncOperation {
             self.result = false
             print(error.localizedDescription)
         }
-        self.finish()
     }
+    
 }

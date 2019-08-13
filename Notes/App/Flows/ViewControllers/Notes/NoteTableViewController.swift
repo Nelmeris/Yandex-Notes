@@ -31,7 +31,6 @@ class NoteTableViewController: UITableViewController {
     func loadNotes() {
         let loadNotesOperation = LoadNotesOperation(notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         loadNotesOperation.completionBlock = {
-            print("Main load operation completed")
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -125,7 +124,7 @@ extension NoteTableViewController {
         let note = sortedNotes[indexPath.row]
         tableView.beginUpdates()
         let removeNoteOperation = RemoveNoteOperation(note: note, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
-        removeNoteOperation.completionBlock = {
+        removeNoteOperation.removeFromDB.completionBlock = {
             DispatchQueue.main.async {
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 tableView.endUpdates()

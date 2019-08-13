@@ -11,10 +11,12 @@ import Foundation
 let dbQueue = OperationQueue()
 
 class BaseDBOperation: AsyncOperation {
+    
     let notebook: FileNotebook
     
-    init(notebook: FileNotebook) {
+    init(title: String, notebook: FileNotebook) {
         self.notebook = notebook
-        super.init()
+        super.init(title: title)
     }
+    
 }

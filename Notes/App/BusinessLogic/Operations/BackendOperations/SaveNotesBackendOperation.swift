@@ -14,22 +14,22 @@ enum SaveNotesBackendResult {
 }
 
 class SaveNotesBackendOperation: BaseBackendOperation {
+    
     private(set) var result: SaveNotesBackendResult? {
         didSet {
             finish()
         }
     }
     
-    private var notes: [Note]?
+    private var notes: [Note]
     
     init(notes: [Note]) {
         self.notes = notes
-        super.init()
+        super.init(title: "Save notes to Backend")
     }
     
     override func main() {
-        print("Start save to Backend operation")
-        GistForNotesService.shared.pushNotes(notes ?? []) { (result, error) in
+        GistForNotesService.shared.pushNotes(notes) { (result, error) in
             if result {
                 self.result = .success
             } else {
@@ -37,4 +37,5 @@ class SaveNotesBackendOperation: BaseBackendOperation {
             }
         }
     }
+    
 }

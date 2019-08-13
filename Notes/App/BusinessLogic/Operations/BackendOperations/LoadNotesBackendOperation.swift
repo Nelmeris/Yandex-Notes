@@ -14,14 +14,18 @@ enum LoadNotesBackendResult {
 }
 
 class LoadNotesBackendOperation: BaseBackendOperation {
+    
     private(set) var result: LoadNotesBackendResult? {
         didSet {
             finish()
         }
     }
     
+    init() {
+        super.init(title: "Load notes from Backend")
+    }
+    
     override func main() {
-        print("Start load from Backend operation")
         GistForNotesService.shared.pullNotes { result, error in
             guard let notes = result else {
                 self.result = .failure(error!)
@@ -30,4 +34,5 @@ class LoadNotesBackendOperation: BaseBackendOperation {
             self.result = .success(notes)
         }
     }
+    
 }

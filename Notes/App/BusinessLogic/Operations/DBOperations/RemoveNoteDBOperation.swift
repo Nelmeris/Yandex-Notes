@@ -9,17 +9,18 @@
 import Foundation
 
 class RemoveNoteDBOperation: BaseDBOperation {
+    
     private let note: Note
     
     init(note: Note,
          notebook: FileNotebook) {
         self.note = note
-        super.init(notebook: notebook)
+        super.init(title: "Remove note from DataBase", notebook: notebook)
     }
     
     override func main() {
-        print("Start remove from DataBase operation")
         notebook.remove(with: note.uid)
         finish()
     }
+    
 }
