@@ -9,8 +9,8 @@
 import Foundation
 
 enum LoadNotesBackendResult {
-    case success([Note])
-    case failure(GistServiceErrors)
+    case success(GistNotesContainer)
+    case failure(GistServiceError)
 }
 
 class LoadNotesBackendOperation: BaseBackendOperation {
@@ -27,11 +27,11 @@ class LoadNotesBackendOperation: BaseBackendOperation {
     
     override func main() {
         GistForNotesService.shared.pullNotes { result, error in
-            guard let notes = result else {
+            guard let gistContainer = result else {
                 self.result = .failure(error!)
                 return
             }
-            self.result = .success(notes)
+            self.result = .success(gistContainer)
         }
     }
     

@@ -135,6 +135,7 @@ extension EditNoteViewController {
                              oldIndex: Int? = nil) {
         DispatchQueue.main.async {
             dest.tableView.beginUpdates()
+            dest.notes = FileNotebook.shared.notes
             if let oldNote = oldNote,
                 let oldIndex = oldIndex {
                 self.updateTableAfterEditNote(dest, note, oldNote: oldNote, oldIndex: oldIndex)
@@ -177,7 +178,7 @@ extension EditNoteViewController {
             destructionDate: date
         )
         
-        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
+        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, mainQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.saveToDb.completionBlock = {
             self.updateTable(dest, newNote)
         }
@@ -202,7 +203,7 @@ extension EditNoteViewController {
         
         let removeNoteOperation = RemoveNoteOperation(note: note, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         
-        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
+        let saveNoteOperation = SaveNoteOperation(note: newNote, notebook: FileNotebook.shared, mainQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
         saveNoteOperation.addDependency(removeNoteOperation)
         
         let index = dest.sortedNotes.firstIndex { $0.uid == note.uid }!

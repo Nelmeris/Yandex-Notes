@@ -30,22 +30,25 @@ class GistForNotesService {
     }
     
     private func createGistCreator(with notes: [Note] = []) throws -> GistCreator {
-        let data = try JSONEncoder().encode(notes)
+        let gistContainer = GistNotesContainer(notes: notes, createdDate: Date())
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(gistContainer)
         let gistContent = String(data: data, encoding: .utf8)
         let gistFileCreator = GistFileCreator(content: gistContent!)
-        let gistCreator = GistCreator(public: true, description: gistName, files: [gistName: gistFileCreator])
+        let gistCreator = GistCreator(public: false, description: gistName, files: [gistName: gistFileCreator])
         return gistCreator
     }
     
-    private func parseNotes(from gist: Gist) throws -> [Note]? {
+    private func parseNotes(from gist: Gist) throws -> GistNotesContainer? {
         guard let file = gist.files[gistName],
             let content = file.content,
             let data = content.data(using: .utf8) else { return nil }
-        let notes = try JSONDecoder().decode([Note].self, from: data)
-        return notes
+        let gistContainer = try JSONDecoder().decode(GistNotesContainer.self, from: data)
+        return gistContainer
     }
     
-    private func findGist(completion: @escaping (_ result: Bool, _ error: GistServiceErrors?) -> Void) {
+    private func findGist(completion: @escaping (_ result: Bool, _ error: GistServiceError?) -> Void) {
         GistService.shared.search(for: gistName) { (result, error) in
             // Если не найден
             guard let gist = result else {
@@ -58,7 +61,7 @@ class GistForNotesService {
         }
     }
     
-    func isNotebookCreated(completion: @escaping (_ result: Bool, _ error: GistServiceErrors?) -> Void) {
+    func isNotebookCreated(completion: @escaping (_ result: Bool, _ error: GistServiceError?) -> Void) {
         if gistId != nil {
             GistService.shared.get(with: gistId) { (result, error) in
                 guard result != nil else {
@@ -72,23 +75,23 @@ class GistForNotesService {
         }
     }
     
-    func createGist(with notes: [Note] = [], completion: @escaping (GistServiceErrors?) -> Void) {
+    func createGist(with notes: [Note] = [], completion: @escaping (_ data: Gist?, _ error: GistServiceError?) -> Void) {
         do {
             let gistCreator = try createGistCreator(with: notes)
             GistService.shared.create(with: gistCreator) { (result, error) in // Создать его
                 if let gist = result { // Если успешно
                     self.gistId = gist.id // Сохранить ID
-                    completion(nil)
+                    completion(gist, nil)
                 } else {
-                    completion(error)
+                    completion(nil, error)
                 }
             }
         } catch {
-            completion(.failedDecodeData(error))
+            completion(nil, .failedDecodeData(error))
         }
     }
     
-    func pullNotes(completion: @escaping (_ result: [Note]?, _ error: GistServiceErrors?) -> Void) {
+    func pullNotes(completion: @escaping (_ result: GistNotesContainer?, _ error: GistServiceError?) -> Void) {
         isNotebookCreated { (result, error) in
             if result {
                 GistService.shared.get(with: self.gistId) { (result, error) in
@@ -97,25 +100,30 @@ class GistForNotesService {
                         return
                     }
                     do {
-                        let notes = try self.parseNotes(from: gist)
-                        completion(notes, nil)
+                        let gistContainer = try self.parseNotes(from: gist)
+                        completion(gistContainer, nil)
                     } catch {
                         completion(nil, .failedDecodeData(error))
                     }
                 }
             } else {
-                self.createGist { error in
-                    if error != nil {
-                        completion(nil, error)
+                self.createGist { data, error in
+                    if let gist = data {
+                        do {
+                            let gistNoteContainer = try self.parseNotes(from: gist)
+                            completion(gistNoteContainer, nil)
+                        } catch {
+                            completion(nil, .failedEncodeData(error))
+                        }
                     } else {
-                        completion([], nil)
+                        completion(nil, error)
                     }
                 }
             }
         }
     }
     
-    func pushNotes(_ notes: [Note], completion: @escaping (_ result: Bool, _ error: GistServiceErrors?) -> Void) {
+    func pushNotes(_ notes: [Note], completion: @escaping (_ result: Bool, _ error: GistServiceError?) -> Void) {
         do {
             let gistCreator = try createGistCreator(with: notes)
             isNotebookCreated { (result, error) in
@@ -128,7 +136,7 @@ class GistForNotesService {
                         }
                     }
                 } else {
-                    self.createGist(with: notes) { error in
+                    self.createGist(with: notes) { data, error in
                         if error == nil {
                             completion(true, nil)
                         } else {

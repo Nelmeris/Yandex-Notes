@@ -11,30 +11,19 @@ import UIKit
 // MARK: - Parse from JSON
 extension Note {
     
-    static private func parseColor(json: [String: Double]) -> UIColor? {
-        guard let red = json["red"] else { return nil }
-        guard let green = json["green"] else { return nil }
-        guard let blue = json["blue"] else { return nil }
-        guard let alpha = json["alpha"] else { return nil }
-        return UIColor(
-            red: CGFloat(red),
-            green: CGFloat(green),
-            blue: CGFloat(blue),
-            alpha: CGFloat(alpha)
-        )
-    }
-    
     static func parse(json: [String: Any]) -> Note? {
         
-        guard let uid = json["uid"] as? String else { return nil }
-        guard let title = json["title"] as? String else { return nil }
-        guard let content = json["content"] as? String else { return nil }
+        guard let uid = json["uid"] as? String,
+            let title = json["title"] as? String,
+            let content = json["content"] as? String,
+            let createDateDouble = json["create_date"] as? Double else { return nil }
+        
+        let createDate = Date(timeIntervalSince1970: createDateDouble)
         
         // Color
-        let color: UIColor
-        if let colorDictionary = json["color"] as? [String: Double] {
-            guard let parsedColor = parseColor(json: colorDictionary) else { return nil }
-            color = parsedColor
+        var color: UIColor
+        if let hexColor = json["color"] as? String {
+            color = UIColor(hexString: hexColor)
         } else {
             color = .white
         }
@@ -51,27 +40,30 @@ extension Note {
             destructionDate = nil
         }
         
-        return Note(uid: uid, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate)
+        return Note(uid: uid, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate, createdDate: createDate)
         
+    }
+    
+    private init(
+        uid: String = UUID().uuidString,
+        title: String, content: String, color: UIColor = .white,
+        importance: ImportanceLevels,
+        destructionDate selfDestructionDate: Date? = nil,
+        createdDate: Date
+        ) {
+        self.uid = uid
+        self.title = title
+        self.content = content
+        self.color = color
+        self.importance = importance
+        self.destructionDate = selfDestructionDate
+        self.createDate = createdDate
     }
     
 }
 
 // MARK: - Parse to JSON
 extension Note {
-    
-    private func parseColor(_ color: UIColor) -> [String: Double] {
-        var nColor: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
-        nColor.red = 0.0; nColor.green = 0.0; nColor.blue = 0.0; nColor.alpha = 0.0
-        color.getRed(&nColor.red, green: &nColor.green, blue: &nColor.blue, alpha: &nColor.alpha)
-        
-        var colorDic = [String: Double]()
-        colorDic["red"] = Double(nColor.red)
-        colorDic["green"] = Double(nColor.green)
-        colorDic["blue"] = Double(nColor.blue)
-        colorDic["alpha"] = Double(nColor.alpha)
-        return colorDic
-    }
     
     var json: [String: Any] {
         var json = [String: Any]()
@@ -80,13 +72,16 @@ extension Note {
         json["content"] = content
         
         if color != .white {
-            json["color"] = parseColor(self.color)
+            json["color"] = color.toHexString()
         }
         
         if (self.importance != .usual) {
             json["importance"] = self.importance.rawValue
         }
+        
         json["destruction_date"] = self.destructionDate?.timeIntervalSince1970
+        
+        json["create_date"] = self.createDate.timeIntervalSince1970
         
         return json
     }

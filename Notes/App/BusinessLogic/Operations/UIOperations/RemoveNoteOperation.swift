@@ -8,13 +8,18 @@
 
 import Foundation
 
+enum RemoveNoteOperationResult {
+    case success
+    case failture(GistServiceError)
+}
+
 class RemoveNoteOperation: AsyncOperation {
     
     private let notebook: FileNotebook
     private(set) var removeFromDB: RemoveNoteDBOperation
     private(set) var saveToBackend: SaveNotesBackendOperation?
     
-    private(set) var result: Bool? {
+    private(set) var result: RemoveNoteOperationResult? {
         didSet {
             finish()
         }
@@ -48,10 +53,9 @@ class RemoveNoteOperation: AsyncOperation {
     override func main() {
         switch saveToBackend!.result! {
         case .success:
-            result = true
+            result = .success
         case .failure(let error):
-            result = false
-            print(error.localizedDescription)
+            result = .failture(error)
         }
     }
     

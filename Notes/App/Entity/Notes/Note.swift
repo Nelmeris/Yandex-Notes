@@ -22,6 +22,7 @@ struct Note: Equatable {
     let importance: ImportanceLevels
     
     let destructionDate: Date?
+    
     let createDate: Date
     
     init(
@@ -43,7 +44,7 @@ struct Note: Equatable {
         return lhs.uid == rhs.uid &&
             lhs.title == rhs.title &&
             lhs.content == rhs.content &&
-            lhs.color == rhs.color &&
+            lhs.color.toHexString() == rhs.color.toHexString() &&
             lhs.importance == rhs.importance &&
             lhs.destructionDate == rhs.destructionDate
     }

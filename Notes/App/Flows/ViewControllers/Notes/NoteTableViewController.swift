@@ -15,32 +15,67 @@ class NoteTableViewController: UITableViewController {
     
     var selectedNote: Note?
     
+    var notes: [Note] = FileNotebook.shared.notes
+    var timer: Timer!
+    
+    func getSortCompare() -> (Note, Note) -> Bool {
+        return { lft, rht in
+            return lft.createDate > rht.createDate
+        }
+    }
+    
     var sortedNotes: [Note] {
-        return FileNotebook.shared.notes.sorted { $0.createDate > $1.createDate }
+        return notes.sorted(by: getSortCompare())
+    }
+    
+    private func loadNotesFromDB() {
+        let loadNotesFromDBOperation = LoadNotesDBOperation(notebook: FileNotebook.shared)
+        loadNotesFromDBOperation.completionBlock = {
+            guard let newNotes = loadNotesFromDBOperation.result else { return }
+            DispatchQueue.main.async {
+                self.notes = newNotes
+                self.tableView.reloadData()
+            }
+        }
+        dbQueue.addOperation(loadNotesFromDBOperation)
+    }
+    
+    @objc func syncNotes() {
+        let syncNotesOperation = SyncNotesOperation(notebook: FileNotebook.shared, mainQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
+        syncNotesOperation.completionBlock = {
+            switch syncNotesOperation.result! {
+            case .success(let notes):
+                if self.notes != notes {
+                    DispatchQueue.main.async {
+                        self.notes = notes
+                        self.tableView.reloadData()
+                    }
+                }
+            case .failture(let error):
+                print(error.localizedDescription)
+            }
+        }
+        commonQueue.addOperation(syncNotesOperation)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(syncNotes))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         
+        timer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(syncNotes), userInfo: nil, repeats: true)
+        
         title = "Заметки"
-    }
-    
-    func loadNotes() {
-        let loadNotesOperation = LoadNotesOperation(notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
-        loadNotesOperation.completionBlock = {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-        commonQueue.addOperation(loadNotesOperation)
+        tableView.separatorStyle = .none
+        
+        loadNotesFromDB()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        loadNotes()
+        syncNotes()
     }
     
     @objc func startEditing(sender: UIBarButtonItem) {
@@ -64,15 +99,6 @@ class NoteTableViewController: UITableViewController {
         destVC.note = selectedNote
     }
 
-}
-
-extension NoteTableViewController: AuthViewControllerDelegate {
-    
-    func handleTokenChanged(token: String) {
-        UserDefaults.standard.set(token, forKey: "access_token")
-        loadNotes()
-    }
-    
 }
 
 // MARK: - UITableViewDelegate
@@ -122,10 +148,11 @@ extension NoteTableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
         let note = sortedNotes[indexPath.row]
-        tableView.beginUpdates()
         let removeNoteOperation = RemoveNoteOperation(note: note, notebook: FileNotebook.shared, backendQueue: backendQueue, dbQueue: dbQueue)
         removeNoteOperation.removeFromDB.completionBlock = {
             DispatchQueue.main.async {
+                tableView.beginUpdates()
+                self.notes = FileNotebook.shared.notes
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 tableView.endUpdates()
             }

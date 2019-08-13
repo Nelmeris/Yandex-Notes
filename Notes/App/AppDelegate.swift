@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var saveNoteOperation = SaveNoteOperation(
             note: note,
             notebook: FileNotebook.shared,
+            mainQueue: commonQueue,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )
@@ -45,6 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         saveNoteOperation = SaveNoteOperation(
             note: note,
             notebook: FileNotebook.shared,
+            mainQueue: commonQueue,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )
@@ -55,6 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         saveNoteOperation = SaveNoteOperation(
             note: note,
             notebook: FileNotebook.shared,
+            mainQueue: commonQueue,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )
@@ -65,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         saveNoteOperation = SaveNoteOperation(
             note: note,
             notebook: FileNotebook.shared,
+            mainQueue: commonQueue,
             backendQueue: backendQueue,
             dbQueue: dbQueue
         )

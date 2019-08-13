@@ -8,24 +8,32 @@
 
 import Foundation
 
+enum SaveNoteOperationResult {
+    case success
+    case failture(GistServiceError)
+}
+
 class SaveNoteOperation: AsyncOperation {
     
     private let note: Note
     private let notebook: FileNotebook
     
     private(set) var saveToDb: SaveNoteDBOperation
-    private(set) var saveToBackend: SaveNotesBackendOperation?
+    private(set) var syncNotes: SyncNotesOperation?
     
-    private(set) var result: Bool? = false {
+    private(set) var result: SaveNoteOperationResult? {
         didSet {
             finish()
         }
     }
     
-    init(note: Note,
-         notebook: FileNotebook,
-         backendQueue: OperationQueue,
-         dbQueue: OperationQueue) {
+    init(
+        note: Note,
+        notebook: FileNotebook,
+        mainQueue: OperationQueue,
+        backendQueue: OperationQueue,
+        dbQueue: OperationQueue
+        ) {
         self.note = note
         self.notebook = notebook
         
@@ -35,10 +43,10 @@ class SaveNoteOperation: AsyncOperation {
         
         // Дополнительная зависимость, чтобы успеть добавить зависимость saveToBackend
         let fakeOp = BlockOperation {
-            let saveToBackend = SaveNotesBackendOperation(notes: notebook.notes)
-            self.saveToBackend = saveToBackend
-            self.addDependency(saveToBackend)
-            backendQueue.addOperation(saveToBackend)
+            let syncNotes = SyncNotesOperation(notebook: notebook, mainQueue: mainQueue, backendQueue: backendQueue, dbQueue: dbQueue)
+            self.syncNotes = syncNotes
+            self.addDependency(syncNotes)
+            mainQueue.addOperation(syncNotes)
         }
         
         addDependency(saveToDb)
@@ -50,12 +58,11 @@ class SaveNoteOperation: AsyncOperation {
     }
     
     override func main() {
-        switch saveToBackend!.result! {
+        switch syncNotes!.result! {
         case .success:
-            self.result = true
-        case .failure(let error):
-            self.result = false
-            print(error.localizedDescription)
+            self.result = .success
+        case .failture(let error):
+            self.result = .failture(error)
         }
     }
     

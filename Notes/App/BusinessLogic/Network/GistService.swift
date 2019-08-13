@@ -57,9 +57,11 @@ class GistService {
     }
     
     // Создать новый Gist
-    func create(with gist: GistCreator, completion: @escaping (_ data: Gist?, _ error: GistServiceErrors?) -> Void) {
+    func create(with gist: GistCreator, completion: @escaping (_ data: Gist?, _ error: GistServiceError?) -> Void) {
         do {
-            let data = try JSONEncoder().encode(gist)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let data = try encoder.encode(gist)
             executeRequest(with: .post, path: "gists", data: data) { data in
                 guard let data = data else {
                     completion(nil, .failedCreation)
@@ -78,9 +80,11 @@ class GistService {
     }
     
     // Обновить Gist по ID
-    func patch(with gistId: String, gist: GistCreator, completion: @escaping (_ error: GistServiceErrors?) -> Void) {
+    func patch(with gistId: String, gist: GistCreator, completion: @escaping (_ error: GistServiceError?) -> Void) {
         do {
-            let data = try JSONEncoder().encode(gist)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .sortedKeys
+            let data = try encoder.encode(gist)
             executeRequest(with: .patch, path: "gists/\(gistId)", data: data) { data in
                 guard data != nil else {
                     completion(.failedPatch)
@@ -94,7 +98,7 @@ class GistService {
     }
     
     // Загрузить все Gist's пользователя
-    func load(completion: @escaping (_ data: [Gist]?, _ error: GistServiceErrors?) -> Void) {
+    func load(completion: @escaping (_ data: [Gist]?, _ error: GistServiceError?) -> Void) {
         executeRequest(with: .get, path: "gists") { data in
             guard let data = data else {
                 completion(nil, .failedLoad)
@@ -110,7 +114,7 @@ class GistService {
     }
     
     // Получить определенный Gist по ID
-    func get(with gistId: String, completion: @escaping (_ data: Gist?, _ error: GistServiceErrors?) -> Void) {
+    func get(with gistId: String, completion: @escaping (_ data: Gist?, _ error: GistServiceError?) -> Void) {
         executeRequest(with: .get, path: "gists/\(gistId)") { data in
             guard let data = data else {
                 completion(nil, .failedGet)
@@ -125,7 +129,7 @@ class GistService {
         }
     }
     
-    func search(for q: String, completion: @escaping (_ data: Gist?, _ error: GistServiceErrors?) -> Void) {
+    func search(for q: String, completion: @escaping (_ data: Gist?, _ error: GistServiceError?) -> Void) {
         load { gists, error  in
             guard let gists = gists else {
                 completion(nil, error)

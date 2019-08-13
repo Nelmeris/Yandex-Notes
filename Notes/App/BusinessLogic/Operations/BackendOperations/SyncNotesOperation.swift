@@ -1,21 +1,21 @@
 //
-//  SaveNotesBackendOperation.swift
+//  SyncNotesOperation.swift
 //  Notes
 //
-//  Created by Artem Kufaev on 25.07.2019.
-//  Copyright © 2019 Artem Kufaev. All rights reserved.
+//  Created by Артем Куфаев on 13/08/2019.
+//  Copyright © 2019 Артем Куфаев. All rights reserved.
 //
 
 import Foundation
 
-enum SaveNotesBackendResult {
+enum SyncNotesResult {
     case success
-    case failure(GistServiceError)
+    case failure(GistServiceErrors)
 }
 
-class SaveNotesBackendOperation: BaseBackendOperation {
+class SyncNotesOperation: BaseBackendOperation {
     
-    private(set) var result: SaveNotesBackendResult? {
+    private(set) var result: SyncNotesResult? {
         didSet {
             finish()
         }
@@ -25,7 +25,7 @@ class SaveNotesBackendOperation: BaseBackendOperation {
     
     init(notes: [Note]) {
         self.notes = notes
-        super.init(title: "Save notes to Backend")
+        super.init(title: "Sync notes with Backend")
     }
     
     override func main() {
