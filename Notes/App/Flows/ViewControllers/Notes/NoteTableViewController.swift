@@ -65,8 +65,6 @@ class NoteTableViewController: UITableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(syncNotes))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         
-        timer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(syncNotes), userInfo: nil, repeats: true)
-        
         title = "Заметки"
         tableView.separatorStyle = .none
         
