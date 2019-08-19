@@ -46,10 +46,11 @@ class ExecuteGistRequestOperation: AsyncOperation {
         let authVC = AuthViewController()
         
         DispatchQueue.main.async {
-            if let visibleViewController = getVisibleViewController() {
+            let window = UIApplication.shared.keyWindow
+            if let visibleViewController = window?.visibleViewController {
                 visibleViewController.present(authVC, animated: true)
             } else {
-                UIApplication.shared.keyWindow?.rootViewController = authVC
+                window?.rootViewController = authVC
             }
         }
         

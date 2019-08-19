@@ -22,11 +22,12 @@
 		5769C2362302D23B00530294 /* URLResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2352302D23B00530294 /* URLResponseError.swift */; };
 		5769C2382302D36C00530294 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2372302D36C00530294 /* NetworkError.swift */; };
 		5769C23A2302D48100530294 /* URLRequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2392302D48100530294 /* URLRequestError.swift */; };
-		5769C23C2302DB7100530294 /* GlobalMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C23B2302DB7100530294 /* GlobalMethods.swift */; };
+		5769C23C2302DB7100530294 /* VisibleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C23B2302DB7100530294 /* VisibleViewController.swift */; };
 		5769C2402303148400530294 /* GistNotesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C23F2303148400530294 /* GistNotesContainer.swift */; };
 		5769C242230318D400530294 /* UpdateNoteDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C241230318D400530294 /* UpdateNoteDBOperation.swift */; };
 		5769C244230319A000530294 /* RewriteDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C243230319A000530294 /* RewriteDBOperation.swift */; };
 		5769C24823034BC400530294 /* SyncNotesOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C24723034BC400530294 /* SyncNotesOperation.swift */; };
+		57731F09230B160E005E4625 /* NoteTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57731F08230B160E005E4625 /* NoteTableViewModel.swift */; };
 		579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */; };
 		579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */; };
 		579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */; };
@@ -101,11 +102,12 @@
 		5769C2352302D23B00530294 /* URLResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResponseError.swift; sourceTree = "<group>"; };
 		5769C2372302D36C00530294 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		5769C2392302D48100530294 /* URLRequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestError.swift; sourceTree = "<group>"; };
-		5769C23B2302DB7100530294 /* GlobalMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalMethods.swift; sourceTree = "<group>"; };
+		5769C23B2302DB7100530294 /* VisibleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleViewController.swift; sourceTree = "<group>"; };
 		5769C23F2303148400530294 /* GistNotesContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistNotesContainer.swift; sourceTree = "<group>"; };
 		5769C241230318D400530294 /* UpdateNoteDBOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNoteDBOperation.swift; sourceTree = "<group>"; };
 		5769C243230319A000530294 /* RewriteDBOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteDBOperation.swift; sourceTree = "<group>"; };
 		5769C24723034BC400530294 /* SyncNotesOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncNotesOperation.swift; sourceTree = "<group>"; };
+		57731F08230B160E005E4625 /* NoteTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewModel.swift; sourceTree = "<group>"; };
 		579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickButton.swift; sourceTree = "<group>"; };
 		579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 		579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				579AAC6122D5CFDC00B3DD09 /* NoteTableViewController.swift */,
+				57731F08230B160E005E4625 /* NoteTableViewModel.swift */,
 				57D01C5C22D5180300412438 /* EditNoteViewController.swift */,
 				579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */,
 			);
@@ -356,7 +359,7 @@
 				57D01C5A22D516B700412438 /* DesignableView.swift */,
 				579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */,
 				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
-				5769C23B2302DB7100530294 /* GlobalMethods.swift */,
+				5769C23B2302DB7100530294 /* VisibleViewController.swift */,
 				5743A68C230A175200BF5B74 /* Reachability.swift */,
 			);
 			path = Core;
@@ -654,6 +657,7 @@
 				57D81D22230A0EBB00444DBC /* MappingModel.xcmappingmodel in Sources */,
 				57F518D123010583000E91C4 /* NoteCodable.swift in Sources */,
 				57F518CB2300F7A5000E91C4 /* AuthViewController.swift in Sources */,
+				57731F09230B160E005E4625 /* NoteTableViewModel.swift in Sources */,
 				5769C22B2302B79900530294 /* GistCreator.swift in Sources */,
 				57F518D323010BF0000E91C4 /* GistOwner.swift in Sources */,
 				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
@@ -683,7 +687,7 @@
 				57C4D2D122D8CC6900E7F86E /* GalleryPhotoViewCell.swift in Sources */,
 				57FAB0D722CB643C0044DDDC /* Note.swift in Sources */,
 				579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */,
-				5769C23C2302DB7100530294 /* GlobalMethods.swift in Sources */,
+				5769C23C2302DB7100530294 /* VisibleViewController.swift in Sources */,
 				57F518C22300F6CD000E91C4 /* Gist.swift in Sources */,
 				57C4D2CF22D8CB3200E7F86E /* GalleryViewController.swift in Sources */,
 				57E56C6322EA2CD30006087C /* RemoveNoteOperation.swift in Sources */,

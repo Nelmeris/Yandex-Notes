@@ -2,8 +2,8 @@
 //  NoteCoreDataParsing.swift
 //  Notes
 //
-//  Created by Артем Куфаев on 18/08/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 18/08/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
