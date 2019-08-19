@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Notes.xcodeproj">
+      location = "group:/Users/nelmeris/Projects/Yandex-Notes/Yandex.Notes.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
