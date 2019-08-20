@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_NotesTestsVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_NotesTestsVersionString[];
+FOUNDATION_EXPORT double Pods_Yandex_NotesVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_Yandex_NotesVersionString[];
 

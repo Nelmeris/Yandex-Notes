@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "57FAB0C622CB63CA0044DDDC"
-               BuildableName = "Yandex.NotesTests.xctest"
-               BlueprintName = "Yandex.NotesTests"
+               BuildableName = "Yandex.Notes.Tests.xctest"
+               BlueprintName = "Yandex.Notes.Tests"
                ReferencedContainer = "container:Yandex.Notes.xcodeproj">
             </BuildableReference>
          </TestableReference>

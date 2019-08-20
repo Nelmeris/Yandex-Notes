@@ -1,0 +1,6 @@
+module Pods_Yandex_Notes {
+  umbrella header "Pods-Yandex.Notes-umbrella.h"
+
+  export *
+  module * { export * }
+}
