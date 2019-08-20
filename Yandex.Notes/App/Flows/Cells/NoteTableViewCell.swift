@@ -14,10 +14,13 @@ class NoteTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var contentLabel: UILabel!
     @IBOutlet weak var destructionDateLabel: UILabel!
+    @IBOutlet weak var destructionDateTitle: UILabel!
     
     override func prepareForReuse() {
         super.prepareForReuse()
         colorView.backgroundColor = nil
+        destructionDateLabel.text = ""
+        destructionDateTitle.text = ""
     }
 
 }

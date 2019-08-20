@@ -89,10 +89,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UserDefaults.standard.removeObject(forKey: "no_connection_timer")
         
-        dbQueue.maxConcurrentOperationCount = 1
-        commonQueue.maxConcurrentOperationCount = 1
-        backendQueue.maxConcurrentOperationCount = 1
-        
         let storyboard = UIStoryboard(name: mainStoryboardName, bundle: nil)
         guard let navController = storyboard.instantiateInitialViewController() as? UINavigationController,
             let rootViewController = navController.topViewController as? NoteTableViewController else { fatalError() }

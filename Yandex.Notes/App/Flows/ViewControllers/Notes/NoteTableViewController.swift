@@ -35,13 +35,10 @@ class NoteTableViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         configure()
         presenter.loadNotesFromDB()
-        presenter.syncNotes()
-        presenter.startSyncTimer(with: 30)
     }
     
     func configure() {
         title = "Заметки"
-        tableView.separatorStyle = .none
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(prepareSyncNotes), for: .allEvents)
         
@@ -114,12 +111,12 @@ extension NoteTableViewController {
         cell.contentLabel.text = note.content
         cell.colorView.backgroundColor = note.color
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM d, h:mm a"
         if let date = note.destructionDate {
-            cell.destructionDateLabel.text = dateFormatter.string(from: date)
+            cell.destructionDateLabel.text = shortDate(date)
+            cell.destructionDateTitle.text = "Destruction at:"
         } else {
             cell.destructionDateLabel.text = ""
+            cell.destructionDateTitle.text = ""
         }
         
         return cell
