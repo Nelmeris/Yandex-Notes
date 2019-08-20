@@ -1,6 +1,6 @@
 //
 //  LoadNotesOperation.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 19/08/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -12,14 +12,11 @@ import CoreData
 class LoadNotesOperation: AsyncOperation {
     
     private let context: NSManagedObjectContext
+    
     private(set) var loadFromDB: LoadNotesDBOperation
     private(set) var loadFromBackend: LoadNotesBackendOperation
     
-    private(set) var result: UIOperationResult? {
-        didSet {
-            finish()
-        }
-    }
+    private(set) var result: UIOperationResult? { didSet { finish() } }
     
     init(note: Note,
          context: NSManagedObjectContext,
@@ -31,18 +28,20 @@ class LoadNotesOperation: AsyncOperation {
         loadFromBackend = LoadNotesBackendOperation()
         
         super.init(title: "Main load notes")
-        
-        dbQueue.addOperation(loadFromDB)
-        backendQueue.addOperation(loadFromBackend)
-        
-        addDependency(loadFromDB)
-        addDependency(loadFromBackend)
     }
     
-    override func main() {
-        switch loadFromDB.result! {
+    private func mainCompletion() {
+        guard let result = loadFromDB.result else {
+            self.result = nil
+            return
+        }
+        switch result {
         case .success(let dbNotes):
-            switch loadFromBackend.result! {
+            guard let result = loadFromBackend.result else {
+                self.result = nil
+                return
+            }
+            switch result {
             case .success(let gistContainer):
                 let newNotes = Note.syncNotes(dbNotes: dbNotes, gistContainer: gistContainer)
                 self.result = .success(newNotes)
@@ -52,6 +51,25 @@ class LoadNotesOperation: AsyncOperation {
         case .failture(let error):
             self.result = .dbFailture(error)
         }
+    }
+    
+    override func main() {
+        dbQueue.addOperation(loadFromDB)
+        backendQueue.addOperation(loadFromBackend)
+        
+        let mainOperation = BlockOperation {
+            self.mainCompletion()
+        }
+        
+        mainOperation.addDependency(loadFromDB)
+        mainOperation.addDependency(loadFromBackend)
+        OperationQueue().addOperation(mainOperation)
+    }
+    
+    override func cancel() {
+        loadFromDB.cancel()
+        loadFromBackend.cancel()
+        super.cancel()
     }
     
 }

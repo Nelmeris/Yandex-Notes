@@ -414,33 +414,42 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Заголовок" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y8m-9e-ayi">
-                                            <rect key="frame" x="55" y="18" width="319" height="21.5"/>
+                                            <rect key="frame" x="55" y="17.5" width="94.5" height="22"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Текст заметки, Текст заметки, Текст заметки, Текст заметки, Текст заметки" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IUb-9X-Ghv">
-                                            <rect key="frame" x="30" y="41" width="344" height="60.5"/>
+                                            <rect key="frame" x="30" y="41" width="364" height="60.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eG0-a9-jiA">
+                                            <rect key="frame" x="358" y="18" width="36" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="eG0-a9-jiA" firstAttribute="trailing" secondItem="IUb-9X-Ghv" secondAttribute="trailing" id="3Bk-YB-1ak"/>
+                                        <constraint firstItem="eG0-a9-jiA" firstAttribute="centerY" secondItem="y8m-9e-ayi" secondAttribute="centerY" id="3ph-si-tvt"/>
                                         <constraint firstAttribute="bottom" secondItem="IUb-9X-Ghv" secondAttribute="bottom" constant="15" id="6MB-nw-Ms9"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="y8m-9e-ayi" secondAttribute="trailing" constant="20" id="Gfc-bI-CSJ"/>
                                         <constraint firstItem="efV-1R-svy" firstAttribute="top" secondItem="7j0-dt-jQe" secondAttribute="topMargin" constant="10" id="HRb-5V-B53"/>
                                         <constraint firstItem="y8m-9e-ayi" firstAttribute="centerY" secondItem="efV-1R-svy" secondAttribute="centerY" id="Ldl-aS-Z7s"/>
                                         <constraint firstItem="IUb-9X-Ghv" firstAttribute="leading" secondItem="efV-1R-svy" secondAttribute="leading" id="ZRW-bF-apT"/>
-                                        <constraint firstItem="y8m-9e-ayi" firstAttribute="trailing" secondItem="IUb-9X-Ghv" secondAttribute="trailing" id="g6v-Wt-0uQ"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="eG0-a9-jiA" secondAttribute="trailing" id="d7g-L6-rdb"/>
                                         <constraint firstItem="IUb-9X-Ghv" firstAttribute="top" secondItem="efV-1R-svy" secondAttribute="bottom" constant="5" id="h03-YB-TLl"/>
                                         <constraint firstItem="y8m-9e-ayi" firstAttribute="leading" secondItem="efV-1R-svy" secondAttribute="trailing" constant="10" id="nlk-RR-gdo"/>
+                                        <constraint firstItem="eG0-a9-jiA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="y8m-9e-ayi" secondAttribute="trailing" constant="10" id="wD7-pI-JVF"/>
                                         <constraint firstItem="efV-1R-svy" firstAttribute="leading" secondItem="7j0-dt-jQe" secondAttribute="leadingMargin" constant="10" id="ydS-e1-v5V"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="colorView" destination="efV-1R-svy" id="vFQ-4W-2mI"/>
                                     <outlet property="contentLabel" destination="IUb-9X-Ghv" id="yEC-5J-wCq"/>
+                                    <outlet property="destructionDateLabel" destination="eG0-a9-jiA" id="iIO-pB-zc1"/>
                                     <outlet property="titleLabel" destination="y8m-9e-ayi" id="CEo-Ef-bYv"/>
                                     <segue destination="TJz-cm-vav" kind="show" identifier="NoteTableToEditNote" id="zk9-89-9Zj"/>
                                 </connections>

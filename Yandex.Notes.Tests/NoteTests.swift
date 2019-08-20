@@ -7,14 +7,14 @@
 //
 
 import XCTest
-@testable import Notes
+@testable import Yandex_Notes
 
 class NoteTests: XCTestCase {
     
-    private let uid = "123"
+    private let uuid = UUID()
     private let title = "title"
     private let content = "text"
-    private let importance = Note.ImportanceLevels.usual
+    private let importance = NoteImportanceLevel.usual
     private var sut: Note!
     
     override func setUp() {
@@ -36,16 +36,16 @@ class NoteTests: XCTestCase {
         XCTAssertEqual(displayStyle, .struct)
     }
     
-    func testNote_whenInitialized_isSetUid() {
-        let note = Note(uid: uid, title: title, content: content, importance: importance)
+    func testNote_whenInitialized_isSetUUID() {
+        let note = Note(uuid: uuid, title: title, content: content, importance: importance)
         
-        XCTAssertEqual(uid, note.uid)
+        XCTAssertEqual(uuid, note.uuid)
     }
     
-    func testNote_whenInitialized_isSetDefaultUid() {
+    func testNote_whenInitialized_isSetDefaultUUID() {
         let note = Note(title: title, content: content, importance: importance)
         
-        XCTAssertNotEqual(sut.uid, note.uid)
+        XCTAssertNotEqual(sut.uuid, note.uuid)
     }
     
     func testNote_whenInitialized_setTitle() {
@@ -73,14 +73,14 @@ class NoteTests: XCTestCase {
     }
     
     func testNote_whenInitialized_defaultDate() {
-        XCTAssertNil(sut.selfDestructionDate)
+        XCTAssertNil(sut.destructionDate)
     }
     
     func testNote_whenInitialized_customDate() {
         let date = Date()
         let note = Note(title: title, content: content, importance: .critical, destructionDate: date)
         
-        XCTAssertEqual(date, note.selfDestructionDate)
+        XCTAssertEqual(date, note.destructionDate)
     }
     
 }

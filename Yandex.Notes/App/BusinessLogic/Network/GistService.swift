@@ -1,6 +1,6 @@
 //
 //  GistService.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 12.08.2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -38,12 +38,21 @@ class GistService {
     enum ExecuteRequestResult {
         case success(Data)
         case failture(NetworkError)
+        case closed
     }
+    
+    var operations: [ExecuteGistRequestOperation] = []
     
     private func executeRequest(with method: RequestMethods, path: String, data: Data? = nil, completion: @escaping (ExecuteRequestResult) -> ()) {
         let operation = ExecuteGistRequestOperation(method: method, path: path, data: data)
+        operations.append(operation)
         operation.completionBlock = {
-            switch operation.result! {
+            self.operations.removeAll { $0 == operation }
+            guard let result = operation.result else {
+                completion(.closed)
+                return
+            }
+            switch result {
             case .success(let data, statusCode: let code):
                 print("Network request success. Status code: \(code)")
                 completion(.success(data))
@@ -78,6 +87,8 @@ class GistService {
                     }
                 case .failture(let netError):
                     completion(nil, .failed(netError))
+                case .closed:
+                    completion(nil, .cancel)
                 }
             }
         } catch {
@@ -117,6 +128,8 @@ class GistService {
                 }
             case .failture(let netError):
                 completion(nil, .failed(netError))
+            case .closed:
+                completion(nil, .cancel)
             }
         }
     }
@@ -134,6 +147,8 @@ class GistService {
                 }
             case .failture(let netError):
                 completion(nil, .failed(netError))
+            case .closed:
+                completion(nil, .cancel)
             }
         }
     }
@@ -158,6 +173,10 @@ class GistService {
             }
             completion(nil, .failedSearch)
         }
+    }
+    
+    func cancelLastOperation() {
+        operations.last?.cancel()
     }
     
 }

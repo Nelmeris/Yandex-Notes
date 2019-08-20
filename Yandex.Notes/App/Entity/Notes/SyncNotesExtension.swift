@@ -1,6 +1,6 @@
 //
 //  ExistNotesSelection.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 19/08/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -22,9 +22,9 @@ extension Note {
     static func syncNotes(dbNotes: [Note], gistContainer: GistNotesContainer) -> [Note] {
         var newNotes = gistContainer.notes
         for dbNote in dbNotes {
-            if let noteInGist = newNotes.first(where: { $0.uid == dbNote.uid }) {
+            if let noteInGist = newNotes.first(where: { $0.uuid == dbNote.uuid }) {
                 if isOutdated(dbNote: dbNote, backendNote: noteInGist) {
-                    newNotes.removeAll { $0.uid == dbNote.uid }
+                    newNotes.removeAll { $0.uuid == dbNote.uuid }
                     newNotes.append(dbNote)
                 }
             } else {

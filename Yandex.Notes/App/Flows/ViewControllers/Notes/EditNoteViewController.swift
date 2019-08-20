@@ -1,6 +1,6 @@
 //
 //  EditNoteViewController.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 09/07/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -42,12 +42,13 @@ class EditNoteViewController: UIViewController {
     var backgroundContext: NSManagedObjectContext!
     
     var presenter: EditNotePresenterProtocol!
-    var parentVC: UIViewController? {
-        guard isMovingFromParent else { return nil }
+    lazy var parentVC: NoteTableViewController? = {
         guard let navigControl = navigationController else { return nil }
-        guard let lastVC = navigControl.viewControllers.last else { return nil }
-        return lastVC
-    }
+        guard let lastVC = navigControl.viewControllers.last(where: { (controller) -> Bool in
+            return controller is NoteTableViewController
+        }) else { return nil }
+        return (lastVC as! NoteTableViewController)
+    }()
     
     var staticDateFieldHeight: CGFloat!
     
@@ -82,7 +83,8 @@ class EditNoteViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        guard let noteTableVC = parentVC as? NoteTableViewController else { return }
+        guard isMovingFromParent,
+            let noteTableVC = parentVC else { return }
         noteProcessing(noteTableVC: noteTableVC)
     }
     
@@ -125,19 +127,20 @@ class EditNoteViewController: UIViewController {
 extension EditNoteViewController: EditNoteViewProtocol {
     
     func loadNotesFromDBOnDestination() {
-        guard let noteTableVC = parentVC as? NoteTableViewController else { return }
+        guard let noteTableVC = parentVC else { return }
         noteTableVC.presenter.loadNotesFromDB()
     }
     
     func setColor(_ color: UIColor) {
-        print(UIColor.green.toHexString())
-        print(color.toHexString())
-        switch color {
-        case .white:
+        let whiteHex = UIColor.white.toHexString()
+        let redHex = UIColor.red.toHexString()
+        let greenHex = UIColor.green.toHexString()
+        switch color.toHexString() {
+        case whiteHex:
             checkedColorButton = colorWhiteButton
-        case .red:
+        case redHex:
             checkedColorButton = colorRedButton
-        case .green:
+        case greenHex:
             checkedColorButton = colorGreenButton
         default:
             colorPickerButton.backgroundColor = color
@@ -171,9 +174,13 @@ extension EditNoteViewController {
         
         let noteData = NoteData(title: title, content: content, color: color, importance: .usual, destructionDate: date)
         if let note = self.note {
-            presenter.editNote(note, withData: noteData)
+            presenter.editNote(note, withData: noteData) {
+                self.loadNotesFromDBOnDestination()
+            }
         } else {
-            presenter.createNote(withData: noteData)
+            presenter.createNote(withData: noteData) {
+                self.loadNotesFromDBOnDestination()
+            }
         }
     }
     

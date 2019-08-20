@@ -1,6 +1,6 @@
 //
 //  NoteExtension.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 02/07/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -11,9 +11,11 @@ import UIKit
 // MARK: - Parse from JSON
 extension Note {
     
-    static func parse(json: [String: Any]) -> Note? {
+    typealias JSON = [String: Any]
+    
+    static func parse(json: JSON) -> Note? {
         
-        guard let uid = json["uid"] as? String,
+        guard let uuid = json["uuid"] as? String,
             let title = json["title"] as? String,
             let content = json["content"] as? String,
             let createDateDouble = json["create_date"] as? Double else { return nil }
@@ -40,23 +42,23 @@ extension Note {
             destructionDate = nil
         }
         
-        return Note(uid: UUID(uuidString: uid)!, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate, createdDate: createDate)
+        return Note(uuid: UUID(uuidString: uuid)!, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate, createdDate: createDate)
         
     }
     
     private init(
-        uid: UUID = UUID(),
+        uuid: UUID = UUID(),
         title: String, content: String, color: UIColor = .white,
         importance: NoteImportanceLevel,
-        destructionDate selfDestructionDate: Date? = nil,
+        destructionDate: Date? = nil,
         createdDate: Date
         ) {
-        self.uid = uid
+        self.uuid = uuid
         self.title = title
         self.content = content
         self.color = color
         self.importance = importance
-        self.destructionDate = selfDestructionDate
+        self.destructionDate = destructionDate
         self.createDate = createdDate
     }
     
@@ -65,9 +67,9 @@ extension Note {
 // MARK: - Parse to JSON
 extension Note {
     
-    var json: [String: Any] {
-        var json = [String: Any]()
-        json["uid"] = uid
+    var json: JSON {
+        var json = JSON()
+        json["uuid"] = uuid.uuidString
         json["title"] = title
         json["content"] = content
         

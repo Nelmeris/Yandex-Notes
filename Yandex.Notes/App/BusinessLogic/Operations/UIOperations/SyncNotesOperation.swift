@@ -1,6 +1,6 @@
 //
 //  SyncNotesOperation.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 13/08/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -20,44 +20,13 @@ class SyncNotesOperation: AsyncOperation {
     
     private(set) var syncNotes: [Note]?
     
-    private let mainQueue: OperationQueue
     private let dbQueue: OperationQueue
     private let backendQueue: OperationQueue
     
-    private(set) var result: UIOperationResult? {
-        didSet {
-            finish()
-        }
-    }
-    
-    func startSync() {
-        switch loadFromDB.result! {
-        case .success(let notes):
-            switch loadFromBackend.result! {
-            case .success(let container):
-                let syncNotes = Note.syncNotes(dbNotes: notes, gistContainer: container)
-                if syncNotes != notes {
-                    rewriteNotes = RewriteDBOperation(notes: syncNotes, context: context)
-                    dbQueue.addOperation(rewriteNotes!)
-                    addDependency(rewriteNotes!)
-                }
-                if syncNotes != container.notes {
-                    saveToBackend = SaveNotesBackendOperation(notes: syncNotes)
-                    backendQueue.addOperation(saveToBackend!)
-                    addDependency(saveToBackend!)
-                }
-                self.syncNotes = syncNotes
-            case .failure(let error):
-                self.result = .backendFailture(dbNotes: notes, error: error)
-            }
-        case .failture(let error):
-            self.result = .dbFailture(error)
-        }
-    }
+    private(set) var result: UIOperationResult? { didSet { finish() } }
     
     init(
         context: NSManagedObjectContext,
-        mainQueue: OperationQueue,
         backendQueue: OperationQueue,
         dbQueue: OperationQueue
         ) {
@@ -66,12 +35,70 @@ class SyncNotesOperation: AsyncOperation {
         loadFromBackend = LoadNotesBackendOperation()
         loadFromDB = LoadNotesDBOperation(context: context)
         
-        self.mainQueue = mainQueue
         self.backendQueue = backendQueue
         self.dbQueue = dbQueue
         
         super.init(title: "Sync notes with Backend")
-        
+    }
+    
+    private func mainCompletion() {
+        guard let saveOp = saveToBackend else {
+            self.result = .success(self.syncNotes!)
+            return
+        }
+        guard let result = saveOp.result else {
+            self.result = nil
+            return
+        }
+        switch result {
+        case .success:
+            self.result = .success(self.syncNotes!)
+        case .failure(let error):
+            self.result = .backendFailture(dbNotes: self.syncNotes!, error: error)
+        }
+    }
+    
+    private func startSync() {
+        guard let result = loadFromDB.result else {
+            self.result = nil
+            return
+        }
+        switch result {
+        case .success(let notes):
+            guard let result = loadFromBackend.result else {
+                self.result = nil
+                return
+            }
+            switch result {
+            case .success(let container):
+                let syncNotes = Note.syncNotes(dbNotes: notes, gistContainer: container)
+                
+                let mainCompletion = BlockOperation {
+                    self.mainCompletion()
+                }
+                
+                if syncNotes != notes {
+                    rewriteNotes = RewriteDBOperation(notes: syncNotes, context: context)
+                    dbQueue.addOperation(rewriteNotes!)
+                    mainCompletion.addDependency(rewriteNotes!)
+                }
+                if syncNotes != container.notes {
+                    saveToBackend = SaveNotesBackendOperation(notes: syncNotes)
+                    backendQueue.addOperation(saveToBackend!)
+                    mainCompletion.addDependency(saveToBackend!)
+                }
+                self.syncNotes = syncNotes
+                
+                OperationQueue().addOperation(mainCompletion)
+            case .failure(let error):
+                self.result = .backendFailture(dbNotes: notes, error: error)
+            }
+        case .failture(let error):
+            self.result = .dbFailture(error)
+        }
+    }
+    
+    override func main() {
         let didLoaded = BlockOperation {
             self.startSync()
         }
@@ -79,24 +106,18 @@ class SyncNotesOperation: AsyncOperation {
         didLoaded.addDependency(loadFromBackend)
         didLoaded.addDependency(loadFromDB)
         
-        addDependency(didLoaded)
-        
         backendQueue.addOperation(loadFromBackend)
         dbQueue.addOperation(loadFromDB)
-        mainQueue.addOperation(didLoaded)
+        
+        OperationQueue().addOperation(didLoaded)
     }
     
-    override func main() {
-        if let saveOp = saveToBackend {
-            switch saveOp.result! {
-            case .success:
-                self.result = .success(self.syncNotes!)
-            case .failure(let error):
-                self.result = .backendFailture(dbNotes: self.syncNotes!, error: error)
-            }
-        } else {
-            self.result = .success(self.syncNotes!)
-        }
+    override func cancel() {
+        loadFromDB.cancel()
+        loadFromBackend.cancel()
+        rewriteNotes?.cancel()
+        saveToBackend?.cancel()
+        super.cancel()
     }
     
 }

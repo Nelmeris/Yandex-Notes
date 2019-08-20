@@ -1,6 +1,6 @@
 //
 //  LoadNotesDBOperation.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 25.07.2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -16,11 +16,7 @@ enum LoadNotesDBOperationResult {
 
 class LoadNotesDBOperation: BaseDBOperation {
     
-    private(set) var result: LoadNotesDBOperationResult? {
-        didSet {
-            finish()
-        }
-    }
+    private(set) var result: LoadNotesDBOperationResult? { didSet { finish() } }
     
     init(context: NSManagedObjectContext) {
         super.init(title: "Load notes from DataBase",

@@ -1,6 +1,6 @@
 //
 //  NoteCoreDataParsing.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 18/08/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -12,7 +12,8 @@ import UIKit
 extension Note {
     
     init(from cdNote: CDNote) {
-        self.uid = UUID(uuidString: cdNote.uid!)!
+        let uuidString = cdNote.uuid
+        self.uuid = UUID(uuidString: uuidString!)!
         self.title = cdNote.title!
         self.content = cdNote.content!
         self.color = UIColor(hexString: cdNote.color!)
@@ -27,7 +28,7 @@ extension Note {
 extension Note {
     
     func parse(toCDContainer cdNote: CDNote) -> CDNote {
-        cdNote.uid = self.uid.uuidString
+        cdNote.uuid = self.uuid.uuidString
         cdNote.title = self.title
         cdNote.content = self.content
         cdNote.color = self.color.toHexString()

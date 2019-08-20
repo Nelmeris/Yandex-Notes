@@ -2,8 +2,8 @@
 //  NoteTableViewPresenter.swift
 //  Yandex.Notes
 //
-//  Created by Артем Куфаев on 20/08/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 20/08/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
@@ -14,6 +14,8 @@ protocol NoteTableViewPresenterProtocol {
     func syncNotes()
     func loadNotesFromDB()
     func removeNote(_ note: Note)
+    func startSyncTimer(with timeInterval: TimeInterval?)
+    func resetSyncTimer()
 }
 
 class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
@@ -22,6 +24,9 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
     var notes: [Note] = []
     let context: NSManagedObjectContext
     let backgroundContext: NSManagedObjectContext
+    
+    var timer: Timer?
+    var timerTimeInterval: TimeInterval? = nil
     
     func getSortCompare() -> (Note, Note) -> Bool {
         return { lft, rht in
@@ -42,12 +47,14 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
     var lastSyncOperation: SyncNotesOperation? = nil
     
     func syncNotes() {
-        lastSyncOperation?.finish()
-        viewController.beginRefreshing()
-        let syncNotesOperation = SyncNotesOperation(context: backgroundContext, mainQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
+        lastSyncOperation?.cancel()
+        stopSyncTimer()
+        let syncNotesOperation = SyncNotesOperation(context: backgroundContext, backendQueue: backendQueue, dbQueue: dbQueue)
         syncNotesOperation.loadFromDB.completionBlock = {
-            switch syncNotesOperation.loadFromDB.result! {
+            guard let result = syncNotesOperation.loadFromDB.result else { return }
+            switch result {
             case .success(let notes):
+                self.removeOutdatedNotes(notes)
                 let sortedNotes = self.getSortedNotes(from: notes)
                 self.viewController.setNotes(sortedNotes)
             case .failture(let error):
@@ -58,16 +65,39 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
             guard let result = syncNotesOperation.result else { return }
             self.viewController.endRefreshing()
             self.parseUIOperationResult(from: result)
+            self.startSyncTimer()
         }
         self.lastSyncOperation = syncNotesOperation
         commonQueue.addOperation(syncNotesOperation)
     }
     
+    @objc func removeNoteOBJC(timer: Timer) {
+        guard let note = timer.userInfo as? Note else { return }
+        timers.removeValue(forKey: note.uuid)
+        self.removeNote(note)
+    }
+    
+    var timers: [UUID: Timer] = [:]
+    
+    func removeOutdatedNotes(_ notes: [Note]) {
+        for note in notes {
+            if let date = note.destructionDate {
+                if timers[note.uuid] == nil {
+                    let timer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(removeNoteOBJC(timer:)), userInfo: note, repeats: false)
+                    timers[note.uuid] = timer
+                    RunLoop.main.add(timer, forMode: .default)
+                }
+            }
+        }
+    }
+    
     func loadNotesFromDB() {
         let loadFromDBOperation = LoadNotesDBOperation(context: backgroundContext)
         loadFromDBOperation.completionBlock = {
-            switch loadFromDBOperation.result! {
+            guard let result = loadFromDBOperation.result else { return }
+            switch result {
             case .success(let notes):
+                self.removeOutdatedNotes(notes)
                 let sortedNotes = self.getSortedNotes(from: notes)
                 self.viewController.setNotes(sortedNotes)
             case .failture(let error):
@@ -91,9 +121,11 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
     func parseUIOperationResult(from result: UIOperationResult) {
         switch result {
         case .success(let notes):
+            self.removeOutdatedNotes(notes)
             let sortedNotes = self.getSortedNotes(from: notes)
             self.viewController.setNotes(sortedNotes)
         case .backendFailture(let notes, let error):
+            self.removeOutdatedNotes(notes)
             let sortedNotes = self.getSortedNotes(from: notes)
             self.viewController.setNotes(sortedNotes)
             switch error {
@@ -123,9 +155,31 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
             self.loadNotesFromDB()
         }
         removeNoteOperation.completionBlock = {
-            self.parseUIOperationResult(from: removeNoteOperation.result!)
+            guard let result = removeNoteOperation.result else { return }
+            self.parseUIOperationResult(from: result)
         }
         commonQueue.addOperation(removeNoteOperation)
+    }
+    
+    func stopSyncTimer() {
+        timer?.invalidate()
+    }
+    
+    func startSyncTimer(with timeInterval: TimeInterval? = nil) {
+        if let timeInterval = timeInterval {
+            self.timerTimeInterval = timeInterval
+        }
+        guard let timeInterval = self.timerTimeInterval else { return }
+        timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(prepareSyncNotes), userInfo: nil, repeats: true)
+    }
+    
+    func resetSyncTimer() {
+        stopSyncTimer()
+        startSyncTimer(with: self.timerTimeInterval)
+    }
+    
+    @objc func prepareSyncNotes() {
+        self.syncNotes()
     }
     
 }

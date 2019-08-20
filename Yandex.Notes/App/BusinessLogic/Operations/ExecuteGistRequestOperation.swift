@@ -1,6 +1,6 @@
 //
 //  ExecuteGistRequestOperation.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 13/08/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -28,6 +28,8 @@ class ExecuteGistRequestOperation: AsyncOperation {
     private let data: Data?
     
     private let requestTimeoutInterval: TimeInterval = 10
+    
+    private var dataTask: URLSessionDataTask?
     
     private(set) var result: GistRequestResult? {
         didSet {
@@ -100,9 +102,10 @@ class ExecuteGistRequestOperation: AsyncOperation {
             
             print("\(dateFormatter.string(from: Date())): Request \(self.method.rawValue)/\(request.url!.absoluteString)")
             
-            URLSession.shared.dataTask(with: request) { result in
+            self.dataTask = URLSession.shared.dataTask(with: request) { result in
                 completion(result)
-            }.resume()
+            }
+            self.dataTask?.resume()
         }
     }
     
@@ -115,6 +118,11 @@ class ExecuteGistRequestOperation: AsyncOperation {
                 self.result = .failture(error)
             }
         }
+    }
+    
+    override func cancel() {
+        dataTask?.cancel()
+        super.cancel()
     }
     
 }

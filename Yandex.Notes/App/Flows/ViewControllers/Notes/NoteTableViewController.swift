@@ -1,6 +1,6 @@
 //
 //  NoteTableViewController.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 10/07/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -33,9 +33,10 @@ class NoteTableViewController: UITableViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
-        
         configure()
         presenter.loadNotesFromDB()
+        presenter.syncNotes()
+        presenter.startSyncTimer(with: 30)
     }
     
     func configure() {
@@ -48,11 +49,7 @@ class NoteTableViewController: UITableViewController {
     }
     
     @objc func prepareSyncNotes() {
-        presenter.syncNotes()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        presenter.resetSyncTimer()
         presenter.syncNotes()
     }
     
@@ -116,6 +113,14 @@ extension NoteTableViewController {
         cell.titleLabel.text = note.title
         cell.contentLabel.text = note.content
         cell.colorView.backgroundColor = note.color
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, h:mm a"
+        if let date = note.destructionDate {
+            cell.destructionDateLabel.text = dateFormatter.string(from: date)
+        } else {
+            cell.destructionDateLabel.text = ""
+        }
         
         return cell
     }

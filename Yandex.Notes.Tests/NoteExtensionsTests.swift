@@ -1,13 +1,13 @@
 //
 //  NoteExtensionsTests.swift
-//  NotesTests
+//  Yandex.NotesTests
 //
 //  Created by Roman Brovko on 6/18/19.
 //  Copyright © 2019 Roman Brovko. All rights reserved.
 //
 
 import XCTest
-@testable import Notes
+@testable import Yandex_Notes
 
 class NoteExtensionsTests: XCTestCase {
     
@@ -73,18 +73,18 @@ class NoteExtensionsTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(sut.uid, note.uid)
+        XCTAssertEqual(sut.uuid, note.uuid)
         XCTAssertEqual(sut.title, note.title)
         XCTAssertEqual(sut.content, note.content)
         XCTAssertEqual(sut.importance, note.importance)
         XCTAssertEqual(sut.color, note.color)
         
-        XCTAssertNil(sut.selfDestructionDate)
-        XCTAssertNil(note.selfDestructionDate)
+        XCTAssertNil(sut.destructionDate)
+        XCTAssertNil(note.destructionDate)
     }
     
     func testNoteExtensions_whenGetJsonAndParseJsonForFullNote_isEqualsNotes() {
-        let originNote = Note(uid: "1234", title: "Title1", content: "My text", color: .red, importance: .insignificant, destructionDate: Date())
+        let originNote = Note(uuid: UUID(), title: "Title1", content: "My text", color: .red, importance: .insignificant, destructionDate: Date())
         let _note = getNoteThroughJsonFrom(originNote)
         
         guard let note = _note else {
@@ -92,14 +92,14 @@ class NoteExtensionsTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(originNote.uid, note.uid)
+        XCTAssertEqual(originNote.uuid, note.uuid)
         XCTAssertEqual(originNote.title, note.title)
         XCTAssertEqual(originNote.content, note.content)
         XCTAssertEqual(originNote.importance, note.importance)
         XCTAssertEqual(originNote.color, note.color)
         
-        guard let originDate = originNote.selfDestructionDate,
-            let date = note.selfDestructionDate else {
+        guard let originDate = originNote.destructionDate,
+            let date = note.destructionDate else {
                 XCTFail()
                 return
         }

@@ -1,6 +1,6 @@
 //
 //  GistServiceError.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 13/08/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -15,6 +15,7 @@ enum GistServiceError: Error, LocalizedError {
     case failedEncodeData(Error)
     case invalidToken(String)
     case noToken
+    case cancel
     
     var localizedDescription: String {
         switch self {
@@ -45,6 +46,8 @@ enum GistServiceError: Error, LocalizedError {
             return "Token \"\(token)\" isn't valid"
         case .noToken:
             return "Token not found"
+        case .cancel:
+            return "Operation was cancelled"
         }
     }
 }

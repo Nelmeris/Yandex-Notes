@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Notes
+@testable import Yandex_Notes
 
 class FileNotebookTests: XCTestCase {
     
@@ -16,7 +16,8 @@ class FileNotebookTests: XCTestCase {
     override func setUp() {
         super.setUp()
         FileNotebook.removeFile()
-        sut = FileNotebook()
+        sut = FileNotebook.shared
+        sut.setAutosave(false)
     }
     
     override func tearDown() {
@@ -45,7 +46,7 @@ class FileNotebookTests: XCTestCase {
         
         XCTAssertEqual(notes.count, 1)
         
-        let checkedNote = getNote(by: note.uid, from: notes)
+        let checkedNote = getNote(by: note.uuid, from: notes)
         
         XCTAssertNotNil(checkedNote)
     }
@@ -54,42 +55,42 @@ class FileNotebookTests: XCTestCase {
         let note = Note(title: "Title", content: "Text", importance: .usual)
         sut.add(note)
         
-        guard let checkedNote = getNote(by: note.uid, from: sut.notes) else {
+        guard let checkedNote = getNote(by: note.uuid, from: sut.notes) else {
             XCTFail()
             return
         }
         
-        XCTAssertEqual(note.uid, checkedNote.uid)
+        XCTAssertEqual(note.uuid, checkedNote.uuid)
         XCTAssertEqual(note.title, checkedNote.title)
         XCTAssertEqual(note.content, checkedNote.content)
         XCTAssertEqual(note.importance, checkedNote.importance)
         XCTAssertEqual(note.color, checkedNote.color)
         
-        XCTAssertNil(note.selfDestructionDate)
-        XCTAssertNil(checkedNote.selfDestructionDate)
+        XCTAssertNil(note.destructionDate)
+        XCTAssertNil(checkedNote.destructionDate)
     }
     
     func testFileNotebook_whenAddNoteWithChangedInfo_updateNoteInNotes() {
         let note = Note(title: "Title", content: "Text", importance: .usual)
         sut.add(note)
         
-        let note2 = Note(uid: note.uid, title: "New Title", content: "My new text", color: .red, importance: .critical, destructionDate: Date())
+        let note2 = Note(uuid: note.uuid, title: "New Title", content: "My new text", color: .red, importance: .critical, destructionDate: Date())
         sut.update(note2)
         
-        guard let checkedNote = getNote(by: note2.uid, from: sut.notes) else {
+        guard let checkedNote = getNote(by: note2.uuid, from: sut.notes) else {
             XCTFail()
             return
         }
         
-        XCTAssertEqual(note2.uid, checkedNote.uid)
+        XCTAssertEqual(note2.uuid, checkedNote.uuid)
         XCTAssertEqual(note2.title, checkedNote.title)
         XCTAssertEqual(note2.content, checkedNote.content)
         XCTAssertEqual(note2.importance, checkedNote.importance)
         XCTAssertEqual(note2.color, checkedNote.color)
         
-        XCTAssertNotNil(checkedNote.selfDestructionDate)
+        XCTAssertNotNil(checkedNote.destructionDate)
         
-        guard let checkedDate = checkedNote.selfDestructionDate, let date = note2.selfDestructionDate else {
+        guard let checkedDate = checkedNote.destructionDate, let date = note2.destructionDate else {
             return
         }
         
@@ -100,7 +101,7 @@ class FileNotebookTests: XCTestCase {
     func testFileNotebook_whenDeleteNote_noteRemoveFromNotes() {
         let note = Note(title: "Title", content: "Text", importance: .usual)
         sut.add(note)
-        sut.remove(with: note.uid)
+        sut.remove(with: note.uuid)
         
         let notes = sut.notes
         
@@ -116,8 +117,8 @@ class FileNotebookTests: XCTestCase {
         
         sut.saveToFile()
         
-        sut.remove(with: note.uid)
-        sut.remove(with: note2.uid)
+        sut.remove(with: note.uuid)
+        sut.remove(with: note2.uuid)
         
         XCTAssertTrue(sut.notes.isEmpty)
         
@@ -128,8 +129,8 @@ class FileNotebookTests: XCTestCase {
         
         let notes = sut.notes
         XCTAssertEqual(notes.count, 2)
-        XCTAssertNotNil(getNote(by: note.uid, from: notes))
-        XCTAssertNotNil(getNote(by: note2.uid, from: notes))
+        XCTAssertNotNil(getNote(by: note.uuid, from: notes))
+        XCTAssertNotNil(getNote(by: note2.uuid, from: notes))
     }
     
     func testFileNotebook_whenSaveToFileAndLoadFromFile_equalsRestoredNotes() {
@@ -145,36 +146,36 @@ class FileNotebookTests: XCTestCase {
         
         let notes = sut.notes
         
-        guard let checkedNote = getNote(by: note.uid, from: notes),
-            let checkedNote2 = getNote(by: note2.uid, from: notes) else {
+        guard let checkedNote = getNote(by: note.uuid, from: notes),
+            let checkedNote2 = getNote(by: note2.uuid, from: notes) else {
                 XCTFail()
                 return
         }
         
-        XCTAssertEqual(note.uid, checkedNote.uid)
+        XCTAssertEqual(note.uuid, checkedNote.uuid)
         XCTAssertEqual(note.title, checkedNote.title)
         XCTAssertEqual(note.content, checkedNote.content)
         XCTAssertEqual(note.importance, checkedNote.importance)
         XCTAssertEqual(note.color, checkedNote.color)
         
-        XCTAssertNil(checkedNote.selfDestructionDate)
+        XCTAssertNil(checkedNote.destructionDate)
         
-        guard let checkedDate = checkedNote.selfDestructionDate, let date = note.selfDestructionDate else {
+        guard let checkedDate = checkedNote.destructionDate, let date = note.destructionDate else {
             return
         }
         
         XCTAssertEqual(checkedDate, date)
         
         
-        XCTAssertEqual(note2.uid, checkedNote2.uid)
+        XCTAssertEqual(note2.uuid, checkedNote2.uuid)
         XCTAssertEqual(note2.title, checkedNote2.title)
         XCTAssertEqual(note2.content, checkedNote2.content)
         XCTAssertEqual(note2.importance, checkedNote2.importance)
         XCTAssertEqual(note2.color, checkedNote2.color)
         
-        XCTAssertNotNil(checkedNote.selfDestructionDate)
+        XCTAssertNotNil(checkedNote.destructionDate)
         
-        guard let checkedDate2 = checkedNote2.selfDestructionDate, let date2 = note2.selfDestructionDate else {
+        guard let checkedDate2 = checkedNote2.destructionDate, let date2 = note2.destructionDate else {
             return
         }
         
@@ -183,13 +184,13 @@ class FileNotebookTests: XCTestCase {
     }
     
     
-    private func getNote(by uid: String, from notes:Any) -> Note? {
+    private func getNote(by uuid: UUID, from notes:Any) -> Note? {
         if let notes = notes as? [String: Note] {
-            return notes[uid]
+            return notes[uuid.uuidString]
         }
         
         if let notes = notes as? [Note] {
-            return notes.filter { $0.uid == uid }.first
+            return notes.filter { $0.uuid == uuid }.first
         }
         
         return nil

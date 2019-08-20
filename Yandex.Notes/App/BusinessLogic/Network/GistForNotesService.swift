@@ -1,6 +1,6 @@
 //
 //  GistForNotesService.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 12/08/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -148,6 +148,10 @@ class GistForNotesService {
         } catch {
             completion(false, .failedEncodeData(error))
         }
+    }
+    
+    func cancelLastOperation() {
+        GistService.shared.cancelLastOperation()
     }
     
 }

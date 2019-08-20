@@ -1,6 +1,6 @@
 //
 //  FileNotebook.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 02/07/2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -30,12 +30,12 @@ class FileNotebook {
         isAutosave = value
     }
     
-    public func contain(with uid: UUID) -> Bool {
-        return notes.contains { $0.uid == uid }
+    public func contain(with uuid: UUID) -> Bool {
+        return notes.contains { $0.uuid == uuid }
     }
     
     public func add(_ note: Note) {
-        guard !contain(with: note.uid) else { return }
+        guard !contain(with: note.uuid) else { return }
         notes.append(note)
         if isAutosave {
             saveToFile()
@@ -48,8 +48,8 @@ class FileNotebook {
         }
     }
     
-    public func remove(with uid: UUID) {
-        notes.removeAll { $0.uid == uid }
+    public func remove(with uuid: UUID) {
+        notes.removeAll { $0.uuid == uuid }
         if isAutosave {
             saveToFile()
         }
@@ -62,13 +62,13 @@ class FileNotebook {
         }
     }
     
-    public func get(with uid: UUID) -> Note? {
-        return notes.first { $0.uid == uid }
+    public func get(with uuid: UUID) -> Note? {
+        return notes.first { $0.uuid == uuid }
     }
     
     public func update(_ note: Note) {
-        guard contain(with: note.uid) else { return }
-        remove(with: note.uid)
+        guard contain(with: note.uuid) else { return }
+        remove(with: note.uuid)
         add(note)
     }
     
@@ -110,7 +110,7 @@ extension FileNotebook {
             let data = try Data(contentsOf: fileURL)
             let jsonArray = try
                 JSONSerialization.jsonObject(with: data, options: [])
-                as! [[String: Any]]
+                as! [Note.JSON]
             self.notes = jsonArray.compactMap { Note.parse(json: $0) }
         } catch {
             print(error.localizedDescription)

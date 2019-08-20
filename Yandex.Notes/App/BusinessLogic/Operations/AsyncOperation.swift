@@ -1,6 +1,6 @@
 //
 //  AsyncOperation.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 25.07.2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -58,6 +58,10 @@ class AsyncOperation: Operation {
         print("\(number): \(title) operation finished")
         _finished = true
         didChangeValue(forKey: "isFinished")
+    }
+    
+    override func cancel() {
+        print("\(number): \(title) operation cancelled")
     }
     
 }

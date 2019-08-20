@@ -1,6 +1,6 @@
 //
 //  NoteCodable.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 12.08.2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -11,7 +11,7 @@ import UIKit
 extension Note: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case uid, title, content, color, importance
+        case uuid, title, content, color, importance
         case destructionDate = "destruction_date"
         case createDate = "create_date"
     }
@@ -19,7 +19,7 @@ extension Note: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        uid = UUID(uuidString: try container.decode(String.self, forKey: .uid))!
+        uuid = UUID(uuidString: try container.decode(String.self, forKey: .uuid))!
         title = try container.decode(String.self, forKey: .title)
         content = try container.decode(String.self, forKey: .content)
         color = UIColor(hexString: try container.decode(String.self, forKey: .color))
@@ -35,7 +35,7 @@ extension Note: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        try container.encode(uid, forKey: .uid)
+        try container.encode(uuid, forKey: .uuid)
         try container.encode(title, forKey: .title)
         try container.encode(content, forKey: .content)
         try container.encode(color.toHexString(), forKey: .color)

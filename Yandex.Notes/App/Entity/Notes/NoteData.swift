@@ -2,8 +2,8 @@
 //  NoteData.swift
 //  Yandex.Notes
 //
-//  Created by Артем Куфаев on 20/08/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 20/08/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import UIKit
@@ -20,13 +20,13 @@ struct NoteData: Equatable {
     init(
         title: String, content: String, color: UIColor = .white,
         importance: NoteImportanceLevel,
-        destructionDate selfDestructionDate: Date? = nil
+        destructionDate: Date? = nil
         ) {
         self.title = title
         self.content = content
         self.color = color
         self.importance = importance
-        self.destructionDate = selfDestructionDate
+        self.destructionDate = destructionDate
     }
     
     static func ==(lhs: NoteData, rhs: NoteData) -> Bool {

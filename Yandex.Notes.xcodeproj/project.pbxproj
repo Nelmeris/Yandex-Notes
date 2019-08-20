@@ -559,7 +559,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1020;
-				ORGANIZATIONNAME = "Артем Куфаев";
+				ORGANIZATIONNAME = "Artem Kufaev";
 				TargetAttributes = {
 					57FAB0B222CB63C80044DDDC = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -813,6 +813,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MODULE_NAME = Yandex_Notes;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DDEMO";
 				PRODUCT_BUNDLE_IDENTIFIER = artemkufaev.Notes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -830,7 +831,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
-				INFOPLIST_FILE = NotesTests/Info.plist;
+				INFOPLIST_FILE = Yandex.Notes.Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -972,6 +973,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MODULE_NAME = Yandex_Notes;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = artemkufaev.Notes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -992,6 +994,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MODULE_NAME = Yandex_Notes;
 				PRODUCT_BUNDLE_IDENTIFIER = artemkufaev.Notes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -1008,7 +1011,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
-				INFOPLIST_FILE = NotesTests/Info.plist;
+				INFOPLIST_FILE = Yandex.Notes.Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1032,7 +1035,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YX6VKW92JQ;
-				INFOPLIST_FILE = NotesTests/Info.plist;
+				INFOPLIST_FILE = Yandex.Notes.Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

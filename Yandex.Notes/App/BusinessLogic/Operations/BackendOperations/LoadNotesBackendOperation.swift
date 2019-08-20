@@ -1,6 +1,6 @@
 //
 //  LoadNotesBackendOperation.swift
-//  Notes
+//  Yandex.Notes
 //
 //  Created by Artem Kufaev on 25.07.2019.
 //  Copyright © 2019 Artem Kufaev. All rights reserved.
@@ -33,6 +33,11 @@ class LoadNotesBackendOperation: BaseBackendOperation {
             }
             self.result = .success(gistContainer)
         }
+    }
+    
+    override func cancel() {
+        GistForNotesService.shared.cancelLastOperation()
+        super.cancel()
     }
     
 }

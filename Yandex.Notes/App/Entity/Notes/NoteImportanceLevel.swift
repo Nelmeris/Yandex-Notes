@@ -2,8 +2,8 @@
 //  NoteImportanceLevel.swift
 //  Yandex.Notes
 //
-//  Created by Артем Куфаев on 20/08/2019.
-//  Copyright © 2019 Артем Куфаев. All rights reserved.
+//  Created by Artem Kufaev on 20/08/2019.
+//  Copyright © 2019 Artem Kufaev. All rights reserved.
 //
 
 import Foundation
