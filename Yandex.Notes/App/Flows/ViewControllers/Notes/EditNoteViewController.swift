@@ -9,6 +9,13 @@
 import UIKit
 import CoreData
 
+protocol EditNoteViewProtocol {
+    func setColor(_ color: UIColor)
+    func setDestructionDate(_ date: Date)
+    func goToColorPicker()
+    func loadNotesFromDBOnDestination()
+}
+
 class EditNoteViewController: UIViewController {
     
     @IBOutlet weak var titleField: UITextField!
@@ -32,37 +39,41 @@ class EditNoteViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var dateSwitch: UISwitch!
     
-    private let storyboardId = "Main"
-    private let colorPickerId = "ColorPicker"
+    var backgroundContext: NSManagedObjectContext!
     
-    var context: NSManagedObjectContext?
-    var backgroundContext: NSManagedObjectContext?
+    var presenter: EditNotePresenterProtocol!
+    var parentVC: UIViewController? {
+        guard isMovingFromParent else { return nil }
+        guard let navigControl = navigationController else { return nil }
+        guard let lastVC = navigControl.viewControllers.last else { return nil }
+        return lastVC
+    }
     
     var staticDateFieldHeight: CGFloat!
     
     var selectedColor: UIColor {
         return checkedColorButton.backgroundColor!
     }
-    
     var noteTitle: String {
         return self.titleField.text!
     }
-    
     var content: String {
         return self.contentView.text!
     }
-    
     var date: Date {
         return self.datePicker.date
     }
     
     let datePicker = UIDatePicker()
-    var note: Note!
+    var note: Note?
     
     override func viewDidLoad() {
         configureViews()
-        showDatePicker()
+        configureDatePicker()
         doneDatePicker()
+        configureColorButtons()
+        
+        presenter = EditNotePresenter(view: self, backgroundContext: backgroundContext)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -71,32 +82,14 @@ class EditNoteViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        guard isMovingFromParent else { return }
-        guard let navigControl = navigationController else { return }
-        guard let noteTableVC = navigControl.viewControllers.last as? NoteTableViewController else { return }
-        
-        guard let title = titleField.text, title != "",
-            let content = contentView.text, content != "" else {
-                let alert = UIAlertController(title: "Заметка не была создана", message: "Отсутствует содержимое", preferredStyle: .alert)
-                let alertAction = UIAlertAction(title: "ОК", style: .cancel)
-                alert.addAction(alertAction)
-                noteTableVC.present(alert, animated: true)
-                return
-        }
-        let color = selectedColor
-        let date = dateSwitch.isOn ? datePicker.date : nil
-        
-        if note == nil {
-            createNote(destination: noteTableVC, title: title, content: content, color: color, date: date)
-        } else {
-            editNote(destination: noteTableVC, title: title, content: content, color: color, date: date)
-        }
+        guard let noteTableVC = parentVC as? NoteTableViewController else { return }
+        noteProcessing(noteTableVC: noteTableVC)
     }
     
     func configureViews() {
         staticDateFieldHeight = dateFieldHeight.constant
         
-        guard note != nil else {
+        guard let note = note else {
             titleField.text = ""
             contentView.text = ""
             checkedColorButton = colorWhiteButton
@@ -106,32 +99,60 @@ class EditNoteViewController: UIViewController {
         
         titleField.text = note.title
         contentView.text = note.content
-        switch note.color {
-        case let color where color == colorWhiteButton.backgroundColor:
-            checkedColorButton = colorWhiteButton
-        case let color where color == colorRedButton.backgroundColor:
-            checkedColorButton = colorRedButton
-        case let color where color == colorGreenButton.backgroundColor:
-            checkedColorButton = colorGreenButton
-        default:
-            colorPickerButton.backgroundColor = note.color
-            checkedColorButton = colorPickerButton
-        }
+        setColor(note.color)
         if let date = note.destructionDate {
-            dateSwitch.isOn = true
-            datePicker.date = date
-            dateSwitchChanged(dateSwitch)
+            setDestructionDate(date)
         }
     }
     
+    func configureColorButtons() {
+        colorWhiteButton.backgroundColor = .white
+        colorGreenButton.backgroundColor = .green
+        colorRedButton.backgroundColor = .red
+    }
+    
     @IBAction func dateSwitchChanged(_ sender: UISwitch) {
+        dateField.isHidden = !sender.isOn
         if sender.isOn {
-            dateField.isHidden = false
             dateFieldHeight.constant = staticDateFieldHeight
         } else {
-            dateField.isHidden = true
             dateFieldHeight.constant = 0
         }
+    }
+    
+}
+
+extension EditNoteViewController: EditNoteViewProtocol {
+    
+    func loadNotesFromDBOnDestination() {
+        guard let noteTableVC = parentVC as? NoteTableViewController else { return }
+        noteTableVC.presenter.loadNotesFromDB()
+    }
+    
+    func setColor(_ color: UIColor) {
+        print(UIColor.green.toHexString())
+        print(color.toHexString())
+        switch color {
+        case .white:
+            checkedColorButton = colorWhiteButton
+        case .red:
+            checkedColorButton = colorRedButton
+        case .green:
+            checkedColorButton = colorGreenButton
+        default:
+            colorPickerButton.backgroundColor = color
+            checkedColorButton = colorPickerButton
+        }
+    }
+    
+    func setDestructionDate(_ date: Date) {
+        dateSwitch.isOn = true
+        datePicker.date = date
+        dateSwitchChanged(dateSwitch)
+    }
+    
+    func goToColorPicker() {
+        performSegue(withIdentifier: "toColorPicker", sender: self)
     }
     
 }
@@ -139,51 +160,21 @@ class EditNoteViewController: UIViewController {
 // MARK: - Note maker
 extension EditNoteViewController {
     
-    private func createNote(destination dest: NoteTableViewController,
-                    title: String,
-                    content: String,
-                    color: UIColor,
-                    date: Date?) {
-        guard let backgroundContext = backgroundContext else { return }
-        let newNote = Note(
-            title: title,
-            content: content,
-            color: color,
-            importance: .usual,
-            destructionDate: date
-        )
-        
-        let saveNoteOperation = SaveNoteOperation(note: newNote, context: backgroundContext, mainQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
-        saveNoteOperation.saveToDb.completionBlock = {
-            dest.syncNotes()
+    func noteProcessing(noteTableVC: NoteTableViewController) {
+        guard let title = titleField.text, title != "",
+            let content = contentView.text, content != "" else {
+                noteTableVC.showAlert(with: "Заметка не была создана", message: "Отсутствует содержимое")
+                return
         }
-        commonQueue.addOperation(saveNoteOperation)
-    }
-    
-    private func editNote(destination dest: NoteTableViewController,
-                  title: String,
-                  content: String,
-                  color: UIColor,
-                  date: Date?) {
-        guard let backgroundContext = backgroundContext else { return }
-        let newNote = Note(
-            uid: note.uid,
-            title: title,
-            content: content,
-            color: color,
-            importance: note.importance,
-            destructionDate: date
-        )
+        let color = selectedColor
+        let date = dateSwitch.isOn ? datePicker.date : nil
         
-        guard !(note == newNote) else { return }
-        
-        let updateNoteOperation = UpdateNoteOperation(note: newNote, context: backgroundContext, backendQueue: backendQueue, dbQueue: dbQueue)
-        
-        updateNoteOperation.completionBlock = {
-            dest.loadNotesFromDB()
+        let noteData = NoteData(title: title, content: content, color: color, importance: .usual, destructionDate: date)
+        if let note = self.note {
+            presenter.editNote(note, withData: noteData)
+        } else {
+            presenter.createNote(withData: noteData)
         }
-        
-        commonQueue.addOperation(updateNoteOperation)
     }
     
 }
@@ -191,17 +182,20 @@ extension EditNoteViewController {
 // MARK: - Transitions
 extension EditNoteViewController {
     
-    func goToColorPicker() {
-        let storyboard = UIStoryboard(name: storyboardId, bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: colorPickerId) as! ColorPickerViewController
-        vc.color = checkedColorButton.backgroundColor
-        navigationController?.pushViewController(vc, animated: true)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let colorPicker = segue.destination as? ColorPickerViewController else { return }
+        colorPicker.color = checkedColorButton.backgroundColor
     }
+    
+}
+
+// MARK: - Change color
+extension EditNoteViewController {
     
     @IBAction func changeColor(_ sender: ColorPickButton) {
         guard sender != checkedColorButton else { return }
         guard sender != colorPickerButton || colorPickerButton.backgroundColor != nil else {
-            goToColorPicker()
+            presenter.changeColor()
             return
         }
         checkedColorButton = sender
@@ -210,7 +204,7 @@ extension EditNoteViewController {
     @IBAction func didLongPressOnColorPickerButton(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             guard colorPickerButton.backgroundColor != nil else { return }
-            goToColorPicker()
+            presenter.changeColor()
         }
     }
     
@@ -239,18 +233,26 @@ extension EditNoteViewController {
 // MARK: - DatePicker
 extension EditNoteViewController {
     
-    func showDatePicker() {
+    func configureDatePicker() {
         datePicker.datePickerMode = .dateAndTime
         datePicker.minimumDate = Date()
         
+        configureDateField()
+    }
+    
+    func configureDateField() {
+        dateField.inputView = datePicker
+        dateField.inputAccessoryView = createToolbarForDateField()
+    }
+    
+    func createToolbarForDateField() -> UIToolbar {
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneDatePicker))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelDatePicker))
         toolbar.setItems([cancelButton, spaceButton, doneButton], animated: false)
-        dateField.inputAccessoryView = toolbar
-        dateField.inputView = datePicker
+        return toolbar
     }
     
     @objc func doneDatePicker() {

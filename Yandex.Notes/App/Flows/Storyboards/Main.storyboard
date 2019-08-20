@@ -10,23 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Tab Bar Controller-->
-        <scene sceneID="EqJ-EK-ZDW">
-            <objects>
-                <tabBarController id="nRi-GV-6gA" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7qB-qt-rJe">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="08o-W8-zK8" kind="relationship" relationship="viewControllers" id="5c0-S4-DcP"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6ms-oN-gxU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2354" y="80"/>
-        </scene>
         <!--Notebook-->
         <scene sceneID="SGC-6k-72v">
             <objects>
@@ -47,7 +30,7 @@
         <!--Edit Note View Controller-->
         <scene sceneID="DaC-ii-rrQ">
             <objects>
-                <viewController storyboardIdentifier="EditNote" id="TJz-cm-vav" customClass="EditNoteViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EditNote" id="TJz-cm-vav" customClass="EditNoteViewController" customModule="Yandex_Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="078-DW-9d5">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -89,7 +72,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="50C-IR-Nj6">
                                                 <rect key="frame" x="40" y="254.5" width="334" height="80"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUH-bU-8H4" customClass="ColorPickButton" customModule="Notes" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUH-bU-8H4" customClass="ColorPickButton" customModule="Yandex_Notes" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
@@ -114,7 +97,7 @@
                                                             <action selector="changeColor:" destination="TJz-cm-vav" eventType="touchUpInside" id="vEs-gN-giP"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P9z-iw-Tew" customClass="ColorPickButton" customModule="Notes" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P9z-iw-Tew" customClass="ColorPickButton" customModule="Yandex_Notes" customModuleProvider="target">
                                                         <rect key="frame" x="85" y="0.0" width="79.5" height="80"/>
                                                         <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -138,7 +121,7 @@
                                                             <action selector="changeColor:" destination="TJz-cm-vav" eventType="touchUpInside" id="Bwv-VR-So6"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DAp-L1-295" customClass="ColorPickButton" customModule="Notes" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DAp-L1-295" customClass="ColorPickButton" customModule="Yandex_Notes" customModuleProvider="target">
                                                         <rect key="frame" x="169.5" y="0.0" width="80" height="80"/>
                                                         <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -168,7 +151,7 @@
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ColorPicker" translatesAutoresizingMaskIntoConstraints="NO" id="2q5-VU-QHX">
                                                                 <rect key="frame" x="0.0" y="0.0" width="79.5" height="80"/>
                                                             </imageView>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qVe-En-mpw" customClass="ColorPickButton" customModule="Notes" customModuleProvider="target">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qVe-En-mpw" customClass="ColorPickButton" customModule="Yandex_Notes" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="79.5" height="80"/>
                                                                 <gestureRecognizers/>
                                                                 <constraints>
@@ -279,6 +262,7 @@
                         <outlet property="dateSwitch" destination="w9s-4A-fOT" id="GMF-1q-GH3"/>
                         <outlet property="scrollView" destination="w2T-Qv-j2e" id="j00-cG-5KJ"/>
                         <outlet property="titleField" destination="b6S-06-Bde" id="WjP-sr-gTR"/>
+                        <segue destination="pYA-Nd-ajV" kind="show" identifier="toColorPicker" id="zSE-2i-zkm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wxk-YE-dcw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -293,13 +277,13 @@
         <!--Color Picker View Controller-->
         <scene sceneID="4Rq-Cq-RlV">
             <objects>
-                <viewController storyboardIdentifier="ColorPicker" id="pYA-Nd-ajV" customClass="ColorPickerViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ColorPicker" id="pYA-Nd-ajV" customClass="ColorPickerViewController" customModule="Yandex_Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EFC-lg-gQL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eKd-vQ-qEe" customClass="DesignableView" customModule="Notes" customModuleProvider="target">
-                                <rect key="frame" x="20" y="64" width="124" height="124"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eKd-vQ-qEe" customClass="DesignableView" customModule="Yandex_Notes" customModuleProvider="target">
+                                <rect key="frame" x="20" y="108" width="124" height="124"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="eKd-vQ-qEe" secondAttribute="height" multiplier="1:1" id="GmN-Jt-1SN"/>
@@ -317,13 +301,13 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="#000000" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yTi-fd-KyD">
-                                <rect key="frame" x="20" y="174" width="124" height="34"/>
+                                <rect key="frame" x="20" y="218" width="124" height="34"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GUG-5p-S6m" customClass="HSBColorPicker" customModule="Notes" customModuleProvider="target">
-                                <rect key="frame" x="20" y="233" width="374" height="524"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GUG-5p-S6m" customClass="HSBColorPicker" customModule="Yandex_Notes" customModuleProvider="target">
+                                <rect key="frame" x="20" y="277" width="374" height="480"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -349,13 +333,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brightness:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXn-3b-pOu">
-                                <rect key="frame" x="194" y="115.5" width="87" height="21"/>
+                                <rect key="frame" x="194" y="159.5" width="87" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Ncu-QR-MVp">
-                                <rect key="frame" x="192" y="158" width="204" height="31"/>
+                                <rect key="frame" x="192" y="202" width="204" height="31"/>
                                 <connections>
                                     <action selector="brightnessChange:" destination="pYA-Nd-ajV" eventType="valueChanged" id="MQk-5t-Rfu"/>
                                 </connections>
@@ -399,20 +383,20 @@
         <!--Note Table View Controller-->
         <scene sceneID="Vvq-ru-um9">
             <objects>
-                <tableViewController id="BWG-Nh-tpB" customClass="NoteTableViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="BWG-Nh-tpB" customClass="NoteTableViewController" customModule="Yandex_Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="t46-LH-a5w">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NoteCell" rowHeight="117" id="r86-6V-TtV" customClass="NoteTableViewCell" customModule="Notes" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NoteCell" rowHeight="117" id="r86-6V-TtV" customClass="NoteTableViewCell" customModule="Yandex_Notes" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="117"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="r86-6V-TtV" id="7j0-dt-jQe">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="116.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="efV-1R-svy" customClass="DesignableView" customModule="Notes" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="efV-1R-svy" customClass="DesignableView" customModule="Yandex_Notes" customModuleProvider="target">
                                             <rect key="frame" x="30" y="21" width="15" height="15"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
@@ -473,132 +457,9 @@
             </objects>
             <point key="canvasLocation" x="-723.1884057971015" y="-378.34821428571428"/>
         </scene>
-        <!--Галерея-->
-        <scene sceneID="37O-lZ-lJW">
-            <objects>
-                <navigationController id="08o-W8-zK8" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Галерея" image="GalleryIcon" id="yR7-IW-OKs"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="mCG-Dj-zgU">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="02B-m7-39e" kind="relationship" relationship="rootViewController" id="lj7-58-c0j"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="R5k-em-K04" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1464" y="457"/>
-        </scene>
-        <!--Галерея-->
-        <scene sceneID="MmU-ha-1rk">
-            <objects>
-                <collectionViewController id="02B-m7-39e" customClass="GalleryViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="Ck5-ib-xpr">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gbY-mj-YoG">
-                            <size key="itemSize" width="128" height="124"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                        <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="9BH-yK-Xay" customClass="GalleryPhotoViewCell" customModule="Notes" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="124" height="124"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                    <rect key="frame" x="0.0" y="0.0" width="124" height="124"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2hj-zc-0nt" customClass="DesignableView" customModule="Notes" customModuleProvider="target">
-                                            <rect key="frame" x="5" y="5" width="114" height="114"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qae-6h-QG5">
-                                                    <rect key="frame" x="5" y="5" width="104" height="104"/>
-                                                </imageView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="qae-6h-QG5" secondAttribute="trailing" constant="5" id="5NV-jI-Gtf"/>
-                                                <constraint firstItem="qae-6h-QG5" firstAttribute="top" secondItem="2hj-zc-0nt" secondAttribute="top" constant="5" id="9i9-Pm-jDO"/>
-                                                <constraint firstAttribute="width" secondItem="2hj-zc-0nt" secondAttribute="height" multiplier="1:1" id="j8R-Sv-uyX"/>
-                                                <constraint firstItem="qae-6h-QG5" firstAttribute="leading" secondItem="2hj-zc-0nt" secondAttribute="leading" constant="5" id="juh-9Z-lMy"/>
-                                                <constraint firstAttribute="bottom" secondItem="qae-6h-QG5" secondAttribute="bottom" constant="5" id="pJv-qJ-eer"/>
-                                            </constraints>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                    <real key="value" value="1"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                    <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
-                                        </view>
-                                    </subviews>
-                                </view>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="2hj-zc-0nt" secondAttribute="bottom" constant="5" id="1xh-8E-0Zs"/>
-                                    <constraint firstAttribute="trailing" secondItem="2hj-zc-0nt" secondAttribute="trailing" constant="5" id="R4Z-d2-SSR"/>
-                                    <constraint firstItem="2hj-zc-0nt" firstAttribute="top" secondItem="9BH-yK-Xay" secondAttribute="top" constant="5" id="YeD-ls-fVI"/>
-                                    <constraint firstItem="2hj-zc-0nt" firstAttribute="leading" secondItem="9BH-yK-Xay" secondAttribute="leading" constant="5" id="j0X-1O-P1k"/>
-                                </constraints>
-                                <size key="customSize" width="124" height="124"/>
-                                <connections>
-                                    <outlet property="photoView" destination="qae-6h-QG5" id="Ahc-8O-Ykr"/>
-                                </connections>
-                            </collectionViewCell>
-                        </cells>
-                        <connections>
-                            <outlet property="dataSource" destination="02B-m7-39e" id="boV-dO-TFl"/>
-                            <outlet property="delegate" destination="02B-m7-39e" id="g8f-vm-tsj"/>
-                        </connections>
-                    </collectionView>
-                    <tabBarItem key="tabBarItem" title="Галерея" id="s0X-dP-o04"/>
-                    <navigationItem key="navigationItem" title="Галерея" id="aHF-D9-vRj"/>
-                    <connections>
-                        <outlet property="collectionViewFlowLayout" destination="gbY-mj-YoG" id="eca-yr-yGO"/>
-                    </connections>
-                </collectionViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="deF-Zg-dqO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-723" y="457"/>
-        </scene>
-        <!--Галерея-->
-        <scene sceneID="XVF-bW-NVG">
-            <objects>
-                <viewController storyboardIdentifier="GalleryViewer" id="kCP-xf-Zfi" customClass="GalleryViewerViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="km0-6W-Ijg">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vRO-NV-0zl">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                            </scrollView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="fcP-pc-Xox" firstAttribute="bottom" secondItem="vRO-NV-0zl" secondAttribute="bottom" id="4BF-em-lbJ"/>
-                            <constraint firstItem="fcP-pc-Xox" firstAttribute="trailing" secondItem="vRO-NV-0zl" secondAttribute="trailing" id="83Z-lf-gm4"/>
-                            <constraint firstItem="vRO-NV-0zl" firstAttribute="top" secondItem="fcP-pc-Xox" secondAttribute="top" id="Uke-ZM-20Z"/>
-                            <constraint firstItem="vRO-NV-0zl" firstAttribute="leading" secondItem="fcP-pc-Xox" secondAttribute="leading" id="r44-tC-HAy"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="fcP-pc-Xox"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Галерея" id="pst-Vz-lhj"/>
-                    <connections>
-                        <outlet property="scrollView" destination="vRO-NV-0zl" id="vPP-hZ-Ydu"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="T5q-ay-eKs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="0.0" y="457"/>
-        </scene>
     </scenes>
     <resources>
         <image name="ColorPicker" width="990" height="994"/>
-        <image name="GalleryIcon" width="25" height="25"/>
         <image name="NotebookIcon" width="25" height="25"/>
     </resources>
 </document>

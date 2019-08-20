@@ -72,7 +72,7 @@ class NoteCoreDataService {
     func remove(_ note: Note, queue: DispatchQueue, completion: @escaping (Error?) -> ()) {
         queue.async {
             do {
-                guard let cdNote = try self.loadFromCD(with: note.uid).first else { fatalError("Note not found") }
+                guard let cdNote = try self.loadFromCD(with: note.uid.uuidString).first else { fatalError("Note not found") }
                 self.context.performAndWait {
                     self.context.delete(cdNote)
                     do {
@@ -102,7 +102,7 @@ class NoteCoreDataService {
         queue.async { [weak self] in
             guard let `self` = self else { return }
             do {
-                guard var cdNote = try self.loadFromCD(with: note.uid).first else { fatalError("Note not found") }
+                guard var cdNote = try self.loadFromCD(with: note.uid.uuidString).first else { fatalError("Note not found") }
                 
                 cdNote = self.rewrite(cdNote, from: note)
                 

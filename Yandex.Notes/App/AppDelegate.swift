@@ -87,6 +87,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         guard let window = window else { fatalError() }
         
+        UserDefaults.standard.removeObject(forKey: "no_connection_timer")
+        
         commonQueue.maxConcurrentOperationCount = 1
         dbQueue.maxConcurrentOperationCount = 1 
         backendQueue.maxConcurrentOperationCount = 1

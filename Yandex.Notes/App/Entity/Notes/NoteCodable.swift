@@ -19,11 +19,11 @@ extension Note: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        uid = try container.decode(String.self, forKey: .uid)
+        uid = UUID(uuidString: try container.decode(String.self, forKey: .uid))!
         title = try container.decode(String.self, forKey: .title)
         content = try container.decode(String.self, forKey: .content)
         color = UIColor(hexString: try container.decode(String.self, forKey: .color))
-        importance = try container.decode(ImportanceLevels.self, forKey: .importance)
+        importance = try container.decode(NoteImportanceLevel.self, forKey: .importance)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"

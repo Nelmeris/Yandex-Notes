@@ -30,7 +30,7 @@ extension Note {
         
         // Importance
         let importanceInt = (json["importance"] as? Int) ?? 1
-        let importance = Note.ImportanceLevels(rawValue: importanceInt)!
+        let importance = NoteImportanceLevel(rawValue: importanceInt)!
         
         // Destruction date
         var destructionDate: Date?
@@ -40,14 +40,14 @@ extension Note {
             destructionDate = nil
         }
         
-        return Note(uid: uid, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate, createdDate: createDate)
+        return Note(uid: UUID(uuidString: uid)!, title: title, content: content, color: color, importance: importance, destructionDate: destructionDate, createdDate: createDate)
         
     }
     
     private init(
-        uid: String = UUID().uuidString,
+        uid: UUID = UUID(),
         title: String, content: String, color: UIColor = .white,
-        importance: ImportanceLevels,
+        importance: NoteImportanceLevel,
         destructionDate selfDestructionDate: Date? = nil,
         createdDate: Date
         ) {

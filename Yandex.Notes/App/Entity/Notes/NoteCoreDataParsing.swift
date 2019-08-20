@@ -12,13 +12,13 @@ import UIKit
 extension Note {
     
     init(from cdNote: CDNote) {
-        self.uid = cdNote.uid!
+        self.uid = UUID(uuidString: cdNote.uid!)!
         self.title = cdNote.title!
         self.content = cdNote.content!
         self.color = UIColor(hexString: cdNote.color!)
         self.createDate = cdNote.createDate!
         self.destructionDate = cdNote.destructionDate
-        self.importance = ImportanceLevels(rawValue: Int(cdNote.importance))!
+        self.importance = NoteImportanceLevel(rawValue: Int(cdNote.importance))!
     }
     
 }
@@ -27,7 +27,7 @@ extension Note {
 extension Note {
     
     func parse(toCDContainer cdNote: CDNote) -> CDNote {
-        cdNote.uid = self.uid
+        cdNote.uid = self.uid.uuidString
         cdNote.title = self.title
         cdNote.content = self.content
         cdNote.color = self.color.toHexString()

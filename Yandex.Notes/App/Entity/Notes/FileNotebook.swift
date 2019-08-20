@@ -30,7 +30,7 @@ class FileNotebook {
         isAutosave = value
     }
     
-    public func contain(with uid: String) -> Bool {
+    public func contain(with uid: UUID) -> Bool {
         return notes.contains { $0.uid == uid }
     }
     
@@ -48,7 +48,7 @@ class FileNotebook {
         }
     }
     
-    public func remove(with uid: String) {
+    public func remove(with uid: UUID) {
         notes.removeAll { $0.uid == uid }
         if isAutosave {
             saveToFile()
@@ -62,7 +62,7 @@ class FileNotebook {
         }
     }
     
-    public func get(with uid: String) -> Note? {
+    public func get(with uid: UUID) -> Note? {
         return notes.first { $0.uid == uid }
     }
     

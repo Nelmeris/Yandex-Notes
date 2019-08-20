@@ -9,135 +9,51 @@
 import UIKit
 import CoreData
 
+protocol NoteTableViewProtocol {
+    func setNotes(_ notes: [Note])
+    func beginRefreshing()
+    func endRefreshing()
+    func alert(with title: String, message: String)
+}
+
 class NoteTableViewController: UITableViewController {
     
     private let cellReuseIdentifier = "NoteCell"
     private let segueToEditNoteIdentifier = "NoteTableToEditNote"
     
-    var context: NSManagedObjectContext?
-    var backgroundContext: NSManagedObjectContext?
-    
-    var selectedNote: Note?
+    var context: NSManagedObjectContext!
+    var backgroundContext: NSManagedObjectContext!
+    var presenter: NoteTableViewPresenterProtocol!
     
     var notes: [Note] = []
-    var timer: Timer!
-    
-    func getSortCompare() -> (Note, Note) -> Bool {
-        return { lft, rht in
-            return lft.createDate > rht.createDate
-        }
-    }
-    
-    var sortedNotes: [Note] {
-        return notes.sorted(by: getSortCompare())
-    }
-    
-    private func saveNotes(_ notes: [Note]) {
-        DispatchQueue.main.async {
-            if self.notes != notes {
-                self.notes = notes
-                self.tableView.reloadData()
-            }
-            self.tableView.refreshControl?.endRefreshing()
-        }
-    }
-    
-    func loadNotesFromDB() {
-        guard let backgroundContext = backgroundContext else { return }
-        DispatchQueue.main.async {
-            self.tableView.refreshControl?.beginRefreshing()
-        }
-        let loadFromDBOperation = LoadNotesDBOperation(context: backgroundContext)
-        loadFromDBOperation.completionBlock = {
-            switch loadFromDBOperation.result! {
-            case .success(let notes):
-                self.saveNotes(notes)
-            case .failture(let error):
-                print(error.localizedDescription)
-            }
-        }
-        dbQueue.addOperation(loadFromDBOperation)
-    }
-    
-    let noConnectionTimerKey = "no_connection_timer"
-    func noConnectionHandler() {
-        let userDefaults = UserDefaults.standard
-        let time = userDefaults.double(forKey: noConnectionTimerKey)
-        userDefaults.value(forKey: noConnectionTimerKey)
-        if time == 0 || Date().timeIntervalSince1970 - time > 300 {
-            let alert = UIAlertController(title: "Внимание!", message: "Отсутствует подключение к сети", preferredStyle: .alert)
-            let alertAction = UIAlertAction(title: "ОК", style: .cancel)
-            alert.addAction(alertAction)
-            self.present(alert, animated: true)
-            UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: noConnectionTimerKey)
-        }
-    }
-    
-    func parseUIOperationResult(from result: UIOperationResult) {
-        switch result {
-        case .success(let notes):
-            self.saveNotes(notes)
-        case .backendFailture(let notes, let error):
-            self.saveNotes(notes)
-            switch error {
-            case .failed(let netError):
-                switch netError {
-                case .failedRequest(let requestError):
-                    switch requestError {
-                    case .noConnection:
-                        noConnectionHandler()
-                    default:
-                        print(requestError.localizedDescription)
-                    }
-                case .failedResponse(let responseError):
-                    print(responseError.localizedDescription)
-                }
-            default:
-                print(error.localizedDescription)
-            }
-        case .dbFailture(let error):
-            fatalError(error.localizedDescription)
-        }
-    }
-    
-    @objc func syncNotes() {
-        guard let backgroundContext = backgroundContext else { return }
-        DispatchQueue.main.async {
-            self.tableView.refreshControl?.beginRefreshing()
-        }
-        let syncNotesOperation = SyncNotesOperation(context: backgroundContext, mainQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
-        syncNotesOperation.loadFromDB.completionBlock = {
-            switch syncNotesOperation.loadFromDB.result! {
-            case .success(let notes):
-                self.saveNotes(notes)
-            case .failture(let error):
-                fatalError(error.localizedDescription)
-            }
-        }
-        syncNotesOperation.completionBlock = {
-            self.parseUIOperationResult(from: syncNotesOperation.result!)
-        }
-        commonQueue.addOperation(syncNotesOperation)
-    }
+    var selectedNote: Note?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(syncNotes))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         
+        configure()
+        presenter.loadNotesFromDB()
+    }
+    
+    func configure() {
         title = "Заметки"
         tableView.separatorStyle = .none
         tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(syncNotes), for: .allEvents)
+        tableView.refreshControl?.addTarget(self, action: #selector(prepareSyncNotes), for: .allEvents)
         
-        loadNotesFromDB()
+        presenter = NoteTableViewPresenter(view: self, context: context, backgroundContext: backgroundContext)
+    }
+    
+    @objc func prepareSyncNotes() {
+        presenter.syncNotes()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        syncNotes()
+        presenter.syncNotes()
     }
     
     @objc func startEditing(sender: UIBarButtonItem) {
@@ -158,7 +74,6 @@ class NoteTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let destVC = segue.destination as? EditNoteViewController else { return }
-        destVC.context = self.context
         destVC.backgroundContext = self.backgroundContext
         destVC.note = selectedNote
     }
@@ -169,7 +84,7 @@ class NoteTableViewController: UITableViewController {
 extension NoteTableViewController {
     
     override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        selectedNote = sortedNotes[indexPath.row]
+        selectedNote = notes[indexPath.row]
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -186,7 +101,7 @@ extension NoteTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sortedNotes.count
+        return notes.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -196,7 +111,7 @@ extension NoteTableViewController {
             ) as? NoteTableViewCell ??
             NoteTableViewCell(style: .default, reuseIdentifier: cellReuseIdentifier)
         
-        let note = sortedNotes[indexPath.row]
+        let note = notes[indexPath.row]
         
         cell.titleLabel.text = note.title
         cell.contentLabel.text = note.content
@@ -211,16 +126,38 @@ extension NoteTableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
-        let note = sortedNotes[indexPath.row]
-        guard let backgroundContext = backgroundContext else { return }
-        let removeNoteOperation = RemoveNoteOperation(note: note, context: backgroundContext, mainQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
-        removeNoteOperation.removeFromDB.completionBlock = {
-            self.loadNotesFromDB()
+        let note = notes[indexPath.row]
+        self.presenter.removeNote(note)
+    }
+    
+}
+
+extension NoteTableViewController: NoteTableViewProtocol {
+    
+    func beginRefreshing() {
+        DispatchQueue.main.async {
+            self.tableView.refreshControl?.beginRefreshing()
         }
-        removeNoteOperation.completionBlock = {
-            self.parseUIOperationResult(from: removeNoteOperation.result!)
+    }
+    
+    func setNotes(_ notes: [Note]) {
+        if self.notes != notes {
+            self.notes = notes
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
-        commonQueue.addOperation(removeNoteOperation)
+    }
+    
+    func endRefreshing() {
+        DispatchQueue.main.async {
+            guard let refreshControl = self.tableView.refreshControl else { return }
+            refreshControl.endRefreshing()
+        }
+    }
+    
+    func alert(with title: String, message: String) {
+        self.showAlert(with: title, message: message)
     }
     
 }
