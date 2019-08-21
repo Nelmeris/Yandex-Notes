@@ -15,18 +15,15 @@ enum LoadNotesBackendResult {
 
 class LoadNotesBackendOperation: BaseBackendOperation {
     
-    private(set) var result: LoadNotesBackendResult? {
-        didSet {
-            finish()
-        }
-    }
+    private(set) var result: LoadNotesBackendResult? { didSet { finish() } }
+    private let gistForNotesService = GistForNotesService()
     
-    init() {
-        super.init(title: "Load notes from Backend")
+    override init(title: String? = nil, id: Int? = nil) {
+        super.init(title: title ?? "Load notes from Backend", id: id)
     }
     
     override func main() {
-        GistForNotesService.shared.pullNotes { result, error in
+        gistForNotesService.pullNotes { result, error in
             guard let gistContainer = result else {
                 self.result = .failure(error!)
                 return
@@ -36,7 +33,7 @@ class LoadNotesBackendOperation: BaseBackendOperation {
     }
     
     override func cancel() {
-        GistForNotesService.shared.cancelLastOperation()
+        gistForNotesService.cancelAllOperations()
         super.cancel()
     }
     

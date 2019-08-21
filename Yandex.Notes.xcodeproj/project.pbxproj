@@ -12,6 +12,8 @@
 		57328DA32309BA8200EF39F1 /* NoteCoreDataParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57328DA22309BA8200EF39F1 /* NoteCoreDataParsing.swift */; };
 		57328DA52309BF4100EF39F1 /* NoteCoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57328DA42309BF4100EF39F1 /* NoteCoreDataService.swift */; };
 		5743A68D230A175200BF5B74 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5743A68C230A175200BF5B74 /* Reachability.swift */; };
+		5757828F230D62B000C30374 /* BaseUIOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5757828E230D62B000C30374 /* BaseUIOperation.swift */; };
+		57578291230DAB1500C30374 /* UpdateNotesDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57578290230DAB1500C30374 /* UpdateNotesDBOperation.swift */; };
 		5769C2252302B77300530294 /* URLSessionDataTaskUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */; };
 		5769C2272302B78000530294 /* GistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2262302B78000530294 /* GistService.swift */; };
 		5769C22A2302B79900530294 /* GistFileCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2282302B79800530294 /* GistFileCreator.swift */; };
@@ -26,7 +28,6 @@
 		5769C2402303148400530294 /* GistNotesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C23F2303148400530294 /* GistNotesContainer.swift */; };
 		5769C242230318D400530294 /* UpdateNoteDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C241230318D400530294 /* UpdateNoteDBOperation.swift */; };
 		5769C244230319A000530294 /* RewriteDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C243230319A000530294 /* RewriteDBOperation.swift */; };
-		5769C24823034BC400530294 /* SyncNotesOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C24723034BC400530294 /* SyncNotesOperation.swift */; };
 		57874262230BD715005B2FD1 /* NoteTableViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57874261230BD715005B2FD1 /* NoteTableViewPresenter.swift */; };
 		57874264230BF100005B2FD1 /* EditNotePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57874263230BF100005B2FD1 /* EditNotePresenter.swift */; };
 		57874266230BF6A6005B2FD1 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57874265230BF6A6005B2FD1 /* UIViewControllerExtensions.swift */; };
@@ -95,6 +96,8 @@
 		57328DA22309BA8200EF39F1 /* NoteCoreDataParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCoreDataParsing.swift; sourceTree = "<group>"; };
 		57328DA42309BF4100EF39F1 /* NoteCoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCoreDataService.swift; sourceTree = "<group>"; };
 		5743A68C230A175200BF5B74 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		5757828E230D62B000C30374 /* BaseUIOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUIOperation.swift; sourceTree = "<group>"; };
+		57578290230DAB1500C30374 /* UpdateNotesDBOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNotesDBOperation.swift; sourceTree = "<group>"; };
 		5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskUpdate.swift; sourceTree = "<group>"; };
 		5769C2262302B78000530294 /* GistService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistService.swift; sourceTree = "<group>"; };
 		5769C2282302B79800530294 /* GistFileCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistFileCreator.swift; sourceTree = "<group>"; };
@@ -109,7 +112,6 @@
 		5769C23F2303148400530294 /* GistNotesContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistNotesContainer.swift; sourceTree = "<group>"; };
 		5769C241230318D400530294 /* UpdateNoteDBOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNoteDBOperation.swift; sourceTree = "<group>"; };
 		5769C243230319A000530294 /* RewriteDBOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteDBOperation.swift; sourceTree = "<group>"; };
-		5769C24723034BC400530294 /* SyncNotesOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncNotesOperation.swift; sourceTree = "<group>"; };
 		57874261230BD715005B2FD1 /* NoteTableViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewPresenter.swift; sourceTree = "<group>"; };
 		57874263230BF100005B2FD1 /* EditNotePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNotePresenter.swift; sourceTree = "<group>"; };
 		57874265230BF6A6005B2FD1 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
@@ -273,10 +275,10 @@
 		577AA4E322E908D500FA4E52 /* UIOperations */ = {
 			isa = PBXGroup;
 			children = (
-				5769C24723034BC400530294 /* SyncNotesOperation.swift */,
+				5757828E230D62B000C30374 /* BaseUIOperation.swift */,
+				57D81D182309FD9E00444DBC /* LoadNotesOperation.swift */,
 				57E56C5F22EA2CD30006087C /* SaveNoteOperation.swift */,
 				57E56C6022EA2CD30006087C /* RemoveNoteOperation.swift */,
-				57D81D182309FD9E00444DBC /* LoadNotesOperation.swift */,
 				57D81D1A230A021F00444DBC /* UpdateNoteOperation.swift */,
 			);
 			path = UIOperations;
@@ -300,6 +302,7 @@
 				57E56C5922EA2CCB0006087C /* RemoveNoteDBOperation.swift */,
 				57E56C5722EA2CCB0006087C /* SaveNoteDBOperation.swift */,
 				5769C241230318D400530294 /* UpdateNoteDBOperation.swift */,
+				57578290230DAB1500C30374 /* UpdateNotesDBOperation.swift */,
 				5769C243230319A000530294 /* RewriteDBOperation.swift */,
 			);
 			path = DBOperations;
@@ -666,7 +669,6 @@
 				5769C2312302C6DB00530294 /* ExecuteGistRequestOperation.swift in Sources */,
 				57E56C5B22EA2CCB0006087C /* SaveNoteDBOperation.swift in Sources */,
 				5769C2402303148400530294 /* GistNotesContainer.swift in Sources */,
-				5769C24823034BC400530294 /* SyncNotesOperation.swift in Sources */,
 				57E56C5422EA2CBD0006087C /* SaveNotesBackendOperation.swift in Sources */,
 				57F518C12300F6CD000E91C4 /* GistFile.swift in Sources */,
 				5769C22A2302B79900530294 /* GistFileCreator.swift in Sources */,
@@ -680,6 +682,7 @@
 				57F518D323010BF0000E91C4 /* GistOwner.swift in Sources */,
 				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
 				5769C2272302B78000530294 /* GistService.swift in Sources */,
+				5757828F230D62B000C30374 /* BaseUIOperation.swift in Sources */,
 				5743A68D230A175200BF5B74 /* Reachability.swift in Sources */,
 				57D01C5B22D516B700412438 /* DesignableView.swift in Sources */,
 				57328DA32309BA8200EF39F1 /* NoteCoreDataParsing.swift in Sources */,
@@ -714,6 +717,7 @@
 				579AAC5622D53B7000B3DD09 /* UIColorHEXValues.swift in Sources */,
 				57E56C5622EA2CBD0006087C /* LoadNotesBackendOperation.swift in Sources */,
 				57874266230BF6A6005B2FD1 /* UIViewControllerExtensions.swift in Sources */,
+				57578291230DAB1500C30374 /* UpdateNotesDBOperation.swift in Sources */,
 				5769C2362302D23B00530294 /* URLResponseError.swift in Sources */,
 				5769C23A2302D48100530294 /* URLRequestError.swift in Sources */,
 				57E56C5022EA2CB10006087C /* AsyncOperation.swift in Sources */,

@@ -9,33 +9,92 @@
 import Foundation
 import CoreData
 
-class UpdateNoteOperation: AsyncOperation {
+class UpdateNoteOperation: BaseUIOperation {
     
     private let context: NSManagedObjectContext
     
-    private(set) var updateNoteInDB: UpdateNoteDBOperation
-    private(set) var loadFromDB: LoadNotesDBOperation
+    private(set) var updateInDB: UpdateNoteDBOperation!
+    private(set) var loadFromDB: LoadNotesDBOperation!
     private(set) var saveToBackend: SaveNotesBackendOperation?
+    
+    private let backendQueue: OperationQueue
+    private let dbQueue: OperationQueue
+    
+    private var notes: [Note]?
     
     private(set) var result: UIOperationResult? { didSet { finish() } }
     
     init(note: Note,
          context: NSManagedObjectContext,
          backendQueue: OperationQueue,
-         dbQueue: OperationQueue) {
+         dbQueue: OperationQueue,
+         id: Int? = nil,
+         title: String? = nil
+        ) {
         self.context = context
+        self.backendQueue = backendQueue
+        self.dbQueue = dbQueue
         
-        updateNoteInDB = UpdateNoteDBOperation(note: note, context: context)
-        loadFromDB = LoadNotesDBOperation(context: self.context)
+        let id = AsyncOperationID(number: id, title: title ?? "Main update note")
+        super.init(id: id)
         
-        super.init(title: "Main update note")
+        updateInDB = UpdateNoteDBOperation(note: note, context: context, id: self.id?.number)
+        loadFromDB = LoadNotesDBOperation(context: self.context, id: self.id?.number)
+        
+        dbQueue.addOperation(updateInDB)
+        loadFromDB.addDependency(updateInDB)
+        dbQueue.addOperation(loadFromDB)
+        
+        let updateInDBCompletionBlock = BlockOperation {
+            self.updateInDBCompletion()
+        }
+        updateInDBCompletionBlock.addDependency(updateInDB)
+        AsyncOperation.commonQueue.addOperation(updateInDBCompletionBlock)
+        
+        let loadFromDBCompletionBlock = BlockOperation {
+            self.loadFromDBCompletion()
+        }
+        loadFromDBCompletionBlock.addDependency(loadFromDB)
+        AsyncOperation.commonQueue.addOperation(loadFromDBCompletionBlock)
+        
+        self.addDependency(loadFromDBCompletionBlock)
     }
     
-    private func mainCompletion(_ notes: [Note]) {
+    private func updateInDBCompletion() {
+        guard let result = updateInDB.result else {
+            self.result = nil
+            return
+        }
+        switch result {
+        case .failture(let error):
+            self.result = .dbFailture(error)
+        default: break
+        }
+    }
+    
+    private func loadFromDBCompletion() {
+        guard let result = loadFromDB!.result else {
+            self.result = nil
+            return
+        }
+        switch result {
+        case .success(let notes):
+            self.notes = notes
+            let saveToBackend = SaveNotesBackendOperation(notes: notes, id: self.id?.number)
+            self.saveToBackend = saveToBackend
+            self.addDependency(saveToBackend)
+            backendQueue.addOperation(saveToBackend)
+        case .failture(let error):
+            self.result = .dbFailture(error)
+        }
+    }
+    
+    override func main() {
         guard let result = saveToBackend!.result else {
             self.result = nil
             return
         }
+        guard let notes = notes else { fatalError() }
         switch result {
         case .success:
             self.result = .success(notes)
@@ -44,48 +103,8 @@ class UpdateNoteOperation: AsyncOperation {
         }
     }
     
-    private func loadFromDBCompletion() {
-        guard let result = loadFromDB.result else {
-            self.result = nil
-            return
-        }
-        switch result {
-        case .success(let notes):
-            self.saveToBackend = SaveNotesBackendOperation(notes: notes)
-            let saveToBackendCompletion = BlockOperation {
-                self.mainCompletion(notes)
-            }
-            saveToBackendCompletion.addDependency(self.saveToBackend!)
-            backendQueue.addOperation(self.saveToBackend!)
-            
-            OperationQueue().addOperation(saveToBackendCompletion)
-        case .failture(let error):
-            self.result = .dbFailture(error)
-        }
-    }
-    
-    private func updateNoteInDBCompletion() {
-        let loadFromDBCompletion = BlockOperation {
-            self.loadFromDBCompletion()
-        }
-        loadFromDBCompletion.addDependency(loadFromDB)
-        dbQueue.addOperation(loadFromDB)
-        
-        OperationQueue().addOperation(loadFromDBCompletion)
-    }
-    
-    override func main() {
-        let updateNoteInDBCompletion = BlockOperation {
-            self.updateNoteInDBCompletion()
-        }
-        updateNoteInDBCompletion.addDependency(updateNoteInDB)
-        dbQueue.addOperation(updateNoteInDB)
-        
-        OperationQueue().addOperation(updateNoteInDBCompletion)
-    }
-    
     override func cancel() {
-        updateNoteInDB.cancel()
+        updateInDB.cancel()
         loadFromDB.cancel()
         saveToBackend?.cancel()
         super.cancel()

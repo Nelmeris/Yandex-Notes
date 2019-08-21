@@ -19,7 +19,9 @@ extension Note: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        uuid = UUID(uuidString: try container.decode(String.self, forKey: .uuid))!
+        let uuidString = try container.decode(String.self, forKey: .uuid)
+        let uuid = UUID(uuidString: uuidString)
+        self.uuid = uuid!
         title = try container.decode(String.self, forKey: .title)
         content = try container.decode(String.self, forKey: .content)
         color = UIColor(hexString: try container.decode(String.self, forKey: .color))

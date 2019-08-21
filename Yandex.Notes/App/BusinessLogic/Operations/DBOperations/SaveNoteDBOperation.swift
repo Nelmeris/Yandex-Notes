@@ -24,9 +24,9 @@ class SaveNoteDBOperation: BaseDBOperation {
     }
     
     init(note: Note,
-         context: NSManagedObjectContext) {
+         context: NSManagedObjectContext, title: String? = nil, id: Int? = nil) {
         self.note = note
-        super.init(title: "Save note to DataBase", context: context)
+        super.init(context: context, title: title ?? "Save not to DataBase", id: id)
     }
     
     override func main() {

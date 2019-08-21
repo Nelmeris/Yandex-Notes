@@ -16,7 +16,7 @@ public class Reachability {
         var request = URLRequest(url: url!)
         request.httpMethod = "HEAD"
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        request.timeoutInterval = 10.0
+        request.timeoutInterval = 10
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let httpResponse = response as? HTTPURLResponse,

@@ -24,10 +24,10 @@ class UpdateNoteDBOperation: BaseDBOperation {
     }
     
     init(note: Note,
-         context: NSManagedObjectContext) {
+         context: NSManagedObjectContext,
+         title: String? = nil, id: Int? = nil) {
         self.note = note
-        super.init(title: "Update note in DataBase",
-                   context: context)
+        super.init(context: context, title: title ?? "Update note in DataBase", id: id)
     }
     
     override func main() {

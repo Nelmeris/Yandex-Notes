@@ -27,7 +27,7 @@ extension Note {
 // MARK: - Parse to CoreData
 extension Note {
     
-    func parse(toCDContainer cdNote: CDNote) -> CDNote {
+    func parse(toCDContainer cdNote: CDNote) {
         cdNote.uuid = self.uuid.uuidString
         cdNote.title = self.title
         cdNote.content = self.content
@@ -35,7 +35,6 @@ extension Note {
         cdNote.createDate = self.createDate
         cdNote.destructionDate = self.destructionDate
         cdNote.importance = Int16(self.importance.rawValue)
-        return cdNote
     }
     
 }

@@ -10,4 +10,13 @@ import Foundation
 
 let backendQueue = OperationQueue()
 
-class BaseBackendOperation: AsyncOperation { }
+class BaseBackendOperation: AsyncOperation {
+    
+    static var queue = OperationQueue()
+    
+    init(title: String, id: Int? = nil) {
+        let id = AsyncOperationID(number: id, title: title)
+        super.init(id: id)
+    }
+    
+}

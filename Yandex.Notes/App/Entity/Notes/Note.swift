@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Note: Equatable {
+struct Note: Equatable, Hashable {
     
     let uuid: UUID
     

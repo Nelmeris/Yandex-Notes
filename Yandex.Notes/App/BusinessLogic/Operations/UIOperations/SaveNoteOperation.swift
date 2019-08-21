@@ -9,76 +9,107 @@
 import Foundation
 import CoreData
 
-class SaveNoteOperation: AsyncOperation {
+class SaveNoteOperation: BaseUIOperation {
     
     private let note: Note
     private let context: NSManagedObjectContext
     
     private let dbQueue: OperationQueue
     private let backendQueue: OperationQueue
-    private let syncQueue: OperationQueue
     
-    private(set) var saveToDb: SaveNoteDBOperation
-    private(set) var syncNotes: SyncNotesOperation
+    private(set) var saveToDB: SaveNoteDBOperation!
+    private(set) var loadFromDB: LoadNotesDBOperation!
+    private(set) var saveToBackend: SaveNotesBackendOperation?
     
     private(set) var result: UIOperationResult? { didSet { finish() } }
+    
+    private var notes: [Note]?
     
     init(
         note: Note,
         context: NSManagedObjectContext,
-        syncQueue: OperationQueue,
         backendQueue: OperationQueue,
-        dbQueue: OperationQueue
+        dbQueue: OperationQueue,
+        id: Int? = nil,
+        title: String? = nil
         ) {
         self.note = note
         self.context = context
         self.dbQueue = dbQueue
         self.backendQueue = backendQueue
-        self.syncQueue = syncQueue
         
-        saveToDb = SaveNoteDBOperation(note: note, context: context)
-        syncNotes = SyncNotesOperation(context: context, backendQueue: backendQueue, dbQueue: dbQueue)
+        let id = AsyncOperationID(number: id, title: title ?? "Main save note")
+        super.init(id: id)
         
-        super.init(title: "Main save note")
-    }
-    
-    private func syncNotesCompletion() {
-        guard let result = syncNotes.result else {
-            self.result = nil
-            return
+        saveToDB = SaveNoteDBOperation(note: note, context: context, id: self.id?.number)
+        loadFromDB = LoadNotesDBOperation(context: context, id: self.id?.number)
+        
+        dbQueue.addOperation(saveToDB)
+        loadFromDB.addDependency(saveToDB)
+        dbQueue.addOperation(loadFromDB)
+        
+        let saveToDBCompletionBlock = BlockOperation {
+            self.saveToDBCompletion()
         }
-        self.result = result
+        saveToDBCompletionBlock.addDependency(saveToDB)
+        AsyncOperation.commonQueue.addOperation(saveToDBCompletionBlock)
+        
+        let loadFromDBCompletionBlock = BlockOperation {
+            self.loadFromDBCompletion()
+        }
+        loadFromDBCompletionBlock.addDependency(loadFromDB)
+        AsyncOperation.commonQueue.addOperation(loadFromDBCompletionBlock)
+        
+        self.addDependency(loadFromDBCompletionBlock)
     }
     
     private func saveToDBCompletion() {
-        guard let result = saveToDb.result else {
+        guard let result = saveToDB.result else {
             self.result = nil
             return
         }
         switch result {
-        case .success:
-            self.syncNotesCompletion()
+        case .failture(let error):
+            self.result = .dbFailture(error)
+        default: break
+        }
+    }
+    
+    private func loadFromDBCompletion() {
+        guard let result = loadFromDB.result else {
+            self.result = nil
+            return
+        }
+        switch result {
+        case .success(let notes):
+            self.notes = notes
+            let saveToBackend = SaveNotesBackendOperation(notes: notes, id: self.id?.number)
+            self.saveToBackend = saveToBackend
+            self.addDependency(saveToBackend)
+            backendQueue.addOperation(saveToBackend)
         case .failture(let error):
             self.result = .dbFailture(error)
         }
     }
     
     override func main() {
-        dbQueue.addOperation(saveToDb)
-        syncQueue.addOperation(syncNotes)
-        
-        syncNotes.addDependency(saveToDb)
-        
-        let saveToDbCompletion = BlockOperation {
-            self.saveToDBCompletion()
+        guard let result = saveToBackend?.result else {
+            self.result = nil
+            return
         }
-        
-        OperationQueue().addOperation(saveToDbCompletion)
+        guard let notes = self.notes else { fatalError() }
+        switch result {
+        case .success:
+            self.result = .success(notes)
+        case .failure(let error):
+            self.result = .backendFailture(dbNotes: notes, error: error)
+        }
     }
     
     override func cancel() {
-        saveToDb.cancel()
-        syncNotes.cancel()
+        saveToDB.cancel()
+        loadFromDB.cancel()
+        saveToBackend?.cancel()
         super.cancel()
     }
     

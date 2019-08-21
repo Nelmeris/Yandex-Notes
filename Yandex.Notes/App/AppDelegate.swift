@@ -10,112 +10,56 @@ import UIKit
 import CocoaLumberjack
 import CoreData
 
-let commonQueue = OperationQueue.main
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-//    func printJSON(json: Note.JSON) {
-//        for (key, value) in json {
-//            if let newJson = value as? [String: Any] {
-//                print("'\(key)' [")
-//                printJSON(json: newJson)
-//                print("]")
-//            } else {
-//                print("'\(key)': \(value)")
-//            }
-//        }
-//    }
-    
-//    private func initNotebook(context: NSManagedObjectContext, backgroundContext: NSManagedObjectContext) {
-//        var note = Note(title: "Заметка для демо 1", content: "Какой-то контент",
-//                        color: .black, importance: .critical, destructionDate: Date())
-//
-//        var saveNoteOperation = SaveNoteOperation(
-//            note: note,
-//            context: backgroundContext,
-//            mainQueue: commonQueue,
-//            backendQueue: backendQueue,
-//            dbQueue: dbQueue
-//        )
-//        commonQueue.addOperation(saveNoteOperation)
-//
-//        note = Note(title: "Заметка для демо 2", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make",
-//                    color: .yellow, importance: .usual, destructionDate: Date())
-//        saveNoteOperation = SaveNoteOperation(
-//            note: note,
-//            context: backgroundContext,
-//            mainQueue: commonQueue,
-//            backendQueue: backendQueue,
-//            dbQueue: dbQueue
-//        )
-//        commonQueue.addOperation(saveNoteOperation)
-//
-//        note = Note(title: "Заметка для демо 3", content: "Lorem Ipsum is simply dummy text of the printing and typesetting",
-//                    color: .white, importance: .usual)
-//        saveNoteOperation = SaveNoteOperation(
-//            note: note,
-//            context: backgroundContext,
-//            mainQueue: commonQueue,
-//            backendQueue: backendQueue,
-//            dbQueue: dbQueue
-//        )
-//        commonQueue.addOperation(saveNoteOperation)
-//
-//        note = Note(title: "Заметка для демо 4", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lore",
-//                    color: .red, importance: .usual)
-//        saveNoteOperation = SaveNoteOperation(
-//            note: note,
-//            context: backgroundContext,
-//            mainQueue: commonQueue,
-//            backendQueue: backendQueue,
-//            dbQueue: dbQueue
-//        )
-//        commonQueue.addOperation(saveNoteOperation)
-//
-//        saveNoteOperation.completionBlock = {
-//            UserDefaults.standard.set(true, forKey: "INITED")
-//        }
-//    }
     
     let mainStoryboardName = "Main"
+    
+    func instanceRootViewController() -> UIViewController {
+        let storyboard = UIStoryboard(name: mainStoryboardName, bundle: nil)
+        guard let navController = storyboard.instantiateInitialViewController() as? UINavigationController,
+            let rootViewController = navController.topViewController as? NoteTableViewController else { fatalError() }
+        
+        setMergeContextAndBackgroundContextChangesNotification()
+        
+        rootViewController.context = persistentContainer.viewContext
+        rootViewController.backgroundContext = persistentContainer.newBackgroundContext()
+        
+        return navController
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         guard let window = window else { fatalError() }
         
-        UserDefaults.standard.removeObject(forKey: "no_connection_timer")
+        BaseDBOperation.queue.maxConcurrentOperationCount = 1
         
-        let storyboard = UIStoryboard(name: mainStoryboardName, bundle: nil)
-        guard let navController = storyboard.instantiateInitialViewController() as? UINavigationController,
-            let rootViewController = navController.topViewController as? NoteTableViewController else { fatalError() }
-        
-        let context = persistentContainer.viewContext
-        let backgroundContext = persistentContainer.newBackgroundContext()
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(managedObjectContextDidSave(notification:)),
-                                               name: NSNotification.Name.NSManagedObjectContextDidSave,
-                                               object: context)
-        
-        rootViewController.context = persistentContainer.viewContext
-        rootViewController.backgroundContext = backgroundContext
-        
-        window.rootViewController = navController
+        window.rootViewController = instanceRootViewController()
         window.makeKeyAndVisible()
         
         #if DEBUG
         
-//        if !UserDefaults.standard.bool(forKey: "INITED") {
-//            initNotebook(context: context, backgroundContext: backgroundContext)
+        UserDefaults.standard.removeObject(forKey: "no_connection_timer")
+        
+//        for _ in 1...15 {
+//            let note = Note(title: "Some title", content: "Some content", importance: .usual)
+//            let saveNote = SaveNoteOperation(note: note, context: persistentContainer.viewContext, backendQueue: BaseBackendOperation.queue, dbQueue: BaseDBOperation.queue)
+//            BaseUIOperation.queue.addOperation(saveNote)
 //        }
         
         #endif
         
         return true
+    }
+    
+    func setMergeContextAndBackgroundContextChangesNotification() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(managedObjectContextDidSave(notification:)),
+                                               name: NSNotification.Name.NSManagedObjectContextDidSave,
+                                               object: persistentContainer.viewContext)
     }
     
     @objc func managedObjectContextDidSave(notification: Notification) {

@@ -22,6 +22,8 @@ enum GistRequestResult {
 
 class ExecuteGistRequestOperation: AsyncOperation {
     
+    static let queue = OperationQueue()
+    
     private let dispatchGroup = DispatchGroup()
     private let method: RequestMethods
     private let path: String
@@ -31,17 +33,13 @@ class ExecuteGistRequestOperation: AsyncOperation {
     
     private var dataTask: URLSessionDataTask?
     
-    private(set) var result: GistRequestResult? {
-        didSet {
-            finish()
-        }
-    }
+    private(set) var result: GistRequestResult? { didSet { finish() } }
     
     init(method: RequestMethods, path: String, data: Data? = nil) {
         self.method = method
         self.path = path
         self.data = data
-        super.init(title: "Execute Gist request")
+        super.init()
     }
     
     private func getToken(completion: @escaping (_ token: String) -> ()) {
@@ -56,7 +54,7 @@ class ExecuteGistRequestOperation: AsyncOperation {
             }
         }
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: GistService.shared.notificationKey), object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: GistService.notificationKey), object: nil, queue: nil) { notification in
             completion(notification.object as! String)
         }
     }
@@ -70,14 +68,25 @@ class ExecuteGistRequestOperation: AsyncOperation {
         completion(request)
     }
     
-    private func createRequest(completion: @escaping (URLRequest?) -> Void) {
-        Reachability.isConnectedToNetwork { result in
-            guard result else {
+    private let noConnectionTimeKey = "no_connection_time"
+    private let noConnectionDelay: TimeInterval = 30
+    
+    private func createRequest(completion: @escaping (URLRequest?) -> ()) {
+        if let udValue = UserDefaults.standard.value(forKey: noConnectionTimeKey),
+            let noConnectionTime = udValue as? Date {
+            if Date().timeIntervalSince(noConnectionTime) < noConnectionDelay {
                 completion(nil)
                 return
             }
-            let url = URL(string: "\(GistService.shared.gitHubAPIURL)/\(self.path)")!
-            guard let token = GistService.shared.accessToken else {
+        }
+        Reachability.isConnectedToNetwork { result in
+            guard result else {
+                completion(nil)
+                UserDefaults.standard.set(Date(), forKey: self.noConnectionTimeKey)
+                return
+            }
+            let url = URL(string: "\(GistService.gitHubAPIURL)/\(self.path)")!
+            guard let token = GistService.accessToken else {
                 self.getToken { token in
                     self.getRequest(to: url, token: token) { request in
                         completion(request)
@@ -97,10 +106,6 @@ class ExecuteGistRequestOperation: AsyncOperation {
                 completion(.failture(.failedRequest(.noConnection)))
                 return
             }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
-            
-            print("\(dateFormatter.string(from: Date())): Request \(self.method.rawValue)/\(request.url!.absoluteString)")
             
             self.dataTask = URLSession.shared.dataTask(with: request) { result in
                 completion(result)

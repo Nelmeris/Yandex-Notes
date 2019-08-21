@@ -13,7 +13,7 @@ protocol EditNoteViewProtocol {
     func setColor(_ color: UIColor)
     func setDestructionDate(_ date: Date)
     func goToColorPicker()
-    func loadNotesFromDBOnDestination()
+    func loadNotesOnDestination()
 }
 
 class EditNoteViewController: UIViewController {
@@ -126,7 +126,7 @@ class EditNoteViewController: UIViewController {
 
 extension EditNoteViewController: EditNoteViewProtocol {
     
-    func loadNotesFromDBOnDestination() {
+    func loadNotesOnDestination() {
         guard let noteTableVC = parentVC else { return }
         noteTableVC.presenter.loadNotesFromDB()
     }
@@ -175,11 +175,11 @@ extension EditNoteViewController {
         let noteData = NoteData(title: title, content: content, color: color, importance: .usual, destructionDate: date)
         if let note = self.note {
             presenter.editNote(note, withData: noteData) {
-                self.loadNotesFromDBOnDestination()
+                self.loadNotesOnDestination()
             }
         } else {
             presenter.createNote(withData: noteData) {
-                self.loadNotesFromDBOnDestination()
+                self.loadNotesOnDestination()
             }
         }
     }

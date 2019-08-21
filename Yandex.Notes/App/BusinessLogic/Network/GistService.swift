@@ -10,17 +10,11 @@ import Foundation
 
 class GistService {
     
-    private init() {
-        executeQueue.maxConcurrentOperationCount = 1
-    }
-    static let shared = GistService()
+    static let gitHubAPIURL = "https://api.github.com"
+    static let notificationKey = "token_was_received"
+    static let accessTokenKey = "access_token"
     
-    let gitHubAPIURL = "https://api.github.com"
-    let notificationKey = "token_was_received"
-    
-    let accessTokenKey = "access_token"
-    
-    var accessToken: String? {
+    static var accessToken: String? {
         get {
             return UserDefaults.standard.string(forKey: accessTokenKey)
         }
@@ -175,8 +169,9 @@ class GistService {
         }
     }
     
-    func cancelLastOperation() {
-        operations.last?.cancel()
+    func cancelAllOperations() {
+        operations.forEach { $0.finish(); $0.cancel() }
+        operations.removeAll()
     }
     
 }

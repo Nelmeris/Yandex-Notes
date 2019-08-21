@@ -9,15 +9,16 @@
 import Foundation
 import CoreData
 
-let dbQueue = OperationQueue()
-
 class BaseDBOperation: AsyncOperation {
     
     let noteCDService: NoteCoreDataService
     
-    init(title: String, context: NSManagedObjectContext) {
+    static var queue = OperationQueue()
+    
+    init(context: NSManagedObjectContext, title: String, id: Int? = nil) {
         self.noteCDService = NoteCoreDataService(context: context)
-        super.init(title: title)
+        let id = AsyncOperationID(number: id, title: title)
+        super.init(id: id)
     }
     
 }

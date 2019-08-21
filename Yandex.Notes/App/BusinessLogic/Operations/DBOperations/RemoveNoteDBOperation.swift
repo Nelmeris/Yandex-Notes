@@ -24,9 +24,9 @@ class RemoveNoteDBOperation: BaseDBOperation {
     }
     
     init(note: Note,
-         context: NSManagedObjectContext) {
+         context: NSManagedObjectContext, title: String? = nil, id: Int? = nil) {
         self.note = note
-        super.init(title: "Remove note from DataBase", context: context)
+        super.init(context: context, title: title ?? "Remove note from DataBase", id: id)
     }
     
     override func main() {

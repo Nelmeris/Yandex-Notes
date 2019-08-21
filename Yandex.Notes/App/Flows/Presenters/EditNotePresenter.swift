@@ -32,26 +32,26 @@ class EditNotePresenter: EditNotePresenterProtocol {
     
     func createNote(withData data: NoteData, completion: @escaping () -> ()) {
         let newNote = Note(from: data)
-        let saveNoteOperation = SaveNoteOperation(note: newNote, context: backgroundContext, syncQueue: commonQueue, backendQueue: backendQueue, dbQueue: dbQueue)
+        let saveNoteOperation = SaveNoteOperation(note: newNote, context: backgroundContext, backendQueue: backendQueue, dbQueue: BaseDBOperation.queue)
         
-        saveNoteOperation.saveToDb.completionBlock = {
+        saveNoteOperation.saveToDB?.completionBlock = {
             completion()
         }
         
-        commonQueue.addOperation(saveNoteOperation)
+        BaseUIOperation.queue.addOperation(saveNoteOperation)
     }
     
     func editNote(_ note: Note, withData data: NoteData, completion: @escaping () -> ()) {
         let newNote = Note(from: data, withUUID: note.uuid)
         guard !(note == newNote) else { return }
         
-        let updateNoteOperation = UpdateNoteOperation(note: newNote, context: backgroundContext, backendQueue: backendQueue, dbQueue: dbQueue)
+        let updateNoteOperation = UpdateNoteOperation(note: newNote, context: backgroundContext, backendQueue: backendQueue, dbQueue: BaseDBOperation.queue)
         
-        updateNoteOperation.updateNoteInDB.completionBlock = {
+        updateNoteOperation.updateInDB?.completionBlock = {
             completion()
         }
         
-        commonQueue.addOperation(updateNoteOperation)
+        BaseUIOperation.queue.addOperation(updateNoteOperation)
     }
     
 }

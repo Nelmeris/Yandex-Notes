@@ -17,32 +17,22 @@ enum RewriteDBOperationResult {
 class RewriteDBOperation: BaseDBOperation {
     
     var notes: [Note]
-    private(set) var result: RewriteDBOperationResult? {
-        didSet {
-            finish()
-        }
-    }
+    private(set) var result: RewriteDBOperationResult? { didSet { finish() } }
     
     init(notes: [Note],
-         context: NSManagedObjectContext) {
+         context: NSManagedObjectContext, title: String? = nil, id: Int? = nil) {
         self.notes = notes
-        super.init(title: "Rewrite DataBase", context: context)
+        super.init(context: context, title: title ?? "Rewrite DataBase", id: id)
     }
     
     override func main() {
         let queue = DispatchQueue.global(qos: .userInitiated)
-        noteCDService.removeAll(queue: queue) { [weak self] error in
+        noteCDService.rewrite(for: notes, queue: queue) { [weak self] error in
             guard let `self` = self else { return }
             if let error = error {
                 self.result = .failture(error)
-                return
-            }
-            self.noteCDService.save(self.notes, queue: queue) { error in
-                if let error = error {
-                    self.result = .failture(error)
-                } else {
-                    self.result = .success
-                }
+            } else {
+                self.result = .success
             }
         }
     }

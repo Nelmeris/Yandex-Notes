@@ -35,19 +35,23 @@ class NoteTableViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         configure()
         presenter.loadNotesFromDB()
+        presenter.loadNotes()
+        presenter.startSyncTimer(with: 10)
     }
     
     func configure() {
         title = "Заметки"
+        tableView.separatorStyle = .none
         tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(prepareSyncNotes), for: .allEvents)
+        tableView.refreshControl?.addTarget(self, action: #selector(prepareSyncNotes), for: .valueChanged)
         
         presenter = NoteTableViewPresenter(view: self, context: context, backgroundContext: backgroundContext)
     }
     
     @objc func prepareSyncNotes() {
+        UserDefaults.standard.removeObject(forKey: "no_connection_time")
         presenter.resetSyncTimer()
-        presenter.syncNotes()
+        presenter.loadNotes()
     }
     
     @objc func startEditing(sender: UIBarButtonItem) {
@@ -95,7 +99,13 @@ extension NoteTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes.count
+        let count = notes.count
+        if count == 0 {
+            tableView.separatorStyle = .none
+        } else {
+            tableView.separatorStyle = .singleLine
+        }
+        return count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

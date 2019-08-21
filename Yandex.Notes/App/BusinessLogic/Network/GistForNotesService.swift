@@ -10,11 +10,10 @@ import Foundation
 
 class GistForNotesService {
     
-    private init() {}
-    static let shared = GistForNotesService()
-    
     private let gistName = "ios-course-notes-db"
     private let gistIdKey = "gist_for_notes_id"
+    
+    private let gistService = GistService()
     
     private var gistId: String! {
         get {
@@ -49,7 +48,7 @@ class GistForNotesService {
     }
     
     private func findGist(completion: @escaping (_ result: Bool, _ error: GistServiceError?) -> Void) {
-        GistService.shared.search(for: gistName) { (result, error) in
+        gistService.search(for: gistName) { (result, error) in
             // Если не найден
             guard let gist = result else {
                 completion(false, error)
@@ -63,7 +62,7 @@ class GistForNotesService {
     
     func isNotebookCreated(completion: @escaping (_ result: Bool, _ error: GistServiceError?) -> Void) {
         if gistId != nil {
-            GistService.shared.get(with: gistId) { (result, error) in
+            gistService.get(with: gistId) { (result, error) in
                 guard result != nil else {
                     self.findGist { completion($0, $1) }
                     return
@@ -78,7 +77,7 @@ class GistForNotesService {
     func createGist(with notes: [Note] = [], completion: @escaping (_ data: Gist?, _ error: GistServiceError?) -> Void) {
         do {
             let gistCreator = try createGistCreator(with: notes)
-            GistService.shared.create(with: gistCreator) { (result, error) in // Создать его
+            gistService.create(with: gistCreator) { (result, error) in // Создать его
                 if let gist = result { // Если успешно
                     self.gistId = gist.id // Сохранить ID
                     completion(gist, nil)
@@ -94,7 +93,7 @@ class GistForNotesService {
     func pullNotes(completion: @escaping (_ result: GistNotesContainer?, _ error: GistServiceError?) -> Void) {
         isNotebookCreated { (result, error) in
             if result {
-                GistService.shared.get(with: self.gistId) { (result, error) in
+                self.gistService.get(with: self.gistId) { (result, error) in
                     guard let gist = result else {
                         completion(nil, error)
                         return
@@ -128,7 +127,7 @@ class GistForNotesService {
             let gistCreator = try createGistCreator(with: notes)
             isNotebookCreated { (result, error) in
                 if result {
-                    GistService.shared.patch(with: self.gistId, gist: gistCreator) { error in
+                    self.gistService.patch(with: self.gistId, gist: gistCreator) { error in
                         if error != nil {
                             completion(false, error)
                         } else {
@@ -150,8 +149,8 @@ class GistForNotesService {
         }
     }
     
-    func cancelLastOperation() {
-        GistService.shared.cancelLastOperation()
+    func cancelAllOperations() {
+        gistService.cancelAllOperations()
     }
     
 }

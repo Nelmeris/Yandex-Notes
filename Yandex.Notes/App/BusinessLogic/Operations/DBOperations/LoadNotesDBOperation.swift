@@ -18,9 +18,8 @@ class LoadNotesDBOperation: BaseDBOperation {
     
     private(set) var result: LoadNotesDBOperationResult? { didSet { finish() } }
     
-    init(context: NSManagedObjectContext) {
-        super.init(title: "Load notes from DataBase",
-                   context: context)
+    override init(context: NSManagedObjectContext, title: String? = nil, id: Int? = nil) {
+        super.init(context: context, title: title ?? "Load notes from DataBase", id: id)
     }
     
     override func main() {
