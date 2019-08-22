@@ -8,11 +8,16 @@
 
 import Foundation
 
-enum SyncNotesResult {
+enum SyncNotesResultType {
     case synchronized
-    case dbNeedsUpdate([Note])
-    case backendNeedsUpdate([Note])
-    case needsBilateralUpdate([Note])
+    case dbNeedsUpdate
+    case backendNeedsUpdate
+    case needsBilateralUpdate
+}
+
+struct SyncNotesResult {
+    let notes: [Note]
+    let type: SyncNotesResultType
 }
 
 extension Note {
@@ -62,7 +67,7 @@ extension Note {
         
         // Проверка на синхронность
         guard !dbNotes.elementsEqual(backendNotes) else {
-            return .synchronized
+            return SyncNotesResult(notes: dbNotes, type: .synchronized)
         }
         
         var syncNotes: [Note] = []
@@ -113,11 +118,11 @@ extension Note {
         }
         
         if isDBNeedsUpdate && isBackendNeedsUpdate {
-            return .needsBilateralUpdate(syncNotes)
+            return SyncNotesResult(notes: syncNotes, type: .needsBilateralUpdate)
         } else if isDBNeedsUpdate {
-            return .dbNeedsUpdate(syncNotes)
+            return SyncNotesResult(notes: syncNotes, type: .dbNeedsUpdate)
         } else {
-            return .backendNeedsUpdate(syncNotes)
+            return SyncNotesResult(notes: syncNotes, type: .backendNeedsUpdate)
         }
         
     }

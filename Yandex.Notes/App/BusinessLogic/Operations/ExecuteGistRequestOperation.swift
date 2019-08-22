@@ -79,6 +79,7 @@ class ExecuteGistRequestOperation: AsyncOperation {
                 return
             }
         }
+        guard !self.isCancelled else { return }
         Reachability.isConnectedToNetwork { result in
             guard result else {
                 completion(nil)
@@ -107,14 +108,17 @@ class ExecuteGistRequestOperation: AsyncOperation {
                 return
             }
             
+            guard !self.isCancelled else { return }
             self.dataTask = URLSession.shared.dataTask(with: request) { result in
                 completion(result)
             }
+            guard !self.isCancelled else { return }
             self.dataTask?.resume()
         }
     }
     
     override func main() {
+        guard !self.isCancelled else { return }
         executeRequest { result in
             switch result {
             case .success(let container):

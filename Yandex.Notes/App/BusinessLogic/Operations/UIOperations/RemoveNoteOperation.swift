@@ -40,20 +40,24 @@ class RemoveNoteOperation: BaseUIOperation {
         removeFromDB = RemoveNoteDBOperation(note: note, context: context, id: self.id?.number)
         loadFromDB = LoadNotesDBOperation(context: context, id: self.id?.number)
         
+        guard !self.isCancelled else { return }
         dbQueue.addOperation(removeFromDB)
         loadFromDB.addDependency(removeFromDB)
+        guard !self.isCancelled else { return }
         dbQueue.addOperation(loadFromDB)
         
         let removeFromDBCompletionBlock = BlockOperation {
             self.removeFromDBCompletion()
         }
         removeFromDBCompletionBlock.addDependency(removeFromDB)
+        guard !self.isCancelled else { return }
         AsyncOperation.commonQueue.addOperation(removeFromDBCompletionBlock)
         
         let loadFromDBCompletionBlock = BlockOperation {
             self.loadFromDBCompletion()
         }
         loadFromDBCompletionBlock.addDependency(loadFromDB)
+        guard !self.isCancelled else { return }
         AsyncOperation.commonQueue.addOperation(loadFromDBCompletionBlock)
         
         self.addDependency(loadFromDBCompletionBlock)
@@ -82,6 +86,7 @@ class RemoveNoteOperation: BaseUIOperation {
             let saveToBackend = SaveNotesBackendOperation(notes: notes, id: self.id?.number)
             self.saveToBackend = saveToBackend
             self.addDependency(saveToBackend)
+            guard !self.isCancelled else { return }
             backendQueue.addOperation(saveToBackend)
         case .failture(let error):
             self.result = .dbFailture(error)

@@ -30,7 +30,9 @@ class RemoveNoteDBOperation: BaseDBOperation {
     }
     
     override func main() {
-        noteCDService.remove(note, queue: DispatchQueue.global(qos: .userInitiated)) { error in
+        let queue = DispatchQueue.global(qos: .userInitiated)
+        guard !self.isCancelled else { return }
+        noteCDService.remove(note, queue: queue) { error in
             if let error = error {
                 self.result = .failture(error)
             } else {

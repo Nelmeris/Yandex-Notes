@@ -27,7 +27,9 @@ class UpdateNotesDBOperation: BaseDBOperation {
     }
     
     override func main() {
-        noteCDService.update(notes, queue: DispatchQueue.global(qos: .userInitiated)) { error in
+        let queue = DispatchQueue.global(qos: .userInitiated)
+        guard !self.isCancelled else { return }
+        noteCDService.update(notes, queue: queue) { error in
             if let error = error {
                 self.result = .failture(error)
             } else {

@@ -23,6 +23,7 @@ class LoadNotesDBOperation: BaseDBOperation {
     }
     
     override func main() {
+        guard !self.isCancelled else { return }
         do {
             let notes = try noteCDService.load()
             self.result = .success(notes)

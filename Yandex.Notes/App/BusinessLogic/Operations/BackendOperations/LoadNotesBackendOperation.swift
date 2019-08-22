@@ -23,6 +23,7 @@ class LoadNotesBackendOperation: BaseBackendOperation {
     }
     
     override func main() {
+        guard !self.isCancelled else { return }
         gistForNotesService.pullNotes { result, error in
             guard let gistContainer = result else {
                 self.result = .failure(error!)

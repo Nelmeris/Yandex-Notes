@@ -30,7 +30,9 @@ class SaveNoteDBOperation: BaseDBOperation {
     }
     
     override func main() {
-        noteCDService.save(note, queue: DispatchQueue.global(qos: .userInitiated)) { error in
+        let queue = DispatchQueue.global(qos: .userInitiated)
+        guard !self.isCancelled else { return }
+        noteCDService.save(note, queue: queue) { error in
             if let error = error {
                 self.result = .failture(error)
             } else {

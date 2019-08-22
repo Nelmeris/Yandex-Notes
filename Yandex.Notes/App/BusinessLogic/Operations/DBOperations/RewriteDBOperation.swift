@@ -27,6 +27,7 @@ class RewriteDBOperation: BaseDBOperation {
     
     override func main() {
         let queue = DispatchQueue.global(qos: .userInitiated)
+        guard !self.isCancelled else { return }
         noteCDService.rewrite(for: notes, queue: queue) { [weak self] error in
             guard let `self` = self else { return }
             if let error = error {

@@ -44,20 +44,24 @@ class SaveNoteOperation: BaseUIOperation {
         saveToDB = SaveNoteDBOperation(note: note, context: context, id: self.id?.number)
         loadFromDB = LoadNotesDBOperation(context: context, id: self.id?.number)
         
+        guard !self.isCancelled else { return }
         dbQueue.addOperation(saveToDB)
         loadFromDB.addDependency(saveToDB)
+        guard !self.isCancelled else { return }
         dbQueue.addOperation(loadFromDB)
         
         let saveToDBCompletionBlock = BlockOperation {
             self.saveToDBCompletion()
         }
         saveToDBCompletionBlock.addDependency(saveToDB)
+        guard !self.isCancelled else { return }
         AsyncOperation.commonQueue.addOperation(saveToDBCompletionBlock)
         
         let loadFromDBCompletionBlock = BlockOperation {
             self.loadFromDBCompletion()
         }
         loadFromDBCompletionBlock.addDependency(loadFromDB)
+        guard !self.isCancelled else { return }
         AsyncOperation.commonQueue.addOperation(loadFromDBCompletionBlock)
         
         self.addDependency(loadFromDBCompletionBlock)
@@ -86,6 +90,7 @@ class SaveNoteOperation: BaseUIOperation {
             let saveToBackend = SaveNotesBackendOperation(notes: notes, id: self.id?.number)
             self.saveToBackend = saveToBackend
             self.addDependency(saveToBackend)
+            guard !self.isCancelled else { return }
             backendQueue.addOperation(saveToBackend)
         case .failture(let error):
             self.result = .dbFailture(error)

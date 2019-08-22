@@ -26,6 +26,7 @@ class SaveNotesBackendOperation: BaseBackendOperation {
     }
     
     override func main() {
+        guard !self.isCancelled else { return }
         gistForNotesService.pushNotes(notes) { (result, error) in
             if result {
                 self.result = .success
