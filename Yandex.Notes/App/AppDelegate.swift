@@ -36,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let window = window else { fatalError() }
         
         BaseDBOperation.queue.maxConcurrentOperationCount = 1
+        BaseBackendOperation.queue.maxConcurrentOperationCount = 1
+        ExecuteRequestOperation.queue.maxConcurrentOperationCount = 1
         
         window.rootViewController = instanceRootViewController()
         window.makeKeyAndVisible()
@@ -45,9 +47,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.removeObject(forKey: "no_connection_timer")
         
 //        for _ in 1...15 {
-//            let note = Note(title: "Some title", content: "Some content", importance: .usual)
-//            let saveNote = SaveNoteOperation(note: note, context: persistentContainer.viewContext, backendQueue: BaseBackendOperation.queue, dbQueue: BaseDBOperation.queue)
-//            BaseUIOperation.queue.addOperation(saveNote)
+//            let load = LoadNotesOperation(context: persistentContainer.viewContext, backendQueue: BaseBackendOperation.queue, dbQueue: BaseDBOperation.queue)
+//            load.loadFromDB.completionBlock = {
+//                load.cancel()
+//            }
+//            BaseUIOperation.queue.addOperation(load)
 //        }
         
         #endif

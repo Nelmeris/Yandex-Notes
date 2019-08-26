@@ -13,7 +13,7 @@ protocol EditNoteViewProtocol {
     func setColor(_ color: UIColor)
     func setDestructionDate(_ date: Date)
     func goToColorPicker()
-    func loadNotesOnDestination()
+    func loadNotesOnDestination(notes: [Note])
 }
 
 class EditNoteViewController: UIViewController {
@@ -89,11 +89,12 @@ class EditNoteViewController: UIViewController {
     }
     
     func configureViews() {
+        let placeholder = "Enter note content..."
         staticDateFieldHeight = dateFieldHeight.constant
-        
         guard let note = note else {
             titleField.text = ""
             contentView.text = ""
+            contentView.placeholder = placeholder
             checkedColorButton = colorWhiteButton
             dateSwitch.isOn = false
             return
@@ -101,6 +102,7 @@ class EditNoteViewController: UIViewController {
         
         titleField.text = note.title
         contentView.text = note.content
+        contentView.placeholder = placeholder
         setColor(note.color)
         if let date = note.destructionDate {
             setDestructionDate(date)
@@ -126,9 +128,9 @@ class EditNoteViewController: UIViewController {
 
 extension EditNoteViewController: EditNoteViewProtocol {
     
-    func loadNotesOnDestination() {
+    func loadNotesOnDestination(notes: [Note]) {
         guard let noteTableVC = parentVC else { return }
-        noteTableVC.presenter.loadNotesFromDB()
+        noteTableVC.setNotes(notes)
     }
     
     func setColor(_ color: UIColor) {
@@ -174,12 +176,14 @@ extension EditNoteViewController {
         
         let noteData = NoteData(title: title, content: content, color: color, importance: .usual, destructionDate: date)
         if let note = self.note {
-            presenter.editNote(note, withData: noteData) {
-                self.loadNotesOnDestination()
+            presenter.editNote(note, withData: noteData) { notes in
+                guard let notes = notes else { return }
+                self.loadNotesOnDestination(notes: notes)
             }
         } else {
-            presenter.createNote(withData: noteData) {
-                self.loadNotesOnDestination()
+            presenter.createNote(withData: noteData) { notes in
+                guard let notes = notes else { return }
+                self.loadNotesOnDestination(notes: notes)
             }
         }
     }

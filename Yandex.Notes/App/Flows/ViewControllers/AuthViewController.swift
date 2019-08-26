@@ -80,12 +80,12 @@ extension AuthViewController {
                 guard let components = URLComponents(string: "\(self.gitHubDomain)?\(responseString)") else { return }
                 
                 if let token = components.queryItems?.first(where: { $0.name == "access_token" })?.value {
-                    UserDefaults.standard.set(token, forKey: GistService.accessTokenKey)
+                    UserDefaults.standard.set(token, forKey: GistRequestManager.accessTokenKey)
                     self.dismiss(animated: true)
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: GistService.notificationKey), object: token)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: GistRequestManager.notificationKey), object: token)
                     self.delegate?.handleTokenChanged(token: token)
                 }
-            case .failture:
+            case .failure:
                 fatalError("Error getting token")
             }
         }.resume()

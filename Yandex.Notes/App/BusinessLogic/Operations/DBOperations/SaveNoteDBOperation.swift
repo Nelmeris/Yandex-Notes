@@ -11,7 +11,7 @@ import CoreData
 
 enum SaveNoteDBOperationResult {
     case success
-    case failture(Error)
+    case failure(Error)
 }
 
 class SaveNoteDBOperation: BaseDBOperation {
@@ -34,7 +34,7 @@ class SaveNoteDBOperation: BaseDBOperation {
         guard !self.isCancelled else { return }
         noteCDService.save(note, queue: queue) { error in
             if let error = error {
-                self.result = .failture(error)
+                self.result = .failure(error)
             } else {
                 self.result = .success
             }

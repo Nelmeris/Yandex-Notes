@@ -20,21 +20,12 @@ class NoteCoreDataService {
     let entityName = "CDNote"
     
     private func loadFromCD(with uuid: UUID? = nil) throws -> [CDNote] {
-        let request: NSFetchRequest<CDNote> = NSFetchRequest(entityName: "CDNote")
+        let request: NSFetchRequest<CDNote> = NSFetchRequest(entityName: entityName)
+        request.sortDescriptors = [ NSSortDescriptor(key: "createDate", ascending: false) ]
         if let uuid = uuid {
             request.predicate = NSPredicate(format: "uuid = %@", uuid.uuidString)
         }
         return try context.fetch(request)
-    }
-    
-    func load(with uuid: UUID? = nil) throws -> [Note] {
-        let cdNotes = try loadFromCD(with: uuid)
-        var notes: [Note] = []
-        for cdNote in cdNotes {
-            let note = Note(from: cdNote)
-            notes.append(note)
-        }
-        return notes
     }
     
     private func saveContext(completion: @escaping (Error?) -> ()) {
@@ -90,6 +81,16 @@ class NoteCoreDataService {
 }
     
 extension NoteCoreDataService {
+    
+    func load(with uuid: UUID? = nil) throws -> [Note] {
+        let cdNotes = try loadFromCD(with: uuid)
+        var notes: [Note] = []
+        for cdNote in cdNotes {
+            let note = Note(from: cdNote)
+            notes.append(note)
+        }
+        return notes
+    }
     
     func save(_ note: Note, queue: DispatchQueue, completion: @escaping (Error?) -> ()) {
         queue.async {

@@ -52,14 +52,14 @@ class UpdateNoteOperation: BaseUIOperation {
         }
         updateInDBCompletionBlock.addDependency(updateInDB)
         guard !self.isCancelled else { return }
-        AsyncOperation.commonQueue.addOperation(updateInDBCompletionBlock)
+        commonQueue.addOperation(updateInDBCompletionBlock)
         
         let loadFromDBCompletionBlock = BlockOperation {
             self.loadFromDBCompletion()
         }
         loadFromDBCompletionBlock.addDependency(loadFromDB)
         guard !self.isCancelled else { return }
-        AsyncOperation.commonQueue.addOperation(loadFromDBCompletionBlock)
+        commonQueue.addOperation(loadFromDBCompletionBlock)
         
         self.addDependency(loadFromDBCompletionBlock)
     }
@@ -70,8 +70,8 @@ class UpdateNoteOperation: BaseUIOperation {
             return
         }
         switch result {
-        case .failture(let error):
-            self.result = .dbFailture(error)
+        case .failure(let error):
+            self.result = .dbFailure(error)
         default: break
         }
     }
@@ -89,8 +89,8 @@ class UpdateNoteOperation: BaseUIOperation {
             self.addDependency(saveToBackend)
             guard !self.isCancelled else { return }
             backendQueue.addOperation(saveToBackend)
-        case .failture(let error):
-            self.result = .dbFailture(error)
+        case .failure(let error):
+            self.result = .dbFailure(error)
         }
     }
     
@@ -103,16 +103,18 @@ class UpdateNoteOperation: BaseUIOperation {
         switch result {
         case .success:
             self.result = .success(notes)
-        case .failure(let error):
-            self.result = .backendFailture(dbNotes: notes, error: error)
+        case .failure:
+            self.result = .backendFailure(dbNotes: notes, error: nil)
+        case .failureRequest(let error):
+            self.result = .backendFailure(dbNotes: notes, error: error)
         }
     }
     
     override func cancel() {
+        super.cancel()
+        saveToBackend?.cancel()
         updateInDB.cancel()
         loadFromDB.cancel()
-        saveToBackend?.cancel()
-        super.cancel()
     }
     
 }

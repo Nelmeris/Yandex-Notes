@@ -10,6 +10,6 @@ import Foundation
 
 enum UIOperationResult {
     case success([Note])
-    case backendFailture(dbNotes: [Note], error: GistServiceError)
-    case dbFailture(Error)
+    case backendFailure(dbNotes: [Note], error: NetworkError?)
+    case dbFailure(Error)
 }

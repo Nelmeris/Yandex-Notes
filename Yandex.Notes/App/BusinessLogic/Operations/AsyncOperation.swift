@@ -19,7 +19,7 @@ class AsyncOperation: Operation {
     private var _finished = false
     
     private static var count = 0
-    static let commonQueue = OperationQueue()
+    let commonQueue = OperationQueue()
     
     let id: AsyncOperationID?
     

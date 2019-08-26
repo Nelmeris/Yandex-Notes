@@ -11,7 +11,7 @@ import CoreData
 
 enum RewriteDBOperationResult {
     case success
-    case failture(Error)
+    case failure(Error)
 }
 
 class RewriteDBOperation: BaseDBOperation {
@@ -31,7 +31,7 @@ class RewriteDBOperation: BaseDBOperation {
         noteCDService.rewrite(for: notes, queue: queue) { [weak self] error in
             guard let `self` = self else { return }
             if let error = error {
-                self.result = .failture(error)
+                self.result = .failure(error)
             } else {
                 self.result = .success
             }

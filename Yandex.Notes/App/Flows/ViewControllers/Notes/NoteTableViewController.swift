@@ -34,9 +34,8 @@ class NoteTableViewController: UITableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(startEditing(sender:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewNote(sender:)))
         configure()
-        presenter.loadNotesFromDB()
         presenter.loadNotes()
-        presenter.startSyncTimer(with: 10)
+//        presenter.startSyncTimer(with: 10)
     }
     
     func configure() {
@@ -50,7 +49,6 @@ class NoteTableViewController: UITableViewController {
     
     @objc func prepareSyncNotes() {
         UserDefaults.standard.removeObject(forKey: "no_connection_time")
-        presenter.resetSyncTimer()
         presenter.loadNotes()
     }
     
@@ -152,13 +150,56 @@ extension NoteTableViewController: NoteTableViewProtocol {
         }
     }
     
+    func beginUpdates() {
+        self.tableView.beginUpdates()
+    }
+    
+    private func getIndex(for note: Note, in notes: [Note]) -> Int? {
+        return notes.firstIndex(where: { $0.uuid == note.uuid })
+    }
+    
+    private func getNote(for uuid: UUID, in notes: [Note]) -> Note? {
+        return notes.first(where: { $0.uuid == uuid })
+    }
+    
     func setNotes(_ notes: [Note]) {
         if self.notes != notes {
-            self.notes = notes
+            let oldNotes = self.notes
+            
+            let removedNotes = Note.getDeletedNotes(in: notes, compare: oldNotes)
+            let newNotes = Note.getNewNotes(in: notes, compare: oldNotes)
+            let updatedNotes = Note.getUpdatedNotes(in: notes, compare: oldNotes)
+            
+            var deletedRows: [IndexPath] = removedNotes
+                .compactMap { getIndex(for: $0, in: oldNotes) }
+                .map { IndexPath(row: $0, section: 0) }
+            var insertedRows: [IndexPath] = newNotes
+                .compactMap { getIndex(for: $0, in: notes) }
+                .map { IndexPath(row: $0, section: 0) }
+            let reloadedRows: [IndexPath] = updatedNotes
+                .filter { getIndex(for: $0, in: oldNotes) == getIndex(for: $0, in: notes) }
+                .compactMap { notes.index(of: $0) }
+                .map { IndexPath(row: $0, section: 0) }
+            let movedRows: [(at: IndexPath, to: IndexPath)] = updatedNotes
+                .filter { (getIndex(for: $0, in: oldNotes) != getIndex(for: $0, in: notes)!) }
+                .map { (getIndex(for: $0, in: oldNotes)!, getIndex(for: $0, in: notes)!) }
+                .map { (IndexPath(row: $0.0, section: 0), IndexPath(row: $0.1, section: 0)) }
+            movedRows.forEach { insertedRows.append($0.to) }
+            movedRows.forEach { deletedRows.append($0.at) }
+            
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.notes = notes
+                self.beginUpdates()
+                self.tableView.deleteRows(at: deletedRows, with: .automatic)
+                self.tableView.insertRows(at: insertedRows, with: .automatic)
+                self.tableView.reloadRows(at: reloadedRows, with: .automatic)
+                self.endUpdates()
             }
         }
+    }
+    
+    func endUpdates() {
+        self.tableView.endUpdates()
     }
     
     func endRefreshing() {

@@ -11,7 +11,7 @@ import CoreData
 
 enum LoadNotesDBOperationResult {
     case success([Note])
-    case failture(Error)
+    case failure(Error)
 }
 
 class LoadNotesDBOperation: BaseDBOperation {
@@ -28,7 +28,7 @@ class LoadNotesDBOperation: BaseDBOperation {
             let notes = try noteCDService.load()
             self.result = .success(notes)
         } catch {
-            self.result = .failture(error)
+            self.result = .failure(error)
         }
     }
     

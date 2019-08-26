@@ -15,7 +15,7 @@ struct URLResponseErrorContainer {
 
 enum URLResponseResult {
     case success(data: Data, statusCode: Int)
-    case failture(NetworkError)
+    case failure(NetworkError)
 }
 
 extension URLSession {
@@ -23,7 +23,7 @@ extension URLSession {
     func dataTask(with request: URLRequest, completionHandler: @escaping (URLResponseResult) -> Void) -> URLSessionDataTask {
         return self.dataTask(with: request) { (data, response, error) in
             guard let response = response as? HTTPURLResponse else {
-                completionHandler(.failture(.failedRequest(.noConnection)))
+                completionHandler(.failure(.noConnection))
                 return
             }
             let statusCode = response.statusCode
@@ -31,17 +31,17 @@ extension URLSession {
                 let container = URLResponseErrorContainer(errorDescription: error.localizedDescription, statusCode: response.statusCode)
                 switch response.statusCode {
                 case ..<400:
-                    completionHandler(.failture(.failedResponse(.redirection(container))))
+                    completionHandler(.failure(.redirection(container)))
                 case 400..<500:
-                    completionHandler(.failture(.failedResponse(.clientError(container))))
+                    completionHandler(.failure(.clientError(container)))
                 case 500...:
-                    completionHandler(.failture(.failedResponse(.serverError(container))))
+                    completionHandler(.failure(.serverError(container)))
                 default:
                     fatalError("Unknown HTTP status code")
                 }
             } else {
                 guard let data = data, (200..<300).contains(statusCode) else {
-                    completionHandler(.failture(.failedRequest(.unexpectedError(response: response))))
+                    completionHandler(.failure(.unexpectedError(response: response)))
                     return
                 }
                 completionHandler(.success(data: data, statusCode: response.statusCode))

@@ -11,7 +11,7 @@ import CoreData
 
 enum UpdateNoteDBOperationResult {
     case success
-    case failture(Error)
+    case failure(Error)
 }
 
 class UpdateNoteDBOperation: BaseDBOperation {
@@ -35,7 +35,7 @@ class UpdateNoteDBOperation: BaseDBOperation {
         guard !self.isCancelled else { return }
         noteCDService.update(note, queue: queue) { error in
             if let error = error {
-                self.result = .failture(error)
+                self.result = .failure(error)
             } else {
                 self.result = .success
             }

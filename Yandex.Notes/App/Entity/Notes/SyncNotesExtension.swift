@@ -1,5 +1,5 @@
 //
-//  ExistNotesSelection.swift
+//  SyncNotesExtension.swift
 //  Yandex.Notes
 //
 //  Created by Artem Kufaev on 19/08/2019.
@@ -46,6 +46,11 @@ extension Note {
         return array.contains { $0.uuid == note.uuid } ? note : nil
     }
     
+    static private func returnIfContainsAndNotEqual(note: Note, in array: [Note]) -> Note? {
+        guard let compareNote = array.first(where: { $0.uuid == note.uuid }) else { return nil }
+        return note != compareNote ? note : nil
+    }
+    
     static private func getSimularNotes(
         fromDB dbNotes: [Note],
         fromBackend backendNotes: [Note]
@@ -59,10 +64,25 @@ extension Note {
         return simularNotes
     }
     
+    static func getNewNotes(in newArray: [Note], compare oldArray: [Note]) -> [Note] {
+        return newArray
+            .compactMap { returnIfNotContains(note: $0, in: oldArray) }
+    }
+    
+    static func getDeletedNotes(in newArray: [Note], compare oldArray: [Note]) -> [Note] {
+        return oldArray
+            .compactMap { returnIfNotContains(note: $0, in: newArray) }
+    }
+    
+    static func getUpdatedNotes(in newArray: [Note], compare oldArray: [Note]) -> [Note] {
+        return newArray
+            .compactMap { returnIfContainsAndNotEqual(note: $0, in: oldArray) }
+    }
+    
     // TODO: - Если удалена на клиенте, но хранится на сервере (?)
     
     // Синхронизация заметок на клиенте и сервере
-    static func syncNotes(dbNotes: [Note], gistContainer: GistNotesContainer) -> SyncNotesResult {
+    static func sync(dbNotes: [Note], gistContainer: GistNotesContainer) -> SyncNotesResult {
         let backendNotes = gistContainer.notes
         
         // Проверка на синхронность
@@ -76,9 +96,9 @@ extension Note {
         var isDBNeedsUpdate = false
         
         // Новые заметки на сервере (отсутствующие локально)
-        let newNotesOnBackend = backendNotes.compactMap { returnIfNotContains(note: $0, in: dbNotes) }
+        let newNotesOnBackend = getNewNotes(in: backendNotes, compare: dbNotes)
         // Новые заметки на устройстве (отсутствующие на сервере)
-        let newNotesOnDB = dbNotes.compactMap { returnIfNotContains(note: $0, in: backendNotes) }
+        let newNotesOnDB = getNewNotes(in: dbNotes, compare: backendNotes)
         // Схожие заметки (с одним и тем же UUID)
         let similarNotes = getSimularNotes(fromDB: dbNotes, fromBackend: backendNotes)
         

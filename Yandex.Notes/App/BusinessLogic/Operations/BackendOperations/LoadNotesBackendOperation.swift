@@ -10,32 +10,40 @@ import Foundation
 
 enum LoadNotesBackendResult {
     case success(GistNotesContainer)
-    case failure(GistServiceError)
+    case failure
+    case failureRequest(NetworkError)
 }
 
 class LoadNotesBackendOperation: BaseBackendOperation {
     
+    var pullNotesFromGist: PullNotesGistOperation?
+    
     private(set) var result: LoadNotesBackendResult? { didSet { finish() } }
-    private let gistForNotesService = GistForNotesService()
     
     override init(title: String? = nil, id: Int? = nil) {
         super.init(title: title ?? "Load notes from Backend", id: id)
+        
+        pullNotesFromGist = PullNotesGistOperation(id: self.id?.number)
+        commonQueue.addOperation(pullNotesFromGist!)
+        addDependency(pullNotesFromGist!)
     }
     
     override func main() {
         guard !self.isCancelled else { return }
-        gistForNotesService.pullNotes { result, error in
-            guard let gistContainer = result else {
-                self.result = .failure(error!)
-                return
-            }
-            self.result = .success(gistContainer)
+        guard let result = pullNotesFromGist?.result else { return }
+        switch result {
+        case .success(let container):
+            self.result = .success(container)
+        case .failure:
+            self.result = .failure
+        case .failureRequest(let error):
+            self.result = .failureRequest(error)
         }
     }
     
     override func cancel() {
-        gistForNotesService.cancelAllOperations()
         super.cancel()
+        pullNotesFromGist?.cancel()
     }
     
 }

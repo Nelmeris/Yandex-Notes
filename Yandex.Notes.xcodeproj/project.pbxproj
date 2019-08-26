@@ -14,16 +14,11 @@
 		5743A68D230A175200BF5B74 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5743A68C230A175200BF5B74 /* Reachability.swift */; };
 		5757828F230D62B000C30374 /* BaseUIOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5757828E230D62B000C30374 /* BaseUIOperation.swift */; };
 		57578291230DAB1500C30374 /* UpdateNotesDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57578290230DAB1500C30374 /* UpdateNotesDBOperation.swift */; };
+		575BC750230E7DAD00207421 /* UITextViewPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575BC74F230E7DAD00207421 /* UITextViewPlaceholder.swift */; };
 		5769C2252302B77300530294 /* URLSessionDataTaskUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */; };
-		5769C2272302B78000530294 /* GistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2262302B78000530294 /* GistService.swift */; };
 		5769C22A2302B79900530294 /* GistFileCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2282302B79800530294 /* GistFileCreator.swift */; };
 		5769C22B2302B79900530294 /* GistCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2292302B79900530294 /* GistCreator.swift */; };
-		5769C22D2302B8C500530294 /* GistForNotesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C22C2302B8C500530294 /* GistForNotesService.swift */; };
-		5769C22F2302C0B200530294 /* GistServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C22E2302C0B200530294 /* GistServiceError.swift */; };
-		5769C2312302C6DB00530294 /* ExecuteGistRequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2302302C6DB00530294 /* ExecuteGistRequestOperation.swift */; };
-		5769C2362302D23B00530294 /* URLResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2352302D23B00530294 /* URLResponseError.swift */; };
 		5769C2382302D36C00530294 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2372302D36C00530294 /* NetworkError.swift */; };
-		5769C23A2302D48100530294 /* URLRequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C2392302D48100530294 /* URLRequestError.swift */; };
 		5769C23C2302DB7100530294 /* VisibleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C23B2302DB7100530294 /* VisibleViewController.swift */; };
 		5769C2402303148400530294 /* GistNotesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C23F2303148400530294 /* GistNotesContainer.swift */; };
 		5769C242230318D400530294 /* UpdateNoteDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5769C241230318D400530294 /* UpdateNoteDBOperation.swift */; };
@@ -33,6 +28,13 @@
 		57874266230BF6A6005B2FD1 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57874265230BF6A6005B2FD1 /* UIViewControllerExtensions.swift */; };
 		57874268230BFEA0005B2FD1 /* NoteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57874267230BFEA0005B2FD1 /* NoteData.swift */; };
 		5787426A230BFEE2005B2FD1 /* NoteImportanceLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57874269230BFEE2005B2FD1 /* NoteImportanceLevel.swift */; };
+		579824D3230EDA5F0029F9A8 /* ExecuteRequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579824D2230EDA5F0029F9A8 /* ExecuteRequestOperation.swift */; };
+		579824D7230EE0500029F9A8 /* GistRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579824D6230EE0500029F9A8 /* GistRequestManager.swift */; };
+		579824DA230EE5BD0029F9A8 /* BaseGistOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579824D9230EE5BD0029F9A8 /* BaseGistOperation.swift */; };
+		579824DC230EE6910029F9A8 /* CreateGistOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579824DB230EE6910029F9A8 /* CreateGistOperation.swift */; };
+		579824DE230EE69C0029F9A8 /* LoadGistsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579824DD230EE69C0029F9A8 /* LoadGistsOperation.swift */; };
+		579824E0230EE6B20029F9A8 /* GetGistOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579824DF230EE6B20029F9A8 /* GetGistOperation.swift */; };
+		579824E2230EE6BA0029F9A8 /* PatchGistOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579824E1230EE6BA0029F9A8 /* PatchGistOperation.swift */; };
 		579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */; };
 		579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */; };
 		579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */; };
@@ -40,6 +42,10 @@
 		579AAC5B22D53DDC00B3DD09 /* UIColorBrightness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */; };
 		579AAC6022D5CFC300B3DD09 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC5F22D5CFC300B3DD09 /* NoteTableViewCell.swift */; };
 		579AAC6222D5CFDC00B3DD09 /* NoteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AAC6122D5CFDC00B3DD09 /* NoteTableViewController.swift */; };
+		579AE215230FC6F000469E9F /* BaseGistForNotesOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AE214230FC6F000469E9F /* BaseGistForNotesOperation.swift */; };
+		579AE217230FC9B100469E9F /* GetGistForNotesOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AE216230FC9B100469E9F /* GetGistForNotesOperation.swift */; };
+		579AE219230FCF5000469E9F /* PullNotesGistOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AE218230FCF5000469E9F /* PullNotesGistOperation.swift */; };
+		579AE21B230FCF5B00469E9F /* PushNotesGistOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AE21A230FCF5B00469E9F /* PushNotesGistOperation.swift */; };
 		57C4D2D122D8CC6900E7F86E /* GalleryPhotoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C4D2D022D8CC6900E7F86E /* GalleryPhotoViewCell.swift */; };
 		57D01C5822D50C5F00412438 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57D01C5722D50C5F00412438 /* Main.storyboard */; };
 		57D01C5B22D516B700412438 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D01C5A22D516B700412438 /* DesignableView.swift */; };
@@ -98,16 +104,11 @@
 		5743A68C230A175200BF5B74 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		5757828E230D62B000C30374 /* BaseUIOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUIOperation.swift; sourceTree = "<group>"; };
 		57578290230DAB1500C30374 /* UpdateNotesDBOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNotesDBOperation.swift; sourceTree = "<group>"; };
+		575BC74F230E7DAD00207421 /* UITextViewPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewPlaceholder.swift; sourceTree = "<group>"; };
 		5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskUpdate.swift; sourceTree = "<group>"; };
-		5769C2262302B78000530294 /* GistService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistService.swift; sourceTree = "<group>"; };
 		5769C2282302B79800530294 /* GistFileCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistFileCreator.swift; sourceTree = "<group>"; };
 		5769C2292302B79900530294 /* GistCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistCreator.swift; sourceTree = "<group>"; };
-		5769C22C2302B8C500530294 /* GistForNotesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistForNotesService.swift; sourceTree = "<group>"; };
-		5769C22E2302C0B200530294 /* GistServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistServiceError.swift; sourceTree = "<group>"; };
-		5769C2302302C6DB00530294 /* ExecuteGistRequestOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecuteGistRequestOperation.swift; sourceTree = "<group>"; };
-		5769C2352302D23B00530294 /* URLResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResponseError.swift; sourceTree = "<group>"; };
 		5769C2372302D36C00530294 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
-		5769C2392302D48100530294 /* URLRequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestError.swift; sourceTree = "<group>"; };
 		5769C23B2302DB7100530294 /* VisibleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleViewController.swift; sourceTree = "<group>"; };
 		5769C23F2303148400530294 /* GistNotesContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistNotesContainer.swift; sourceTree = "<group>"; };
 		5769C241230318D400530294 /* UpdateNoteDBOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNoteDBOperation.swift; sourceTree = "<group>"; };
@@ -117,6 +118,13 @@
 		57874265230BF6A6005B2FD1 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		57874267230BFEA0005B2FD1 /* NoteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteData.swift; sourceTree = "<group>"; };
 		57874269230BFEE2005B2FD1 /* NoteImportanceLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteImportanceLevel.swift; sourceTree = "<group>"; };
+		579824D2230EDA5F0029F9A8 /* ExecuteRequestOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecuteRequestOperation.swift; sourceTree = "<group>"; };
+		579824D6230EE0500029F9A8 /* GistRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistRequestManager.swift; sourceTree = "<group>"; };
+		579824D9230EE5BD0029F9A8 /* BaseGistOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGistOperation.swift; sourceTree = "<group>"; };
+		579824DB230EE6910029F9A8 /* CreateGistOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGistOperation.swift; sourceTree = "<group>"; };
+		579824DD230EE69C0029F9A8 /* LoadGistsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadGistsOperation.swift; sourceTree = "<group>"; };
+		579824DF230EE6B20029F9A8 /* GetGistOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGistOperation.swift; sourceTree = "<group>"; };
+		579824E1230EE6BA0029F9A8 /* PatchGistOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatchGistOperation.swift; sourceTree = "<group>"; };
 		579AAC4B22D5228E00B3DD09 /* ColorPickButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickButton.swift; sourceTree = "<group>"; };
 		579AAC4D22D52C5E00B3DD09 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 		579AAC5322D539C200B3DD09 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +132,10 @@
 		579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorBrightness.swift; sourceTree = "<group>"; };
 		579AAC5F22D5CFC300B3DD09 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		579AAC6122D5CFDC00B3DD09 /* NoteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewController.swift; sourceTree = "<group>"; };
+		579AE214230FC6F000469E9F /* BaseGistForNotesOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGistForNotesOperation.swift; sourceTree = "<group>"; };
+		579AE216230FC9B100469E9F /* GetGistForNotesOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGistForNotesOperation.swift; sourceTree = "<group>"; };
+		579AE218230FCF5000469E9F /* PullNotesGistOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullNotesGistOperation.swift; sourceTree = "<group>"; };
+		579AE21A230FCF5B00469E9F /* PushNotesGistOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotesGistOperation.swift; sourceTree = "<group>"; };
 		57C4D2D022D8CC6900E7F86E /* GalleryPhotoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryPhotoViewCell.swift; sourceTree = "<group>"; };
 		57D01C5722D50C5F00412438 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		57D01C5A22D516B700412438 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
@@ -206,8 +218,7 @@
 		5739C7CE23012D4D0025294E /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				5769C2262302B78000530294 /* GistService.swift */,
-				5769C22C2302B8C500530294 /* GistForNotesService.swift */,
+				579824D6230EE0500029F9A8 /* GistRequestManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -222,18 +233,9 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
-		5769C2322302D1D900530294 /* Errors */ = {
-			isa = PBXGroup;
-			children = (
-				5769C22E2302C0B200530294 /* GistServiceError.swift */,
-			);
-			path = Errors;
-			sourceTree = "<group>";
-		};
 		5769C2332302D1E100530294 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
-				5769C2322302D1D900530294 /* Errors */,
 				57D81D162309F68200444DBC /* UIOperationResult.swift */,
 			);
 			path = Enums;
@@ -242,9 +244,8 @@
 		5769C2342302D22900530294 /* URLSession */ = {
 			isa = PBXGroup;
 			children = (
+				5743A68C230A175200BF5B74 /* Reachability.swift */,
 				5769C2372302D36C00530294 /* NetworkError.swift */,
-				5769C2392302D48100530294 /* URLRequestError.swift */,
-				5769C2352302D23B00530294 /* URLResponseError.swift */,
 				5769C2242302B77300530294 /* URLSessionDataTaskUpdate.swift */,
 			);
 			path = URLSession;
@@ -253,9 +254,9 @@
 		577AA4E122E908AD00FA4E52 /* BusinessLogic */ = {
 			isa = PBXGroup;
 			children = (
-				5739C7CE23012D4D0025294E /* Network */,
 				577AA4E222E908C300FA4E52 /* Operations */,
-				57D81D23230A109500444DBC /* CoreData */,
+				5739C7CE23012D4D0025294E /* Network */,
+				57D81D23230A109500444DBC /* DataBase */,
 			);
 			path = BusinessLogic;
 			sourceTree = "<group>";
@@ -267,7 +268,7 @@
 				577AA4E422E908DE00FA4E52 /* BackendOperations */,
 				577AA4E522E908E900FA4E52 /* DBOperations */,
 				57E56C4F22EA2CB10006087C /* AsyncOperation.swift */,
-				5769C2302302C6DB00530294 /* ExecuteGistRequestOperation.swift */,
+				579824D2230EDA5F0029F9A8 /* ExecuteRequestOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -287,6 +288,8 @@
 		577AA4E422E908DE00FA4E52 /* BackendOperations */ = {
 			isa = PBXGroup;
 			children = (
+				579AE213230FC6BD00469E9F /* GistForNotesOperations */,
+				579824D8230EE5870029F9A8 /* GistOperations */,
 				57E56C5222EA2CBD0006087C /* BaseBackendOperation.swift */,
 				57E56C5322EA2CBD0006087C /* LoadNotesBackendOperation.swift */,
 				57E56C5122EA2CBD0006087C /* SaveNotesBackendOperation.swift */,
@@ -315,6 +318,31 @@
 				57874263230BF100005B2FD1 /* EditNotePresenter.swift */,
 			);
 			path = Presenters;
+			sourceTree = "<group>";
+		};
+		5789D24E230E7DCB009EF8BD /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				57D01C5A22D516B700412438 /* DesignableView.swift */,
+				579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */,
+				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
+				57874265230BF6A6005B2FD1 /* UIViewControllerExtensions.swift */,
+				575BC74F230E7DAD00207421 /* UITextViewPlaceholder.swift */,
+				5769C23B2302DB7100530294 /* VisibleViewController.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		579824D8230EE5870029F9A8 /* GistOperations */ = {
+			isa = PBXGroup;
+			children = (
+				579824D9230EE5BD0029F9A8 /* BaseGistOperation.swift */,
+				579824DB230EE6910029F9A8 /* CreateGistOperation.swift */,
+				579824DD230EE69C0029F9A8 /* LoadGistsOperation.swift */,
+				579824DF230EE6B20029F9A8 /* GetGistOperation.swift */,
+				579824E1230EE6BA0029F9A8 /* PatchGistOperation.swift */,
+			);
+			path = GistOperations;
 			sourceTree = "<group>";
 		};
 		579AAC5722D53BAE00B3DD09 /* Storyboards */ = {
@@ -352,6 +380,17 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		579AE213230FC6BD00469E9F /* GistForNotesOperations */ = {
+			isa = PBXGroup;
+			children = (
+				579AE214230FC6F000469E9F /* BaseGistForNotesOperation.swift */,
+				579AE216230FC9B100469E9F /* GetGistForNotesOperation.swift */,
+				579AE218230FCF5000469E9F /* PullNotesGistOperation.swift */,
+				579AE21A230FCF5B00469E9F /* PushNotesGistOperation.swift */,
+			);
+			path = GistForNotesOperations;
+			sourceTree = "<group>";
+		};
 		57D01C5622D50B8000412438 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,25 +406,20 @@
 		57D01C5922D516A000412438 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				5789D24E230E7DCB009EF8BD /* UIKit */,
 				5769C2342302D22900530294 /* URLSession */,
-				57D01C5A22D516B700412438 /* DesignableView.swift */,
-				579AAC5522D53B7000B3DD09 /* UIColorHEXValues.swift */,
-				579AAC5A22D53DDC00B3DD09 /* UIColorBrightness.swift */,
-				5769C23B2302DB7100530294 /* VisibleViewController.swift */,
-				5743A68C230A175200BF5B74 /* Reachability.swift */,
-				57874265230BF6A6005B2FD1 /* UIViewControllerExtensions.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
 		};
-		57D81D23230A109500444DBC /* CoreData */ = {
+		57D81D23230A109500444DBC /* DataBase */ = {
 			isa = PBXGroup;
 			children = (
 				57328D9B23099BFA00EF39F1 /* Notes.xcdatamodeld */,
 				57D81D21230A0EBB00444DBC /* MappingModel.xcmappingmodel */,
 				57328DA42309BF4100EF39F1 /* NoteCoreDataService.swift */,
 			);
-			path = CoreData;
+			path = DataBase;
 			sourceTree = "<group>";
 		};
 		57F518BC2300F6A2000E91C4 /* Notes */ = {
@@ -666,29 +700,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5769C2312302C6DB00530294 /* ExecuteGistRequestOperation.swift in Sources */,
 				57E56C5B22EA2CCB0006087C /* SaveNoteDBOperation.swift in Sources */,
 				5769C2402303148400530294 /* GistNotesContainer.swift in Sources */,
 				57E56C5422EA2CBD0006087C /* SaveNotesBackendOperation.swift in Sources */,
 				57F518C12300F6CD000E91C4 /* GistFile.swift in Sources */,
 				5769C22A2302B79900530294 /* GistFileCreator.swift in Sources */,
-				5769C22F2302C0B200530294 /* GistServiceError.swift in Sources */,
-				5769C22D2302B8C500530294 /* GistForNotesService.swift in Sources */,
 				57E56C5522EA2CBD0006087C /* BaseBackendOperation.swift in Sources */,
+				579AE219230FCF5000469E9F /* PullNotesGistOperation.swift in Sources */,
 				57D81D22230A0EBB00444DBC /* MappingModel.xcmappingmodel in Sources */,
 				57F518D123010583000E91C4 /* NoteCodable.swift in Sources */,
 				57F518CB2300F7A5000E91C4 /* AuthViewController.swift in Sources */,
 				5769C22B2302B79900530294 /* GistCreator.swift in Sources */,
 				57F518D323010BF0000E91C4 /* GistOwner.swift in Sources */,
 				579AAC4E22D52C5E00B3DD09 /* ColorPickerView.swift in Sources */,
-				5769C2272302B78000530294 /* GistService.swift in Sources */,
 				5757828F230D62B000C30374 /* BaseUIOperation.swift in Sources */,
+				579AE21B230FCF5B00469E9F /* PushNotesGistOperation.swift in Sources */,
 				5743A68D230A175200BF5B74 /* Reachability.swift in Sources */,
 				57D01C5B22D516B700412438 /* DesignableView.swift in Sources */,
 				57328DA32309BA8200EF39F1 /* NoteCoreDataParsing.swift in Sources */,
+				579AE217230FC9B100469E9F /* GetGistForNotesOperation.swift in Sources */,
 				57328D9D23099BFA00EF39F1 /* Notes.xcdatamodeld in Sources */,
 				579AAC5422D539C200B3DD09 /* ColorPickerViewController.swift in Sources */,
 				5769C2382302D36C00530294 /* NetworkError.swift in Sources */,
+				579824D7230EE0500029F9A8 /* GistRequestManager.swift in Sources */,
 				57E56C5E22EA2CCB0006087C /* LoadNotesDBOperation.swift in Sources */,
 				5787426A230BFEE2005B2FD1 /* NoteImportanceLevel.swift in Sources */,
 				57FAB0B722CB63C80044DDDC /* AppDelegate.swift in Sources */,
@@ -699,6 +733,8 @@
 				57328DA52309BF4100EF39F1 /* NoteCoreDataService.swift in Sources */,
 				57D81D172309F68200444DBC /* UIOperationResult.swift in Sources */,
 				57874268230BFEA0005B2FD1 /* NoteData.swift in Sources */,
+				579824E2230EE6BA0029F9A8 /* PatchGistOperation.swift in Sources */,
+				579824E0230EE6B20029F9A8 /* GetGistOperation.swift in Sources */,
 				5769C2252302B77300530294 /* URLSessionDataTaskUpdate.swift in Sources */,
 				57D81D1B230A021F00444DBC /* UpdateNoteOperation.swift in Sources */,
 				579AAC6222D5CFDC00B3DD09 /* NoteTableViewController.swift in Sources */,
@@ -707,19 +743,23 @@
 				57E56C5C22EA2CCB0006087C /* BaseDBOperation.swift in Sources */,
 				57874264230BF100005B2FD1 /* EditNotePresenter.swift in Sources */,
 				57FAB0E022CB972D0044DDDC /* FileNotebook.swift in Sources */,
+				579824D3230EDA5F0029F9A8 /* ExecuteRequestOperation.swift in Sources */,
 				57D01C5D22D5180300412438 /* EditNoteViewController.swift in Sources */,
 				57C4D2D122D8CC6900E7F86E /* GalleryPhotoViewCell.swift in Sources */,
 				57FAB0D722CB643C0044DDDC /* Note.swift in Sources */,
 				579AAC4C22D5228E00B3DD09 /* ColorPickButton.swift in Sources */,
+				579824DC230EE6910029F9A8 /* CreateGistOperation.swift in Sources */,
 				5769C23C2302DB7100530294 /* VisibleViewController.swift in Sources */,
+				579824DA230EE5BD0029F9A8 /* BaseGistOperation.swift in Sources */,
 				57F518C22300F6CD000E91C4 /* Gist.swift in Sources */,
+				579AE215230FC6F000469E9F /* BaseGistForNotesOperation.swift in Sources */,
 				57E56C6322EA2CD30006087C /* RemoveNoteOperation.swift in Sources */,
 				579AAC5622D53B7000B3DD09 /* UIColorHEXValues.swift in Sources */,
 				57E56C5622EA2CBD0006087C /* LoadNotesBackendOperation.swift in Sources */,
 				57874266230BF6A6005B2FD1 /* UIViewControllerExtensions.swift in Sources */,
+				575BC750230E7DAD00207421 /* UITextViewPlaceholder.swift in Sources */,
 				57578291230DAB1500C30374 /* UpdateNotesDBOperation.swift in Sources */,
-				5769C2362302D23B00530294 /* URLResponseError.swift in Sources */,
-				5769C23A2302D48100530294 /* URLRequestError.swift in Sources */,
+				579824DE230EE69C0029F9A8 /* LoadGistsOperation.swift in Sources */,
 				57E56C5022EA2CB10006087C /* AsyncOperation.swift in Sources */,
 				57E56C6222EA2CD30006087C /* SaveNoteOperation.swift in Sources */,
 				579AAC6022D5CFC300B3DD09 /* NoteTableViewCell.swift in Sources */,

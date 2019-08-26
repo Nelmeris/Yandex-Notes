@@ -51,18 +51,18 @@ class LoadNotesOperation: BaseUIOperation {
         backendQueue.addOperation(loadFromBackend)
         
         let loadFromDBCompletionBlock = BlockOperation {
+            guard !self.isCancelled else { return }
             self.loadFromDBCompletion()
         }
         loadFromDBCompletionBlock.addDependency(loadFromDB)
-        guard !self.isCancelled else { return }
-        AsyncOperation.commonQueue.addOperation(loadFromDBCompletionBlock)
+        commonQueue.addOperation(loadFromDBCompletionBlock)
         
         let loadFromBackendCompletionBlock = BlockOperation {
+            guard !self.isCancelled else { return }
             self.loadFromBackendCompletion()
         }
         loadFromBackendCompletionBlock.addDependency(loadFromBackend)
-        guard !self.isCancelled else { return }
-        AsyncOperation.commonQueue.addOperation(loadFromBackendCompletionBlock)
+        commonQueue.addOperation(loadFromBackendCompletionBlock)
         
         
         self.addDependency(loadFromBackendCompletionBlock)
@@ -91,13 +91,14 @@ class LoadNotesOperation: BaseUIOperation {
     
     private func loadFromBackendCompletion() {
         guard let result = loadFromBackend.result else {
+            guard !self.isCancelled else { return }
             self.result = nil
             return
         }
         guard let dbNotes = self.notesFromDB else { fatalError() }
         switch result {
         case .success(let gistContainer):
-            let resultSync = Note.syncNotes(dbNotes: dbNotes, gistContainer: gistContainer)
+            let resultSync = Note.sync(dbNotes: dbNotes, gistContainer: gistContainer)
             self.syncNotes = resultSync.notes
             switch resultSync.type {
             case .dbNeedsUpdate:
@@ -109,12 +110,17 @@ class LoadNotesOperation: BaseUIOperation {
                 self.startSaveToBackend()
             default: break
             }
-        case .failure(let error):
-            self.result = .backendFailture(dbNotes: dbNotes, error: error)
+        case .failureRequest(let error):
+            guard !self.isCancelled else { return }
+            self.result = .backendFailure(dbNotes: dbNotes, error: error)
+        case .failure:
+            guard !self.isCancelled else { return }
+            self.result = .backendFailure(dbNotes: dbNotes, error: nil)
         }
     }
     
     private func loadFromDBCompletion() {
+        guard !self.isCancelled else { return }
         guard let result = loadFromDB.result else {
             self.result = nil
             return
@@ -122,37 +128,45 @@ class LoadNotesOperation: BaseUIOperation {
         switch result {
         case .success(let notes):
             self.notesFromDB = notes
-        case .failture(let error):
-            self.result = .dbFailture(error)
+        case .failure(let error):
+            guard !self.isCancelled else { return }
+            self.result = .dbFailure(error)
         }
     }
     
     private func rewriteDBCompletion() {
         guard let result = rewriteDB?.result else {
+            guard !self.isCancelled else { return }
             self.result = nil
             return
         }
         switch result {
-        case .failture(let error):
-            self.result = .dbFailture(error)
+        case .failure(let error):
+            guard !self.isCancelled else { return }
+            self.result = .dbFailure(error)
         default: break
         }
     }
     
     private func saveToBackendCompletion() {
         guard let result = saveToBackend?.result else {
+            guard !self.isCancelled else { return }
             self.result = nil
             return
         }
         guard let syncNotes = syncNotes else { fatalError() }
+        guard !self.isCancelled else { return }
         switch result {
-        case .failure(let error):
-            self.result = .backendFailture(dbNotes: syncNotes, error: error)
+        case .failure:
+            self.result = .backendFailure(dbNotes: syncNotes, error: nil)
+        case .failureRequest(let error):
+            self.result = .backendFailure(dbNotes: syncNotes, error: error)
         default: break
         }
     }
     
     override func main() {
+        guard !self.isCancelled else { return }
         if rewriteDB != nil {
             rewriteDBCompletion()
         }
@@ -160,16 +174,17 @@ class LoadNotesOperation: BaseUIOperation {
             saveToBackendCompletion()
         }
         guard let syncNotes = syncNotes else { fatalError() }
+        guard !self.isCancelled else { return }
         guard self.result == nil else { return }
         self.result = .success(syncNotes)
     }
     
     override func cancel() {
-        loadFromDB.cancel()
-        loadFromBackend.cancel()
-        rewriteDB?.cancel()
-        saveToBackend?.cancel()
         super.cancel()
+        loadFromBackend.cancel()
+        saveToBackend?.cancel()
+        loadFromDB.cancel()
+        rewriteDB?.cancel()
     }
     
 }

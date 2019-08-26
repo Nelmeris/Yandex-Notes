@@ -51,14 +51,14 @@ class RemoveNoteOperation: BaseUIOperation {
         }
         removeFromDBCompletionBlock.addDependency(removeFromDB)
         guard !self.isCancelled else { return }
-        AsyncOperation.commonQueue.addOperation(removeFromDBCompletionBlock)
+        commonQueue.addOperation(removeFromDBCompletionBlock)
         
         let loadFromDBCompletionBlock = BlockOperation {
             self.loadFromDBCompletion()
         }
         loadFromDBCompletionBlock.addDependency(loadFromDB)
         guard !self.isCancelled else { return }
-        AsyncOperation.commonQueue.addOperation(loadFromDBCompletionBlock)
+        commonQueue.addOperation(loadFromDBCompletionBlock)
         
         self.addDependency(loadFromDBCompletionBlock)
     }
@@ -69,8 +69,8 @@ class RemoveNoteOperation: BaseUIOperation {
             return
         }
         switch result {
-        case .failture(let error):
-            self.result = .dbFailture(error)
+        case .failure(let error):
+            self.result = .dbFailure(error)
         default: break
         }
     }
@@ -88,8 +88,8 @@ class RemoveNoteOperation: BaseUIOperation {
             self.addDependency(saveToBackend)
             guard !self.isCancelled else { return }
             backendQueue.addOperation(saveToBackend)
-        case .failture(let error):
-            self.result = .dbFailture(error)
+        case .failure(let error):
+            self.result = .dbFailure(error)
         }
     }
     
@@ -101,16 +101,18 @@ class RemoveNoteOperation: BaseUIOperation {
         switch result {
         case .success:
             self.result = .success(self.notes!)
-        case .failure(let error):
-            self.result = .backendFailture(dbNotes: self.notes!, error: error)
+        case .failure:
+            self.result = .backendFailure(dbNotes: self.notes!, error: nil)
+        case .failureRequest(let error):
+            self.result = .backendFailure(dbNotes: self.notes!, error: error)
         }
     }
     
     override func cancel() {
+        super.cancel()
+        saveToBackend?.cancel()
         removeFromDB?.cancel()
         loadFromDB?.cancel()
-        saveToBackend?.cancel()
-        super.cancel()
     }
     
 }

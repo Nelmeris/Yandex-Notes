@@ -13,11 +13,10 @@ protocol NoteTableViewPresenterProtocol {
     init(view: NoteTableViewProtocol, context: NSManagedObjectContext, backgroundContext: NSManagedObjectContext)
     
     func loadNotes()
-    func loadNotesFromDB()
     func removeNote(_ note: Note)
     
-    func startSyncTimer(with timeInterval: TimeInterval?)
-    func resetSyncTimer()
+    func startSync(with timeInterval: TimeInterval?)
+    func restartSync()
 }
 
 class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
@@ -26,11 +25,15 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
     var notes: [Note] = []
     let context: NSManagedObjectContext
     let backgroundContext: NSManagedObjectContext
+    let uiQueue = BaseUIOperation.queue
+    let backendQueue = BaseBackendOperation.queue
+    let dbQueue = BaseDBOperation.queue
     
     var syncTimer: Timer?
     var syncTimerTimeInterval: TimeInterval? = nil
     
     var removeTimers: [UUID: Timer] = [:]
+    let dispatchGroup = DispatchGroup()
     
     var currentLoadOperation: LoadNotesOperation?
     
@@ -64,15 +67,9 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
     }
     
     private func setNotes(_ notes: [Note]) {
-        if let currentLoadOperation = self.currentLoadOperation,
-            !currentLoadOperation.isFinished {
-            self.currentLoadOperation?.cancel()
-        }
-        self.currentLoadOperation = nil
-        self.resetSyncTimer()
-        self.removeOutdatedNotes(notes)
-        let sortedNotes = self.getSortedNotes(from: notes)
-        self.viewController.setNotes(sortedNotes)
+        removeOutdatedNotes(notes)
+        let sortedNotes = getSortedNotes(from: notes)
+        viewController.setNotes(sortedNotes)
     }
     
 }
@@ -80,63 +77,54 @@ class NoteTableViewPresenter: NoteTableViewPresenterProtocol {
 extension NoteTableViewPresenter {
     
     func loadNotes() {
-        if self.currentLoadOperation != nil { return }
-        let nsLock = NSLock()
-        nsLock.lock()
-        stopSyncTimer()
-        let loadNotesOperation = LoadNotesOperation(context: backgroundContext, backendQueue: BaseBackendOperation.queue, dbQueue: BaseDBOperation.queue)
-        self.currentLoadOperation = loadNotesOperation
-        nsLock.unlock()
-        loadNotesOperation.loadFromDB?.completionBlock = {
-            guard let result = loadNotesOperation.loadFromDB?.result else { return }
-            switch result {
-            case .failture(let error):
-                fatalError(error.localizedDescription)
-            default:
-                break
+        DispatchQueue.global(qos: .background).async {
+            self.uiQueue.waitUntilAllOperationsAreFinished()
+            self.dispatchGroup.wait()
+            if self.currentLoadOperation != nil { return }
+            self.dispatchGroup.enter()
+            self.stopSync()
+            let loadNotesOperation = LoadNotesOperation(context: self.backgroundContext, backendQueue: self.backendQueue, dbQueue: self.dbQueue)
+            self.currentLoadOperation = loadNotesOperation
+            self.dispatchGroup.leave()
+            loadNotesOperation.loadFromDB?.completionBlock = {
+                guard let result = loadNotesOperation.loadFromDB?.result else { return }
+                switch result {
+                case .success(let notes):
+                    self.setNotes(notes)
+                case .failure(let error):
+                    fatalError(error.localizedDescription)
+                }
             }
-        }
-        loadNotesOperation.completionBlock = {
-            self.viewController.endRefreshing()
-            guard let result = loadNotesOperation.result else { return }
-            switch result {
-            case .success(let notes):
-                self.setNotes(notes)
-            default:
-                break
+            loadNotesOperation.completionBlock = {
+                self.viewController.endRefreshing()
+                guard let result = loadNotesOperation.result else { return }
+                switch result {
+                case .success(let notes):
+                    self.setNotes(notes)
+                default: break
+                }
+                self.parseUIOperationResult(from: result)
+                self.restartSync()
             }
-            self.parseUIOperationResult(from: result)
+            self.uiQueue.addOperation(loadNotesOperation)
         }
-        BaseUIOperation.queue.addOperation(loadNotesOperation)
-    }
-    
-    func loadNotesFromDB() {
-        let loadFromDBOperation = LoadNotesDBOperation(context: backgroundContext)
-        loadFromDBOperation.completionBlock = {
-            guard let result = loadFromDBOperation.result else { return }
-            switch result {
-            case .success(let notes):
-                self.setNotes(notes)
-            case .failture(let error):
-                print(error.localizedDescription)
-            }
-        }
-        BaseDBOperation.queue.addOperation(loadFromDBOperation)
     }
    
     func removeNote(_ note: Note) {
+        stopSync()
         let removeNoteOperation = RemoveNoteOperation(note: note, context: backgroundContext, backendQueue: BaseBackendOperation.queue, dbQueue: BaseDBOperation.queue)
         removeNoteOperation.loadFromDB?.completionBlock = {
             switch removeNoteOperation.loadFromDB!.result! {
             case .success(let notes):
                 self.setNotes(notes)
-            case .failture(let error):
+            case .failure(let error):
                 print(error.localizedDescription)
             }
         }
         removeNoteOperation.completionBlock = {
             guard let result = removeNoteOperation.result else { return }
             self.parseUIOperationResult(from: result)
+            self.restartSync()
         }
         BaseUIOperation.queue.addOperation(removeNoteOperation)
     }
@@ -157,24 +145,15 @@ extension NoteTableViewPresenter {
     
     func parseUIOperationResult(from result: UIOperationResult) {
         switch result {
-        case .backendFailture(_, let error):
+        case .backendFailure(_, let error):
+            guard let error = error else { return }
             switch error {
-            case .failed(let netError):
-                switch netError {
-                case .failedRequest(let requestError):
-                    switch requestError {
-                    case .noConnection:
-                        noConnectionHandler()
-                    default:
-                        print(requestError.localizedDescription)
-                    }
-                case .failedResponse(let responseError):
-                    print(responseError.localizedDescription)
-                }
+            case .noConnection:
+                noConnectionHandler()
             default:
                 print(error.localizedDescription)
             }
-        case .dbFailture(let error):
+        case .dbFailure(let error):
             fatalError(error.localizedDescription)
         default: break
         }
@@ -185,7 +164,7 @@ extension NoteTableViewPresenter {
 // MARK: - Sync timer
 extension NoteTableViewPresenter {
     
-    func startSyncTimer(with timeInterval: TimeInterval? = nil) {
+    func startSync(with timeInterval: TimeInterval? = nil) {
         if let timeInterval = timeInterval {
             self.syncTimerTimeInterval = timeInterval
         }
@@ -196,13 +175,17 @@ extension NoteTableViewPresenter {
         RunLoop.main.add(syncTimer!, forMode: .common)
     }
     
-    func stopSyncTimer() {
+    func stopSync() {
         syncTimer?.invalidate()
+        if (!(currentLoadOperation?.isFinished ?? true)) {
+            currentLoadOperation?.cancel()
+        }
+        currentLoadOperation = nil
     }
     
-    func resetSyncTimer() {
-        stopSyncTimer()
-        startSyncTimer()
+    func restartSync() {
+        stopSync()
+        startSync()
     }
     
 }
